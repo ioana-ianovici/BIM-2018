@@ -1,5 +1,5 @@
 import React from 'react'
-import loginImage from './../../assets/login-image.jpg'
+import loginImage from './../../assets/login-image.png'
 import styled from 'styled-components'
 import { Redirect } from 'react-router-dom'
 import PageWrapper from './../../shared/PageContainer'
@@ -8,6 +8,7 @@ import { styleConstants } from './../../shared/styleConstants'
 const StyledLogin = styled(PageWrapper)`
   background: ${styleConstants.mainColor} url(${loginImage}) no-repeat left
     center;
+  background-size: contain;
   display: flex;
   align-items: center;
   justify-content: flex-end;
