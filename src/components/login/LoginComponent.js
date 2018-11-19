@@ -1,5 +1,5 @@
 import React from 'react'
-import loginImage from './../../assets/login-t.jpg'
+import loginImage from './../../assets/login-image.jpg'
 import styled from 'styled-components'
 import { Redirect } from 'react-router-dom'
 import PageWrapper from './../../shared/PageContainer'
