@@ -1,12 +1,42 @@
 import React from 'react'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, Redirect } from 'react-router-dom'
 import Dashboard from './components/dashboard/Dashboard'
 import Admin from './components/admin/Admin'
+import Login from './components/login/LoginComponent'
+
+const LoginGuard = ({ component: Component, ...rest }) => {
+  const isAuthenticated = false
+
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        isAuthenticated === true ? (
+          Component !== Login ? (
+            <Component {...props} />
+          ) : (
+            <Redirect to="/" />
+          )
+        ) : Component === Login ? (
+          <Login location={{ state: props.location }} />
+        ) : (
+          <Redirect
+            to={{
+              pathname: '/login',
+              state: { from: props.location },
+            }}
+          />
+        )
+      }
+    />
+  )
+}
 
 const AppRouter = () => (
   <Switch>
-    <Route exact path="/" component={Dashboard} />
-    <Route path="/roster" component={Admin} />
+    <LoginGuard exact path="/" component={Dashboard} />
+    <LoginGuard exact path="/admin" component={Admin} />
+    <LoginGuard exact path="/login" component={Login} />
   </Switch>
 )
 
