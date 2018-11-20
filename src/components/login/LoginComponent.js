@@ -1,17 +1,27 @@
 import React from 'react'
 import loginImage from './../../assets/login-illustration.svg'
-import loginLogo from './../../assets/login-logo.svg'
 import styled from 'styled-components'
 import { Redirect } from 'react-router-dom'
 import PageWrapper from './../../shared/PageContainer'
 import { styleConstants } from './../../shared/styleConstants'
+import { Logo } from '../../shared/Logo'
 
 const StyledLogin = styled(PageWrapper)`
   background: ${styleConstants.mainColor} url(${loginImage}) no-repeat left
     center;
   background-size: contain;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  flex-direction: column;
+  overflow: auto;
 
-  .container {
+  @media screen and (max-width: 800px) {
+    align-items: center;
+    justify-content: space-evenly;
+  }
+
+  .login__container {
     margin: 0 7%;
     position: relative;
 
@@ -22,13 +32,6 @@ const StyledLogin = styled(PageWrapper)`
     @media screen and (max-width: 700px) {
       margin: 0 2%;
     }
-  }
-  .login__login-box-wrapper {
-    position: absolute;
-    right: 0;
-    top: 0;
-    margin-top: calc(50% - 30px);
-    transform: translateY(calc(-50% - 30px));
   }
 
   .login__logo {
@@ -160,10 +163,10 @@ class Login extends React.Component {
 
     return (
       <StyledLogin className="login">
-        <div className="container">
+        <div className="login__container">
           <div className="login__login-box-wrapper">
             <div className="login__logo">
-              <img src={loginLogo} alt="logo" />
+              <Logo scale="0.8" />
             </div>
             <div className="login-box">
               <div className="login-box__nav-links-wrapper">
