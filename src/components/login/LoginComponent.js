@@ -1,5 +1,6 @@
 import React from 'react'
-import loginImage from './../../assets/login-image.png'
+import loginImage from './../../assets/login-illustration.svg'
+import loginLogo from './../../assets/login-logo.svg'
 import styled from 'styled-components'
 import { Redirect } from 'react-router-dom'
 import PageWrapper from './../../shared/PageContainer'
@@ -9,24 +10,45 @@ const StyledLogin = styled(PageWrapper)`
   background: ${styleConstants.mainColor} url(${loginImage}) no-repeat left
     center;
   background-size: contain;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  position: relative;
 
-  .login {
+  .container {
+    margin: 0 7%;
+    position: relative;
+
+    @media screen and (max-width: 1000px) {
+      margin: 0 5%;
+    }
+
+    @media screen and (max-width: 700px) {
+      margin: 0 2%;
+    }
+  }
+  .login__login-box-wrapper {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin-top: calc(50% - 30px);
+    transform: translateY(calc(-50% - 30px));
+  }
+
+  .login__logo {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .login-box {
     min-width: 30%;
     background-color: #fff;
     padding: 60px 50px;
 
-    .login__nav-links-wrapper {
+    .login-box__nav-links-wrapper {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 60px;
     }
 
-    .login__nav-link {
+    .login-box__nav-link {
       background: transparent;
       border: none;
       padding: 0 50px 10px;
@@ -50,7 +72,7 @@ const StyledLogin = styled(PageWrapper)`
       }
     }
 
-    .login__form-group {
+    .login-box__form-group {
       margin-bottom: 60px;
 
       .login-form__input {
@@ -75,7 +97,7 @@ const StyledLogin = styled(PageWrapper)`
       }
     }
 
-    .login__submit {
+    .login-box__submit {
       border: none;
       display: block;
       cursor: pointer;
@@ -128,7 +150,6 @@ class Login extends React.Component {
   render() {
     const { from } = this.props.location.state || { from: { pathname: '/' } }
     const { redirectToReferrer, action } = this.state
-    console.log(action)
     const isSignIn = action === this.stateActions.signIn
     const isSignUp = action === this.stateActions.signUp
     const isForgotPassword = action === this.stateActions.forgotPassword
@@ -138,51 +159,66 @@ class Login extends React.Component {
     }
 
     return (
-      <StyledLogin>
-        <div className="login">
-          <div className="login__nav-links-wrapper">
-            <button
-              onClick={() =>
-                this.handleStateActionChange(this.stateActions.signIn)
-              }
-              className={'login__nav-link ' + (isSignIn ? 'active' : '')}
-            >
-              Sign in
-            </button>
-            <button
-              onClick={() =>
-                this.handleStateActionChange(this.stateActions.signUp)
-              }
-              className={'login__nav-link ' + (isSignUp ? 'active' : '')}
-            >
-              Sign up
-            </button>
+      <StyledLogin className="login">
+        <div className="container">
+          <div className="login__login-box-wrapper">
+            <div className="login__logo">
+              <img src={loginLogo} alt="logo" />
+            </div>
+            <div className="login-box">
+              <div className="login-box__nav-links-wrapper">
+                <button
+                  onClick={() =>
+                    this.handleStateActionChange(this.stateActions.signIn)
+                  }
+                  className={
+                    'login-box__nav-link ' + (isSignIn ? 'active' : '')
+                  }
+                >
+                  Sign in
+                </button>
+                <button
+                  onClick={() =>
+                    this.handleStateActionChange(this.stateActions.signUp)
+                  }
+                  className={
+                    'login-box__nav-link ' + (isSignUp ? 'active' : '')
+                  }
+                >
+                  Sign up
+                </button>
+              </div>
+              <form className="login-box__form-group login-form">
+                <input
+                  type="email"
+                  className="login-form__input"
+                  placeholder="Email"
+                  autoComplete="off"
+                />
+                {!isForgotPassword && (
+                  <input
+                    type="password"
+                    className="login-form__input"
+                    placeholder="Password"
+                    autoComplete="off"
+                  />
+                )}
+                {isSignIn && (
+                  <button
+                    onClick={() =>
+                      this.handleStateActionChange(
+                        this.stateActions.forgotPassword
+                      )
+                    }
+                    className="login-form__forgot-password"
+                  >
+                    Forgot your password?
+                  </button>
+                )}
+              </form>
+              <button className="login-box__submit">{this.state.action}</button>
+            </div>
           </div>
-          <div className="login__form-group login-form">
-            <input
-              type="email"
-              className="login-form__input"
-              placeholder="Email"
-            />
-            {!isForgotPassword && (
-              <input
-                type="password"
-                className="login-form__input"
-                placeholder="Password"
-              />
-            )}
-            {isSignIn && (
-              <button
-                onClick={() =>
-                  this.handleStateActionChange(this.stateActions.forgotPassword)
-                }
-                className="login-form__forgot-password"
-              >
-                Forgot your password?
-              </button>
-            )}
-          </div>
-          <button className="login__submit">{this.state.action}</button>
         </div>
       </StyledLogin>
     )
