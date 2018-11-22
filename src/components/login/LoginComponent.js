@@ -2,11 +2,13 @@ import React from 'react'
 import loginImage from './../../assets/login-illustration.svg'
 import styled from 'styled-components'
 import { Redirect } from 'react-router-dom'
-import PageWrapper from './../../shared/PageContainer'
 import { styleConstants } from './../../shared/styleConstants'
 import { Logo } from '../../shared/Logo'
 
-const StyledLogin = styled(PageWrapper)`
+const StyledLogin = styled.div`
+  height: 100%;
+  padding: 0 7%;
+  margin: auto;
   background: ${styleConstants.mainColor} url(${loginImage}) no-repeat left
     center;
   background-size: contain;
@@ -15,6 +17,16 @@ const StyledLogin = styled(PageWrapper)`
   justify-content: center;
   flex-direction: column;
   overflow: auto;
+
+  @media screen and (max-width: 1000px) {
+    padding: 0 5%;
+    margin: auto;
+  }
+
+  @media screen and (max-width: 700px) {
+    padding: 0 2%;
+    margin: auto;
+  }
 
   @media screen and (max-width: 800px) {
     align-items: center;
@@ -63,14 +75,14 @@ const StyledLogin = styled(PageWrapper)`
       text-align: center;
 
       &:hover {
-        color: #505d68;
+        color: ${styleConstants.darkThemePaleText};
       }
       &:focus {
         outline: none;
       }
 
       &.active {
-        color: #505d68;
+        color: ${styleConstants.darkThemePaleText};
         border-bottom: 1px solid ${styleConstants.mainAccent};
       }
     }
@@ -82,18 +94,18 @@ const StyledLogin = styled(PageWrapper)`
         border-radius: 2px;
         display: block;
         width: 100%;
-        border: 1px solid #c2d1d9;
+        border: 1px solid ${styleConstants.lightText};
         padding: 15px;
         margin-bottom: 15px;
         line-height: 18px;
         font-size: 14px;
-        color: #c2d1d9;
+        color: ${styleConstants.lightText};
       }
 
       .login-form__forgot-password {
         line-height: 21px;
         font-size: 14px;
-        color: #a1aeb7;
+        color: ${styleConstants.greyText};
         text-decoration: none;
         background: transparent;
         border: none;
@@ -166,7 +178,7 @@ class Login extends React.Component {
         <div className="login__container">
           <div className="login__login-box-wrapper">
             <div className="login__logo">
-              <Logo scale="0.8" />
+              <Logo width="370" />
             </div>
             <div className="login-box">
               <div className="login-box__nav-links-wrapper">

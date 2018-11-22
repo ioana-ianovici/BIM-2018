@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 851.84 258.24">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 851.84 258.24" id="svg_resize" width="140" height="140">
     <defs>
         <style>
             .text-1,
@@ -20,9 +20,9 @@
     <g id="Layer_2" data-name="Layer 2">
         <g id="Layer_1-2" data-name="Layer 1">
             <text class="text-1" transform="translate(0 165.41)">B</text>
-            <rect class="accent-color" x="214.58" y="27.83" width="39" height="24"/>
-            <rect class="accent-color" x="174.58" y="84.83" width="79" height="24"/>
-            <rect class="accent-color" x="144.58" y="141.83" width="109" height="24"/>
+            <rect class="accent-color" x="214.58" y="27.83" width="39" height="24"></rect>
+            <rect class="accent-color" x="174.58" y="84.83" width="79" height="24"></rect>
+            <rect class="accent-color" x="144.58" y="141.83" width="109" height="24"></rect>
             <text class="text-2" transform="translate(262.23 165.4)">MORE</text>
         </g>
     </g>

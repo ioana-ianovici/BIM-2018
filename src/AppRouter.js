@@ -5,13 +5,13 @@ import Admin from './components/admin/Admin'
 import Login from './components/login/LoginComponent'
 
 const LoginGuard = ({ component: Component, ...rest }) => {
-  const isAuthenticated = false
+  const isAuthenticated = true
 
   return (
     <Route
       {...rest}
       render={props =>
-        isAuthenticated === true ? (
+        isAuthenticated ? (
           Component !== Login ? (
             <Component {...props} />
           ) : (

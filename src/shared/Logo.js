@@ -2,8 +2,13 @@ import React from 'react'
 import styled from 'styled-components'
 import { styleConstants } from './styleConstants'
 
-const PlainLogo = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 851.84 258.24">
+const PlainLogo = ({ width }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 851.84 258.24"
+    id="svg_resize"
+    width={width || '140'}
+  >
     <title>Logo</title>
     <g id="Layer_1" data-name="Layer 1">
       <text className="text-1" transform="translate(0 165.41)">
@@ -39,8 +44,6 @@ const PlainLogo = () => (
 
 export const Logo = props => {
   const StyledLogo = styled.div`
-    transform: scale(${props => props.scale || 1});
-
     .text-1,
     .text-2 {
       font-family: HelveticaNeue-Bold, Helvetica Neue, Helvetica;
@@ -58,7 +61,7 @@ export const Logo = props => {
 
   return (
     <StyledLogo {...props}>
-      <PlainLogo />
+      <PlainLogo width={props.width} />
     </StyledLogo>
   )
 }

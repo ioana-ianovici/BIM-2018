@@ -1,61 +1,72 @@
-import React from 'react'
-import logo from './../../logo.svg'
+import React, { Component } from 'react'
 import styled from 'styled-components'
+import { styleConstants } from '../../shared/styleConstants'
+import PageLayout from '../../shared/PageLayout'
+import Badges from './Badges'
+import UserDetails from './UserDetails'
 
 const StyledDashboard = styled.div`
-  .App {
-    text-align: center;
-  }
-
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-    height: 40vmin;
-  }
-
-  .App-header {
-    background-color: #282c34;
-    min-height: 100vh;
+  .section-wrapper {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+  }
+  .section-left {
+    width: 60%;
+    margin-right: 2%;
+    display: inline-block;
   }
 
-  .App-link {
-    color: #61dafb;
-  }
-
-  @keyframes App-logo-spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
+  .section-right {
+    width: 38%;
+    height: 100%;
+    display: inline-block;
   }
 `
 
-const Dashboard = () => (
-  <StyledDashboard>
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  </StyledDashboard>
-)
+class Dashboard extends Component {
+  state = {}
+  render() {
+    return (
+      <PageLayout>
+        <StyledDashboard userProgressPercentage={45}>
+          <UserDetails />
+          <Badges />
+          <div className="section-wrapper">
+            <section className="section-left">tree</section>
+            <section className="section-right">
+              <p>
+                Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset
+                concludaturque et eum, altera fabulas ut quo. Atqui causae
+                gloriatur ius te, id agam omnis evertitur eum. Affert laboramus
+                repudiandae nec et. Inciderint efficiantur his ad. Eum no
+                molestiae voluptatibus.
+              </p>
+              <p>
+                Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset
+                concludaturque et eum, altera fabulas ut quo. Atqui causae
+                gloriatur ius te, id agam omnis evertitur eum. Affert laboramus
+                repudiandae nec et. Inciderint efficiantur his ad. Eum no
+                molestiae voluptatibus.
+              </p>
+              <p>
+                Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset
+                concludaturque et eum, altera fabulas ut quo. Atqui causae
+                gloriatur ius te, id agam omnis evertitur eum. Affert laboramus
+                repudiandae nec et. Inciderint efficiantur his ad. Eum no
+                molestiae voluptatibus.
+              </p>
+              <p>
+                Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset
+                concludaturque et eum, altera fabulas ut quo. Atqui causae
+                gloriatur ius te, id agam omnis evertitur eum. Affert laboramus
+                repudiandae nec et. Inciderint efficiantur his ad. Eum no
+                molestiae voluptatibus.
+              </p>
+            </section>
+          </div>
+        </StyledDashboard>
+      </PageLayout>
+    )
+  }
+}
 
 export default Dashboard
