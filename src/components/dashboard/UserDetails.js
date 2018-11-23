@@ -36,18 +36,18 @@ const StyledUserDetails = styled.div`
     background: -moz-linear-gradient(left, ${styleConstants.mainAccent} 0%, ${
   styleConstants.mainAccent
 } ${props => props.userProgressPercentage}%, #2a2f39 ${props =>
-  props.userProgressPercentage}%, #2a2f39 100%); /* FF3.6-15 */
+  props.userProgressPercentage}%, #2a2f39 100%);
     background: -webkit-linear-gradient(left, ${styleConstants.mainAccent} 0%,${
   styleConstants.mainAccent
 } ${props => props.userProgressPercentage}%,#2a2f39 ${props =>
-  props.userProgressPercentage}%,#2a2f39 100%); /* Chrome10-25,Safari5.1-6 */
+  props.userProgressPercentage}%,#2a2f39 100%);
     background: linear-gradient(to right, ${styleConstants.mainAccent} 0%,${
   styleConstants.mainAccent
 } ${props => props.userProgressPercentage}%,#2a2f39 ${props =>
-  props.userProgressPercentage}%,#2a2f39 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  props.userProgressPercentage}%,#2a2f39 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=${
       styleConstants.mainAccent
-    }, endColorstr='#2a2f39',GradientType=1 ); /* IE6-9 */
+    }, endColorstr='#2a2f39',GradientType=1 );
     width: 20%;
     height: 1px;
     display: inline-block;
@@ -58,26 +58,36 @@ const StyledUserDetails = styled.div`
 
 class Dashboard extends Component {
   state = {}
+
   render() {
+    const {
+      userName,
+      userPicture,
+      userTitle,
+      userTitleProgressPercentage,
+      userNextTitle,
+      userLastTitle,
+    } = this.props
+
     return (
-      <StyledUserDetails userProgressPercentage={45}>
+      <StyledUserDetails userProgressPercentage={userTitleProgressPercentage}>
         <section>
           <div className="main-profile-info-section">
             <img
               className="profile-picture profile-picture--large"
-              src="http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg"
+              src={userPicture}
               alt="profile"
             />
             <div className="main-profile-info-section__user-name">
-              User name
+              {userName}
             </div>
             <div className="main-profile-info-section__user-title">
-              User title
+              {userTitle}
             </div>
             <div className="main-profile-info-section__user-title main-profile-info-section__user-title--padded">
-              Rookie{' '}
+              {userLastTitle}{' '}
               <span className="main-profile-info-section__user-progress" />{' '}
-              Master
+              {userNextTitle}
             </div>
           </div>
         </section>
@@ -90,7 +100,7 @@ Dashboard.propTypes = {
   userName: propTypes.string,
   userPicture: propTypes.string,
   userTitle: propTypes.string,
-  userTitleProgressPercentage: propTypes.string,
+  userTitleProgressPercentage: propTypes.number,
   userLastTitle: propTypes.string,
   userNextTitle: propTypes.string,
 }

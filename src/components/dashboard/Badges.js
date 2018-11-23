@@ -10,6 +10,10 @@ const StyledBadgesSection = styled.div`
     position: relative;
     padding: 35px 120px 25px 120px;
     margin-bottom: 10px;
+
+    @media screen and (max-width: 520px) {
+      padding: 35px 60px 25px 60px;
+    }
   }
 
   .badge {
@@ -44,35 +48,69 @@ const StyledBadgesSection = styled.div`
 
 class Badges extends PureComponent {
   render() {
-    const items = []
-
-    for (let i = 0; i < 10; i++) {
-      items.push(
-        <div className="badge" key={i}>
-          <img
-            src="http://www.myiconfinder.com/uploads/iconsets/256-256-815d9b2052180f54807413c1da2b7120-.png"
-            className="badge__icon"
-            alt="article writer"
-          />
-          <div className="badge__text">
-            <div className="badge__title">Article writer</div>
-            <div className="badge__subtitle" />
-            <div className="badge__count">11</div>
-          </div>
-        </div>
-      )
-    }
+    const items = this.props.items
 
     return (
       <StyledBadgesSection>
         <section className="badges-section">
-          <Carousel slidesToShow={5} slidesToScroll={1} centerMode>
-            {items}
+          <Carousel
+            slidesToShow={5}
+            slidesToScroll={1}
+            centerMode
+            responsive={[
+              {
+                breakpoint: 1210,
+                settings: {
+                  slidesToShow: 4,
+                  slidesToScroll: 1,
+                },
+              },
+              {
+                breakpoint: 1000,
+                settings: {
+                  slidesToShow: 3,
+                  slidesToScroll: 1,
+                },
+              },
+              {
+                breakpoint: 830,
+                settings: {
+                  slidesToShow: 2,
+                  slidesToScroll: 1,
+                },
+              },
+              {
+                breakpoint: 700,
+                settings: {
+                  slidesToShow: 1,
+                  slidesToScroll: 1,
+                },
+              },
+            ]}
+          >
+            {items.map((item, i) => (
+              <div className="badge" key={i}>
+                <img
+                  src={item.image}
+                  className="badge__icon"
+                  alt="article writer"
+                />
+                <div className="badge__text">
+                  <div className="badge__title">{item.title}</div>
+                  <div className="badge__subtitle">{item.subtitle}</div>
+                  <div className="badge__count">{item.count}</div>
+                </div>
+              </div>
+            ))}
           </Carousel>
         </section>
       </StyledBadgesSection>
     )
   }
+}
+
+Badges.defaultProps = {
+  items: [],
 }
 
 Badges.propTypes = {
@@ -82,7 +120,7 @@ Badges.propTypes = {
       title: propTypes.string,
       subtitle: propTypes.string,
       count: propTypes.number,
-    })
+    }),
   ),
 }
 

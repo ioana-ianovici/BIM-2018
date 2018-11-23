@@ -15,6 +15,26 @@ import { Logo } from './Logo'
 const StyledPageLayout = styled.div`
   height: 100%;
 
+  .main::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: ${styleConstants.darkThemeSecondaryBackground};
+    border-left: 1px solid ${styleConstants.darkThemePaleBorder};
+    border-right: 1px solid ${styleConstants.darkThemePaleBorder};
+  }
+
+  .main::-webkit-scrollbar,
+  ::-webkit-scrollbar {
+    width: 10px;
+    background-color: #f5f5f5;
+  }
+
+  .main::-webkit-scrollbar-thumb,
+  ::-webkit-scrollbar-thumb {
+    background-color: ${styleConstants.darkThemePrimaryBackground};
+    border: 1px solid ${styleConstants.darkThemePaleBorder};
+  }
+
   .sidenav {
     height: 100%;
     width: 60px;
@@ -95,7 +115,7 @@ const StyledPageLayout = styled.div`
   .main {
     background-color: ${styleConstants.darkThemeSecondaryBackground};
     margin-left: 60px;
-    padding: 30px;
+    padding: 20px;
     height: 100%;
     overflow: auto;
   }
@@ -180,7 +200,7 @@ class PageLayout extends PureComponent {
         setTimeout(() => {
           this.setState({ isSidebarTextVisible: this.state.isSidebarExpanded })
         }, styleConstants.sidebarAnimationDurationMilliseconds)
-      }
+      },
     )
   }
   render() {
