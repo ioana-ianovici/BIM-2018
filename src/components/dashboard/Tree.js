@@ -1,6 +1,7 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import styled from 'styled-components'
 import propTypes from 'prop-types'
+import { StickyContainer, Sticky } from 'react-sticky'
 import { styleConstants } from '../../shared/styleConstants'
 
 const StyledTree = styled.div`
@@ -9,6 +10,7 @@ const StyledTree = styled.div`
   flex-direction: column-reverse;
   align-items: center; */
   overflow: hidden;
+  height: 100%;
 
   .tree__step {
     display: block;
@@ -83,18 +85,27 @@ class Tree extends Component {
     const { steps } = this.props
 
     return (
-      <StyledTree>
-        {steps.reverse().map(step => (
-          <div
-            key={step.title}
-            className={
-              'tree__step' + (step.isAchieved ? '' : ' tree__step--inactive')
-            }
-          >
-            {step.title}
-          </div>
-        ))}
-      </StyledTree>
+      <Fragment>
+        <StickyContainer>
+          <Sticky>{({ style }) => <h1>Sticky element</h1>}</Sticky>
+        </StickyContainer>
+
+        <StyledTree>
+          <Fragment>
+            {steps.reverse().map(step => (
+              <div
+                key={step.title}
+                className={
+                  'tree__step' +
+                  (step.isAchieved ? '' : ' tree__step--inactive')
+                }
+              >
+                {step.title}
+              </div>
+            ))}
+          </Fragment>
+        </StyledTree>
+      </Fragment>
     )
   }
 }

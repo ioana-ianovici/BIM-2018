@@ -1,21 +1,20 @@
 import React from 'react'
 import loginImage from './../../assets/login-illustration.svg'
 import styled from 'styled-components'
-import { Redirect } from 'react-router-dom'
-import { styleConstants } from './../../shared/styleConstants'
+import { CSSTransitionGroup } from 'react-transition-group'
+import { Auth } from 'aws-amplify'
+import { styleConstants } from '../../shared/styleConstants'
 import { Logo } from '../../shared/Logo'
+import { AppConstants } from './../../shared/constants'
 
 const StyledLogin = styled.div`
   height: 100%;
-  padding: 0 7%;
+  padding: 7% 7%;
   margin: auto;
-  background: ${styleConstants.mainColor} url(${loginImage}) no-repeat left
-    center;
+  /* background: ${styleConstants.mainColor} url(${loginImage}) no-repeat left
+    center; */
+  background: ${styleConstants.mainColor};
   background-size: contain;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  flex-direction: column;
   overflow: auto;
 
   @media screen and (max-width: 1000px) {
@@ -53,6 +52,8 @@ const StyledLogin = styled.div`
 
   .login-box {
     min-width: 30%;
+    max-width: 600px;
+    margin: auto;
     background-color: #fff;
     padding: 60px 50px;
 
@@ -125,36 +126,65 @@ const StyledLogin = styled.div`
       padding: 15px 5px;
     }
   }
+
+  .error {
+    height: auto;
+    opacity: 1;
+    transition: height 1s, opacity 1s;
+    text-align: center;
+    margin-bottom: 10px;
+    color: crimson;
+  }
+
+  .error {
+    height: auto;
+    opacity: 1;
+    transition: height 1s, opacity 1s;
+  }
+
+  .error-appear {
+    opacity: 0.01;
+    height: 0px;
+  }
+
+  .error-appear.sidenav__link-text-appear-active {
+    opacity: 1;
+    height: auto;
+    transition: opacity 0.5s ease-in;
+  }
+
 `
 
 class Login extends React.Component {
-  stateActions = {
-    signIn: 'SIGN IN',
-    signUp: 'SIGN UP',
-    forgotPassword: 'FORGOT PASSWORD',
-  }
   state = {
-    redirectToReferrer: false,
-    action: this.stateActions.signIn,
+    action: AppConstants.amplifyAuthActions.signIn.awsState,
+    error: null,
+    form: {
+      username: '',
+      password: '',
+    },
   }
   login() {
-    // todo.
-    this.setState(() => ({
-      redirectToReferrer: true,
-    }))
-  }
-  handleStateActionChange(action) {
-    this.setState({ action: action })
+    Auth.signIn(this.state.form.email, this.state.form.password)
+      .then(user => {
+        console.log(user)
+        this.props.onStateChange('authenticated', user)
+        this.setState({ error: null })
+      })
+      .catch(error => {
+        this.setState({ error: error.message })
+      })
   }
   handleSubmit() {
     switch (this.state.action) {
-      case this.stateActions.signIn: {
+      case AppConstants.amplifyAuthActions.signIn.awsState: {
+        this.login()
         break
       }
-      case this.stateActions.signUp: {
+      case AppConstants.amplifyAuthActions.signUp.awsState: {
         break
       }
-      case this.stateActions.forgotPassword: {
+      case AppConstants.amplifyAuthActions.forgotPassword.awsState: {
         break
       }
       default: {
@@ -162,16 +192,22 @@ class Login extends React.Component {
       }
     }
   }
+  handleStateActionChange(action) {
+    this.setState({ action: action, error: null })
+  }
+  handleInputChange(event) {
+    event.persist()
+    this.setState(oldState => ({
+      form: { ...oldState.form, [event.target.name]: event.target.value },
+      error: null,
+    }))
+  }
   render() {
-    const { from } = this.props.location.state || { from: { pathname: '/' } }
-    const { redirectToReferrer, action } = this.state
-    const isSignIn = action === this.stateActions.signIn
-    const isSignUp = action === this.stateActions.signUp
-    const isForgotPassword = action === this.stateActions.forgotPassword
-
-    if (redirectToReferrer) {
-      return <Redirect to={from} />
-    }
+    const { action, error } = this.state
+    const isSignIn = action === AppConstants.amplifyAuthActions.signIn.awsState
+    const isSignUp = action === AppConstants.amplifyAuthActions.signUp.awsState
+    const isForgotPassword =
+      action === AppConstants.amplifyAuthActions.forgotPassword.awsState
 
     return (
       <StyledLogin className="login">
@@ -184,7 +220,9 @@ class Login extends React.Component {
               <div className="login-box__nav-links-wrapper">
                 <button
                   onClick={() =>
-                    this.handleStateActionChange(this.stateActions.signIn)
+                    this.handleStateActionChange(
+                      AppConstants.amplifyAuthActions.signIn,
+                    )
                   }
                   className={
                     'login-box__nav-link ' + (isSignIn ? 'active' : '')
@@ -194,7 +232,9 @@ class Login extends React.Component {
                 </button>
                 <button
                   onClick={() =>
-                    this.handleStateActionChange(this.stateActions.signUp)
+                    this.handleStateActionChange(
+                      AppConstants.amplifyAuthActions.signUp,
+                    )
                   }
                   className={
                     'login-box__nav-link ' + (isSignUp ? 'active' : '')
@@ -205,24 +245,28 @@ class Login extends React.Component {
               </div>
               <form className="login-box__form-group login-form">
                 <input
+                  name="email"
                   type="email"
                   className="login-form__input"
                   placeholder="Email"
                   autoComplete="off"
+                  onChange={event => this.handleInputChange(event)}
                 />
                 {!isForgotPassword && (
                   <input
+                    name="password"
                     type="password"
                     className="login-form__input"
                     placeholder="Password"
                     autoComplete="off"
+                    onChange={event => this.handleInputChange(event)}
                   />
                 )}
                 {isSignIn && (
                   <button
                     onClick={() =>
                       this.handleStateActionChange(
-                        this.stateActions.forgotPassword
+                        AppConstants.amplifyAuthActions.forgotPassword,
                       )
                     }
                     className="login-form__forgot-password"
@@ -231,7 +275,24 @@ class Login extends React.Component {
                   </button>
                 )}
               </form>
-              <button className="login-box__submit">{this.state.action}</button>
+
+              <CSSTransitionGroup
+                transitionName="error"
+                transitionAppear={true}
+                transitionAppearTimeout={1000}
+                transitionEnter={false}
+                transitionLeave={false}
+              >
+                <div key={1} className="error">
+                  {error}
+                </div>
+              </CSSTransitionGroup>
+              <button
+                className="login-box__submit"
+                onClick={() => this.handleSubmit()}
+              >
+                {AppConstants.amplifyAuthActions[this.state.action].title}
+              </button>
             </div>
           </div>
         </div>

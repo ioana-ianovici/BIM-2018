@@ -1,0 +1,32 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "a2018-20181126173744-authRole",
+      "UnauthRoleArn": "arn:aws:iam::231960707961:role/a2018-20181126173744-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::231960707961:role/a2018-20181126173744-authRole",
+      "Region": "eu-west-1",
+      "DeploymentBucketName": "a2018-20181126173744-deployment",
+      "UnauthRoleName": "a2018-20181126173744-unauthRole",
+      "StackName": "a2018-20181126173744",
+      "StackId": "arn:aws:cloudformation:eu-west-1:231960707961:stack/a2018-20181126173744/38392060-f191-11e8-9cdd-0a692a24f4a4"
+    }
+  },
+  "hosting": {
+    "S3AndCloudFront": {
+      "service": "S3AndCloudFront",
+      "providerPlugin": "awscloudformation",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/a2018-20181126173744-deployment/amplify-cfn-templates/hosting/template.json",
+        "logicalId": "hostingS3AndCloudFront"
+      },
+      "lastPushTimeStamp": "2018-11-26T15:47:35.237Z",
+      "output": {
+        "S3BucketSecureURL": "https://bim-dev-aws-amplify-bucket.s3.amazonaws.com",
+        "WebsiteURL": "http://bim-dev-aws-amplify-bucket.s3-website-eu-west-1.amazonaws.com",
+        "Region": "eu-west-1",
+        "HostingBucketName": "bim-dev-aws-amplify-bucket"
+      },
+      "lastPushDirHash": "uPcaKzw70QshyNsguEIAkIExZfk="
+    }
+  }
+}

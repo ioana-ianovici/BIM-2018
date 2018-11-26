@@ -1,43 +1,78 @@
 import React from 'react'
-import { Switch, Route, Redirect } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
+import Amplify, { Auth } from 'aws-amplify'
+import {
+  Authenticator,
+  SignUp,
+  ConfirmSignUp,
+  Greetings,
+  ForgotPassword,
+  RequireNewPassword,
+} from 'aws-amplify-react'
+import awsConfig from './aws-config'
+
 import Dashboard from './components/dashboard/Dashboard'
 import Admin from './components/admin/Admin'
-import Login from './components/login/LoginComponent'
+import Login from './components/login/Login'
 
-const LoginGuard = ({ component: Component, ...rest }) => {
-  const isAuthenticated = true
+Amplify.configure(awsConfig)
 
-  return (
-    <Route
-      {...rest}
-      render={props =>
-        isAuthenticated ? (
-          Component !== Login ? (
-            <Component {...props} />
-          ) : (
-            <Redirect to="/" />
-          )
-        ) : Component === Login ? (
-          <Login location={{ state: props.location }} />
-        ) : (
-          <Redirect
-            to={{
-              pathname: '/login',
-              state: { from: props.location },
-            }}
-          />
-        )
-      }
-    />
-  )
+// const LoginGuard = ({ component: Component, ...rest }) => {
+//   const isAuthenticated = true
+
+//   return (
+//     <Route
+//       {...rest}
+//       render={props =>
+//         isAuthenticated ? (
+//           Component !== Login ? (
+//             <Component {...props} />
+//           ) : (
+//             <Redirect to="/" />
+//           )
+//         ) : Component === Login ? (
+//           <Login location={{ state: props.location }} />
+//         ) : (
+//           <Redirect
+//             to={{
+//               pathname: '/login',
+//               state: { from: props.location },
+//             }}
+//           />
+//         )
+//       }
+//     />
+//   )
+// }
+
+class AppRouter extends React.Component {
+  state = {
+    isAuthenticated: false,
+  }
+
+  constructor(props) {
+    super(props)
+    console.log('props auth state', props.authState)
+    this.setState({ isAuthenticated: Auth.user != null })
+  }
+
+  render() {
+    return !this.state.isAuthenticated ? null : (
+      <Switch>
+        <Route exact path="/" component={Dashboard} />
+        <Route exact path="/admin" component={Admin} />
+        <Route exact path="/login" component={Login} />
+      </Switch>
+    )
+  }
 }
 
-const AppRouter = () => (
-  <Switch>
-    <LoginGuard exact path="/" component={Dashboard} />
-    <LoginGuard exact path="/admin" component={Admin} />
-    <LoginGuard exact path="/login" component={Login} />
-  </Switch>
+export default () => (
+  <Authenticator hideDefault={true} style={{ background: 'red' }}>
+    <Login />
+    <SignUp />
+    <ConfirmSignUp />
+    <Greetings />
+    <AppRouter />
+  </Authenticator>
 )
-
-export default AppRouter
