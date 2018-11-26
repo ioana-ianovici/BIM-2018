@@ -45,7 +45,7 @@ Amplify.configure(awsConfig)
 //   )
 // }
 
-class AppRouter extends React.Component {
+class AppRouter extends React.PureComponent {
   state = {
     isAuthenticated: false,
   }
@@ -61,7 +61,6 @@ class AppRouter extends React.Component {
       <Switch>
         <Route exact path="/" component={Dashboard} />
         <Route exact path="/admin" component={Admin} />
-        <Route exact path="/login" component={Login} />
       </Switch>
     )
   }
