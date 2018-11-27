@@ -157,31 +157,70 @@ const StyledLogin = styled.div`
 
 class Login extends React.Component {
   state = {
-    action: AppConstants.amplifyAuthActions.signIn.awsState,
     error: null,
     form: {
       username: '',
       password: '',
+      confirmationCode: '',
     },
+  }
+  constructor(props) {
+    super(props)
+    this._validAuthStates = ['signIn', 'forgotPassword', 'signUp']
+  }
+  logout() {
+    Auth.signOut()
+      .then(data => {
+        this.handleStateActionChange(
+          AppConstants.amplifyAuthActions.signIn.awsState,
+          data,
+        )
+      })
+      .catch(err => console.log(err))
   }
   login() {
     Auth.signIn(this.state.form.email, this.state.form.password)
       .then(user => {
-        console.log(user)
-        this.props.onStateChange('authenticated', user)
+        this.handleStateActionChange(
+          AppConstants.amplifyAuthActions.signedIn.awsState,
+          user,
+        )
         this.setState({ error: null })
       })
-      .catch(error => {
-        this.setState({ error: error.message })
+      .catch(error => this.setState({ error: error.message }))
+  }
+  signUp() {
+    Auth.signUp({
+      username: this.state.form.email,
+      password: this.state.form.password,
+    })
+      .then(data => {
+        console.log('sign up done,', data)
+
+        this.setState({ error: null })
+
+        // After retrieveing the confirmation code from the user
+        Auth.confirmSignUp(
+          this.state.form.email,
+          this.state.form.confirmationCode,
+          {
+            // Optional. Force user confirmation irrespective of existing alias. By default set to True.
+            forceAliasCreation: true,
+          },
+        )
+          .then(data => console.log('confirm sign up done,', data))
+          .catch(error => this.setState({ error: error.message }))
       })
+      .catch(error => this.setState({ error: error.message }))
   }
   handleSubmit() {
-    switch (this.state.action) {
+    switch (this.props.authState) {
       case AppConstants.amplifyAuthActions.signIn.awsState: {
         this.login()
         break
       }
       case AppConstants.amplifyAuthActions.signUp.awsState: {
+        this.signUp()
         break
       }
       case AppConstants.amplifyAuthActions.forgotPassword.awsState: {
@@ -192,8 +231,9 @@ class Login extends React.Component {
       }
     }
   }
-  handleStateActionChange(action) {
-    this.setState({ action: action, error: null })
+  handleStateActionChange(action, data) {
+    this.props.onStateChange(action, data)
+    this.setState({ error: null })
   }
   handleInputChange(event) {
     event.persist()
@@ -203,14 +243,18 @@ class Login extends React.Component {
     }))
   }
   render() {
-    const { action, error } = this.state
-    const isSignIn = action === AppConstants.amplifyAuthActions.signIn.awsState
-    const isSignUp = action === AppConstants.amplifyAuthActions.signUp.awsState
+    const { error } = this.state
+    const { authState } = this.props
+    const isSignIn =
+      authState === AppConstants.amplifyAuthActions.signIn.awsState
+    const isSignUp =
+      authState === AppConstants.amplifyAuthActions.signUp.awsState
     const isForgotPassword =
-      action === AppConstants.amplifyAuthActions.forgotPassword.awsState
+      authState === AppConstants.amplifyAuthActions.forgotPassword.awsState
 
     return (
       <StyledLogin className="login">
+        {authState}
         <div className="login__container">
           <div className="login__login-box-wrapper">
             <div className="login__logo">
@@ -221,7 +265,7 @@ class Login extends React.Component {
                 <button
                   onClick={() =>
                     this.handleStateActionChange(
-                      AppConstants.amplifyAuthActions.signIn,
+                      AppConstants.amplifyAuthActions.signedIn.awsState,
                     )
                   }
                   className={
@@ -233,7 +277,7 @@ class Login extends React.Component {
                 <button
                   onClick={() =>
                     this.handleStateActionChange(
-                      AppConstants.amplifyAuthActions.signUp,
+                      AppConstants.amplifyAuthActions.signedUp.awsState,
                     )
                   }
                   className={
@@ -262,11 +306,19 @@ class Login extends React.Component {
                     onChange={event => this.handleInputChange(event)}
                   />
                 )}
+                <input
+                  name="confirmationCode"
+                  type="text"
+                  className="login-form__input"
+                  placeholder="Confirmation code"
+                  autoComplete="off"
+                  onChange={event => this.handleInputChange(event)}
+                />
                 {isSignIn && (
                   <button
                     onClick={() =>
                       this.handleStateActionChange(
-                        AppConstants.amplifyAuthActions.forgotPassword,
+                        AppConstants.amplifyAuthActions.forgotPassword.awsState,
                       )
                     }
                     className="login-form__forgot-password"
@@ -291,8 +343,10 @@ class Login extends React.Component {
                 className="login-box__submit"
                 onClick={() => this.handleSubmit()}
               >
-                {AppConstants.amplifyAuthActions[this.state.action].title}
+                {console.log(authState)}
+                {AppConstants.amplifyAuthActions[authState].title}
               </button>
+              <button onClick={() => this.logout()}>Logout</button>
             </div>
           </div>
         </div>

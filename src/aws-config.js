@@ -15,4 +15,18 @@ export default {
     // OPTIONAL - Enforce user authentication prior to accessing AWS resources or not
     mandatorySignIn: true,
   },
+  API: {
+    endpoints: [
+      {
+        name: 'users',
+        endpoint: process.env.REACT_APP_API_USERS,
+        region: process.env.REACT_APP_AWS_REGION,
+      },
+      {
+        name: 'badges',
+        endpoint: process.env.REACT_APP_API_BADGES,
+        region: process.env.REACT_APP_AWS_REGION,
+      },
+    ],
+  },
 }

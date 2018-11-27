@@ -9,13 +9,12 @@ import {
   ForgotPassword,
   RequireNewPassword,
 } from 'aws-amplify-react'
-import awsConfig from './aws-config'
 
 import Dashboard from './components/dashboard/Dashboard'
 import Admin from './components/admin/Admin'
 import Login from './components/login/Login'
-
-Amplify.configure(awsConfig)
+import { Constants } from '@aws-amplify/core'
+import { AppConstants } from './shared/constants'
 
 // const LoginGuard = ({ component: Component, ...rest }) => {
 //   const isAuthenticated = true
@@ -45,33 +44,21 @@ Amplify.configure(awsConfig)
 //   )
 // }
 
-class AppRouter extends React.PureComponent {
-  state = {
-    isAuthenticated: false,
-  }
+const AppRouter = props => {
+  const isAuthenticated =
+    props.authState === AppConstants.amplifyAuthActions.signedIn.awsState
 
-  constructor(props) {
-    super(props)
-    console.log('props auth state', props.authState)
-    this.setState({ isAuthenticated: Auth.user != null })
-  }
-
-  render() {
-    return !this.state.isAuthenticated ? null : (
-      <Switch>
-        <Route exact path="/" component={Dashboard} />
-        <Route exact path="/admin" component={Admin} />
-      </Switch>
-    )
-  }
+  return !isAuthenticated ? null : (
+    <Switch>
+      <Route exact path="/" component={Dashboard} />
+      <Route exact path="/admin" component={Admin} />
+    </Switch>
+  )
 }
 
 export default () => (
   <Authenticator hideDefault={true} style={{ background: 'red' }}>
     <Login />
-    <SignUp />
-    <ConfirmSignUp />
-    <Greetings />
     <AppRouter />
   </Authenticator>
 )

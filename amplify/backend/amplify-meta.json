@@ -19,7 +19,7 @@
         "s3TemplateURL": "https://s3.amazonaws.com/a2018-20181126173744-deployment/amplify-cfn-templates/hosting/template.json",
         "logicalId": "hostingS3AndCloudFront"
       },
-      "lastPushTimeStamp": "2018-11-26T15:47:35.237Z",
+      "lastPushTimeStamp": "2018-11-27T07:41:17.370Z",
       "output": {
         "S3BucketSecureURL": "https://bim-dev-aws-amplify-bucket.s3.amazonaws.com",
         "WebsiteURL": "http://bim-dev-aws-amplify-bucket.s3-website-eu-west-1.amazonaws.com",
@@ -27,6 +27,27 @@
         "HostingBucketName": "bim-dev-aws-amplify-bucket"
       },
       "lastPushDirHash": "uPcaKzw70QshyNsguEIAkIExZfk="
+    }
+  },
+  "auth": {
+    "cognito105252b6": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/a2018-20181126173744-deployment/amplify-cfn-templates/auth/cognito105252b6-cloudformation-template.yml",
+        "logicalId": "authcognito105252b6"
+      },
+      "lastPushTimeStamp": "2018-11-27T07:41:17.374Z",
+      "output": {
+        "AppClientSecret": "",
+        "UserPoolId": "eu-west-1_c7EdEEuIx",
+        "AppClientIDWeb": "5iqlsvr9908r3nc5rme8vg4uit",
+        "AppClientID": "5iqlsvr9908r3nc5rme8vg4uit",
+        "IdentityPoolId": "eu-west-1:9e625e5b-1be2-4125-8b9b-dac41db4f99d",
+        "IdentityPoolName": "be more identity pool",
+        "UserPoolName": "be-more-user-pool"
+      },
+      "lastPushDirHash": "PaU0aJQ5fRgsmJgf+wMI0B9ps2o="
     }
   }
 }
