@@ -9,4 +9,7 @@ export const AppConstants = {
     forgotPassword: { title: 'CONFIRM', awsState: 'forgotPassword' },
     signedIn: { title: 'YOU ARE SIGNED IN', awsState: 'signedIn' },
   },
+  amplifyErrorCodes: {
+    userNotConfirmedException: 'UserNotConfirmedException',
+  },
 }

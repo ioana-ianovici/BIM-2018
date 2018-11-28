@@ -1,18 +1,28 @@
 import React from 'react'
 import styled from 'styled-components'
+import { styleConstants } from './../shared/styleConstants'
 
 const StyledSpinner = styled.div`
   display: inline-block;
-  transform: translateZ(1px);
+  display: table;
+  width: 100%;
+  height: 100%;
 
-  div {
-    display: inline-block;
-    width: 51px;
-    height: 51px;
-    margin: 6px;
-    border-radius: 50%;
-    background: #fff;
-    animation: spinner 2.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+  .spinner-wrapper {
+    width: 100%;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    transform: translateZ(1px);
+    background-color: ${styleConstants.darkThemePrimaryBackground}
+      /* todo: read bgcolor by theme */ div {
+      width: 51px;
+      height: 51px;
+      margin: 6px auto;
+      border-radius: 50%;
+      background: #fff;
+      animation: spinner 2.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    }
   }
 
   @keyframes spinner {
@@ -36,7 +46,9 @@ const StyledSpinner = styled.div`
 const Spinner = () => {
   return (
     <StyledSpinner>
-      <div />
+      <div className="spinner-wrapper">
+        <div />
+      </div>
     </StyledSpinner>
   )
 }

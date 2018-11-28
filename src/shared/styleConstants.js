@@ -1,5 +1,4 @@
 export const styleConstants = {
-  mainColor: '#0D00FF',
   mainAccent: '#09E8C2', //#EA3795
   darkThemePaleBorder: '#1F2228;',
   darkThemePaleText: '#2A2F39;',

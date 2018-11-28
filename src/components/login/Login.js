@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import loginImage from './../../assets/login-illustration.svg'
 import styled from 'styled-components'
 import { CSSTransitionGroup } from 'react-transition-group'
@@ -13,7 +13,8 @@ const StyledLogin = styled.div`
   margin: auto;
   /* background: ${styleConstants.mainColor} url(${loginImage}) no-repeat left
     center; */
-  background: ${styleConstants.mainColor};
+  /* todo */
+  background: ${styleConstants.darkThemePrimaryBackground};
   background-size: contain;
   overflow: auto;
 
@@ -72,7 +73,7 @@ const StyledLogin = styled.div`
       font-weight: bold;
       line-height: 31px;
       font-size: 21px;
-      color: rgba(80, 93, 104, 0.5);
+      color: ${styleConstants.greyText};
       text-align: center;
 
       &:hover {
@@ -100,7 +101,11 @@ const StyledLogin = styled.div`
         margin-bottom: 15px;
         line-height: 18px;
         font-size: 14px;
-        color: ${styleConstants.lightText};
+
+        &::placeholder {
+          color: ${styleConstants.lightText};
+          opacity: 1;
+        }
       }
 
       .login-form__forgot-password {
@@ -136,12 +141,6 @@ const StyledLogin = styled.div`
     color: crimson;
   }
 
-  .error {
-    height: auto;
-    opacity: 1;
-    transition: height 1s, opacity 1s;
-  }
-
   .error-appear {
     opacity: 0.01;
     height: 0px;
@@ -153,6 +152,9 @@ const StyledLogin = styled.div`
     transition: opacity 0.5s ease-in;
   }
 
+  .information-message {
+    margin-bottom: 20px;
+  }
 `
 
 class Login extends React.Component {
@@ -168,17 +170,7 @@ class Login extends React.Component {
     super(props)
     this._validAuthStates = ['signIn', 'forgotPassword', 'signUp']
   }
-  logout() {
-    Auth.signOut()
-      .then(data => {
-        this.handleStateActionChange(
-          AppConstants.amplifyAuthActions.signIn.awsState,
-          data,
-        )
-      })
-      .catch(err => console.log(err))
-  }
-  login() {
+  signIn() {
     Auth.signIn(this.state.form.email, this.state.form.password)
       .then(user => {
         this.handleStateActionChange(
@@ -187,7 +179,20 @@ class Login extends React.Component {
         )
         this.setState({ error: null })
       })
-      .catch(error => this.setState({ error: error.message }))
+      .catch(error => {
+        if (
+          error.code ===
+          AppConstants.amplifyErrorCodes.userNotConfirmedException
+        ) {
+          this.handleStateActionChange(
+            AppConstants.amplifyAuthActions.confirmSignUp.awsState,
+          )
+
+          return
+        }
+
+        this.setState({ error: error.message })
+      })
   }
   signUp() {
     Auth.signUp({
@@ -199,31 +204,80 @@ class Login extends React.Component {
 
         this.setState({ error: null })
 
-        // After retrieveing the confirmation code from the user
-        Auth.confirmSignUp(
-          this.state.form.email,
-          this.state.form.confirmationCode,
-          {
-            // Optional. Force user confirmation irrespective of existing alias. By default set to True.
-            forceAliasCreation: true,
-          },
+        this.handleStateActionChange(
+          AppConstants.amplifyAuthActions.confirmSignUp.awsState,
+          data,
         )
-          .then(data => console.log('confirm sign up done,', data))
-          .catch(error => this.setState({ error: error.message }))
       })
       .catch(error => this.setState({ error: error.message }))
+  }
+  confirmSignUp() {
+    Auth.confirmSignUp(
+      this.state.form.email,
+      this.state.form.confirmationCode,
+      {
+        // Optional. Force user confirmation irrespective of existing alias. By default set to True.
+        forceAliasCreation: true,
+      },
+    )
+      .then(data => {
+        this.handleStateActionChange(
+          AppConstants.amplifyAuthActions.signIn.awsState,
+          data,
+        )
+      })
+      .catch(error => this.setState({ error: error.message }))
+  }
+  onForgotPassword() {
+    Auth.forgotPassword(this.state.form.email)
+      .then(data => {
+        this.handleStateActionChange(
+          AppConstants.amplifyAuthActions.verifyContact.awsState,
+          data,
+        )
+        this.setState({ error: null })
+      })
+      .catch(error => {
+        this.setState({ error: error.message })
+      })
+  }
+  onConfirmForgotPassword() {
+    Auth.forgotPasswordSubmit(
+      this.state.form.email,
+      this.state.form.confirmationCode,
+      this.state.form.password,
+    )
+      .then(data => {
+        this.handleStateActionChange(
+          AppConstants.amplifyAuthActions.signIn.awsState,
+          data,
+        )
+        this.setState({ error: null })
+      })
+      .catch(error => {
+        this.setState({ error: error.message })
+      })
   }
   handleSubmit() {
     switch (this.props.authState) {
       case AppConstants.amplifyAuthActions.signIn.awsState: {
-        this.login()
+        this.signIn()
         break
       }
       case AppConstants.amplifyAuthActions.signUp.awsState: {
         this.signUp()
         break
       }
+      case AppConstants.amplifyAuthActions.confirmSignUp.awsState: {
+        this.confirmSignUp()
+        break
+      }
       case AppConstants.amplifyAuthActions.forgotPassword.awsState: {
+        this.onForgotPassword()
+        break
+      }
+      case AppConstants.amplifyAuthActions.verifyContact.awsState: {
+        this.onConfirmForgotPassword()
         break
       }
       default: {
@@ -238,7 +292,10 @@ class Login extends React.Component {
   handleInputChange(event) {
     event.persist()
     this.setState(oldState => ({
-      form: { ...oldState.form, [event.target.name]: event.target.value },
+      form: {
+        ...oldState.form,
+        [event.target.name]: event.target.value.trim(),
+      },
       error: null,
     }))
   }
@@ -249,8 +306,22 @@ class Login extends React.Component {
       authState === AppConstants.amplifyAuthActions.signIn.awsState
     const isSignUp =
       authState === AppConstants.amplifyAuthActions.signUp.awsState
+    const isConfirmSignUp =
+      authState === AppConstants.amplifyAuthActions.confirmSignUp.awsState
     const isForgotPassword =
       authState === AppConstants.amplifyAuthActions.forgotPassword.awsState
+    const isForgotPasswordConfirm =
+      authState === AppConstants.amplifyAuthActions.verifyContact.awsState
+
+    if (
+      !isSignIn &&
+      !isSignUp &&
+      !isConfirmSignUp &&
+      !isForgotPassword &&
+      !isForgotPasswordConfirm
+    ) {
+      return null
+    }
 
     return (
       <StyledLogin className="login">
@@ -265,7 +336,7 @@ class Login extends React.Component {
                 <button
                   onClick={() =>
                     this.handleStateActionChange(
-                      AppConstants.amplifyAuthActions.signedIn.awsState,
+                      AppConstants.amplifyAuthActions.signIn.awsState,
                     )
                   }
                   className={
@@ -277,7 +348,7 @@ class Login extends React.Component {
                 <button
                   onClick={() =>
                     this.handleStateActionChange(
-                      AppConstants.amplifyAuthActions.signedUp.awsState,
+                      AppConstants.amplifyAuthActions.signUp.awsState,
                     )
                   }
                   className={
@@ -288,32 +359,43 @@ class Login extends React.Component {
                 </button>
               </div>
               <form className="login-box__form-group login-form">
-                <input
-                  name="email"
-                  type="email"
-                  className="login-form__input"
-                  placeholder="Email"
-                  autoComplete="off"
-                  onChange={event => this.handleInputChange(event)}
-                />
-                {!isForgotPassword && (
+                {(isSignIn || isSignUp || isForgotPassword) && (
                   <input
-                    name="password"
-                    type="password"
+                    name="email"
+                    type="email"
                     className="login-form__input"
-                    placeholder="Password"
+                    placeholder="Email"
                     autoComplete="off"
                     onChange={event => this.handleInputChange(event)}
                   />
                 )}
-                <input
-                  name="confirmationCode"
-                  type="text"
-                  className="login-form__input"
-                  placeholder="Confirmation code"
-                  autoComplete="off"
-                  onChange={event => this.handleInputChange(event)}
-                />
+                {(isSignIn || isSignUp || isForgotPasswordConfirm) && (
+                  <input
+                    name="password"
+                    type="password"
+                    className="login-form__input"
+                    placeholder={
+                      isForgotPasswordConfirm ? 'New password' : 'Password'
+                    }
+                    autoComplete="off"
+                    onChange={event => this.handleInputChange(event)}
+                  />
+                )}
+                {(isConfirmSignUp || isForgotPasswordConfirm) && (
+                  <Fragment>
+                    <div className="information-message">
+                      Please verify your email and enter the confirmation code
+                    </div>
+                    <input
+                      name="confirmationCode"
+                      type="text"
+                      className="login-form__input"
+                      placeholder="Confirmation code"
+                      autoComplete="off"
+                      onChange={event => this.handleInputChange(event)}
+                    />
+                  </Fragment>
+                )}
                 {isSignIn && (
                   <button
                     onClick={() =>
@@ -346,7 +428,6 @@ class Login extends React.Component {
                 {console.log(authState)}
                 {AppConstants.amplifyAuthActions[authState].title}
               </button>
-              <button onClick={() => this.logout()}>Logout</button>
             </div>
           </div>
         </div>
