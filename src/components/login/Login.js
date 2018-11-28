@@ -3,9 +3,9 @@ import loginImage from './../../assets/login-illustration.svg'
 import styled from 'styled-components'
 import { CSSTransitionGroup } from 'react-transition-group'
 import { Auth } from 'aws-amplify'
-import { styleConstants } from '../../shared/styleConstants'
+import { styleConstants } from '../../shared/constants/styleConstants'
 import { Logo } from '../../shared/Logo'
-import { AppConstants } from './../../shared/constants'
+import { AppConstants } from '../../shared/constants/constants'
 
 const StyledLogin = styled.div`
   height: 100%;

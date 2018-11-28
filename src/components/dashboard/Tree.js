@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 import styled from 'styled-components'
 import propTypes from 'prop-types'
 import { StickyContainer, Sticky } from 'react-sticky'
-import { styleConstants } from '../../shared/styleConstants'
+import { styleConstants } from '../../shared/constants/styleConstants'
 
 const StyledTree = styled.div`
   /* -ms-box-orient: horizontal;

@@ -1,5 +1,5 @@
 import { Auth } from 'aws-amplify'
-import { AppConstants } from './shared/constants'
+import { AppConstants } from './shared/constants/constants'
 
 const headerAuth = async () => ({
   Authorization: (await Auth.currentSession()).idToken.jwtToken,

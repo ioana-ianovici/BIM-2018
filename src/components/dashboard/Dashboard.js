@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { API, Auth } from 'aws-amplify'
+import { API } from 'aws-amplify'
 
-import { styleConstants } from '../../shared/styleConstants'
-import PageLayout from '../../shared/PageLayout'
+import { styleConstants } from '../../shared/constants/styleConstants'
 import Badges from './Badges'
 import UserDetails from './UserDetails'
 import Tree from './Tree'
@@ -276,12 +275,14 @@ class Dashboard extends Component {
   constructor(props) {
     super(props)
 
-    API.post('Users', '')
+    API.post('Users', '', {
+      body: { userName: 'ioana.ianovici@assist.ro', picture: 'masca' },
+    })
       .then(response => {
         console.log('succes', response)
       })
       .catch(response => {
-        console.log('error', response)
+        console.log('caught')
       })
   }
 
@@ -289,20 +290,18 @@ class Dashboard extends Component {
     const { badges, requirements, userDetails, tree } = this.state
 
     return (
-      <PageLayout>
-        <StyledDashboard userProgressPercentage={45}>
-          <UserDetails {...userDetails} />
-          <Badges items={badges} />
-          <div className="section-wrapper">
-            <section className="section-left">
-              <Tree steps={tree} />
-            </section>
-            <section className="section-right">
-              <Requirements requirements={requirements} />
-            </section>
-          </div>
-        </StyledDashboard>
-      </PageLayout>
+      <StyledDashboard userProgressPercentage={45}>
+        <UserDetails {...userDetails} />
+        <Badges items={badges} />
+        <div className="section-wrapper">
+          <section className="section-left">
+            <Tree steps={tree} />
+          </section>
+          <section className="section-right">
+            <Requirements requirements={requirements} />
+          </section>
+        </div>
+      </StyledDashboard>
     )
   }
 }

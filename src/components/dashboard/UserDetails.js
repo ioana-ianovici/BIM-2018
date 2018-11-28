@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import propTypes from 'prop-types'
-import { styleConstants } from '../../shared/styleConstants'
+import { styleConstants } from '../../shared/constants/styleConstants'
 
 const StyledUserDetails = styled.div`
   .profile-picture--large {

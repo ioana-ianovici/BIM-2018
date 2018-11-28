@@ -3,16 +3,16 @@ import styled from 'styled-components'
 
 import { styleConstants } from '../../shared/constants/styleConstants'
 
-const StyledAdmin = styled.div`
+const StyledSearch = styled.div`
   color: ${styleConstants.darkThemeContrastTextColor};
 `
 
-class Admin extends Component {
+class Search extends Component {
   state = {}
 
   render() {
-    return <StyledAdmin>admin</StyledAdmin>
+    return <StyledSearch>search</StyledSearch>
   }
 }
 
-export default Admin
+export default Search

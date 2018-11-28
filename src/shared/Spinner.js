@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { styleConstants } from './../shared/styleConstants'
+import { styleConstants } from './constants/styleConstants'
 
 const StyledSpinner = styled.div`
   display: inline-block;

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import propTypes from 'prop-types'
 import styled from 'styled-components'
-import { styleConstants } from '../../shared/styleConstants'
+import { styleConstants } from '../../shared/constants/styleConstants'
 import Carousel from '../../shared/Carousel'
 
 const StyledBadgesSection = styled.div`

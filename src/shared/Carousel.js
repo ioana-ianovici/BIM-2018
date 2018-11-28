@@ -35,10 +35,12 @@ const Wrapper = styled.div`
 
   .slick-prev {
     left: -50px;
+    z-index: 0;
   }
 
   .slick-next {
     right: -50px;
+    z-index: 0;
   }
 
   .slick-next img,

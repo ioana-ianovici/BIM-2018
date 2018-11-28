@@ -16,4 +16,11 @@ export const AppConstants = {
     users: 'Users',
     badges: 'Badges',
   },
+  routes: {
+    dashboard: '/dashboard',
+    logout: '/logout',
+    admin: '/admin',
+    search: '/search',
+    settings: '/settings',
+  },
 }
