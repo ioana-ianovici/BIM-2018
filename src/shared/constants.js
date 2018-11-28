@@ -12,4 +12,8 @@ export const AppConstants = {
   amplifyErrorCodes: {
     userNotConfirmedException: 'UserNotConfirmedException',
   },
+  endpoints: {
+    users: 'Users',
+    badges: 'Badges',
+  },
 }

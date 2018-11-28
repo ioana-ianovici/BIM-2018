@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import { API, Auth } from 'aws-amplify'
+
 import { styleConstants } from '../../shared/styleConstants'
 import PageLayout from '../../shared/PageLayout'
 import Badges from './Badges'
@@ -269,6 +271,18 @@ class Dashboard extends Component {
         isAchieved: false,
       },
     ],
+  }
+
+  constructor(props) {
+    super(props)
+
+    API.post('Users', '')
+      .then(response => {
+        console.log('succes', response)
+      })
+      .catch(response => {
+        console.log('error', response)
+      })
   }
 
   render() {

@@ -1,3 +1,10 @@
+import { Auth } from 'aws-amplify'
+import { AppConstants } from './shared/constants'
+
+const headerAuth = async () => ({
+  Authorization: (await Auth.currentSession()).idToken.jwtToken,
+})
+
 export default {
   Auth: {
     // REQUIRED only for Federated Authentication - Amazon Cognito Identity Pool ID
@@ -18,14 +25,16 @@ export default {
   API: {
     endpoints: [
       {
-        name: 'users',
+        name: AppConstants.endpoints.users,
         endpoint: process.env.REACT_APP_API_USERS,
         region: process.env.REACT_APP_AWS_REGION,
+        custom_header: headerAuth,
       },
       {
-        name: 'badges',
+        name: AppConstants.endpoints.badges,
         endpoint: process.env.REACT_APP_API_BADGES,
         region: process.env.REACT_APP_AWS_REGION,
+        custom_header: headerAuth,
       },
     ],
   },
