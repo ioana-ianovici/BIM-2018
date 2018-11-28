@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import loginImage from './../../assets/login-illustration.svg'
 import styled from 'styled-components'
-import { CSSTransitionGroup } from 'react-transition-group'
+import { CSSTransition } from 'react-transition-group'
 import { Auth } from 'aws-amplify'
 import { styleConstants } from '../../shared/constants/styleConstants'
 import { Logo } from '../../shared/Logo'
@@ -410,17 +410,13 @@ class Login extends React.Component {
                 )}
               </form>
 
-              <CSSTransitionGroup
-                transitionName="error"
-                transitionAppear={true}
-                transitionAppearTimeout={1000}
-                transitionEnter={false}
-                transitionLeave={false}
+              <CSSTransition
+                key="1"
+                timeout={{ enter: 1000 }}
+                classNames="sidenav__link-text"
               >
-                <div key={1} className="error">
-                  {error}
-                </div>
-              </CSSTransitionGroup>
+                <div className="error">{error}</div>
+              </CSSTransition>
               <button
                 className="login-box__submit"
                 onClick={() => this.handleSubmit()}

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
-import { CSSTransitionGroup } from 'react-transition-group'
+import { CSSTransition } from 'react-transition-group'
 
 import sidebarToogleIcon from './../assets/sidebar/sidebar-toggle.svg'
 import sidebarHomeIcon from './../assets/sidebar/sidebar-home.svg'
@@ -84,11 +84,11 @@ const StyledSidenav = styled.div`
     width: 20px;
   }
 
-  .sidenav__link-text-appear {
+  .sidenav__link-text-enter {
     opacity: 0.01;
   }
 
-  .sidenav__link-text-appear.sidenav__link-text-appear-active {
+  .sidenav__link-text-enter.sidenav__link-text-enter-active {
     opacity: 1;
     transition: opacity 0.5s ease-in;
   }
@@ -138,15 +138,13 @@ class Sidenav extends PureComponent {
             >
               <img src={sidebarHomeIcon} alt="dashboard" />
               {isSidebarTextVisible ? (
-                <CSSTransitionGroup
-                  transitionName="sidenav__link-text"
-                  transitionAppear={true}
-                  transitionAppearTimeout={500}
-                  transitionEnter={false}
-                  transitionLeave={false}
+                <CSSTransition
+                  key="1"
+                  timeout={{ enter: 500 }}
+                  classNames="sidenav__link-text"
                 >
                   <span key="1">Dashboard</span>
-                </CSSTransitionGroup>
+                </CSSTransition>
               ) : null}
             </NavLink>
             <NavLink
@@ -156,15 +154,13 @@ class Sidenav extends PureComponent {
             >
               <img src={sidebarUserSettingsIcon} alt="admin" />
               {isSidebarTextVisible ? (
-                <CSSTransitionGroup
-                  transitionName="sidenav__link-text"
-                  transitionAppear={true}
-                  transitionAppearTimeout={500}
-                  transitionEnter={false}
-                  transitionLeave={false}
+                <CSSTransition
+                  key="1"
+                  timeout={{ enter: 500 }}
+                  classNames="sidenav__link-text"
                 >
                   <span key="1">Admin</span>
-                </CSSTransitionGroup>
+                </CSSTransition>
               ) : null}
             </NavLink>
             <NavLink
@@ -174,15 +170,13 @@ class Sidenav extends PureComponent {
             >
               <img src={sidebarVerticalIcon} alt="search" />
               {isSidebarTextVisible ? (
-                <CSSTransitionGroup
-                  transitionName="sidenav__link-text"
-                  transitionAppear={true}
-                  transitionAppearTimeout={500}
-                  transitionEnter={false}
-                  transitionLeave={false}
+                <CSSTransition
+                  key="1"
+                  timeout={{ enter: 500 }}
+                  classNames="sidenav__link-text"
                 >
                   <span key="1">Search</span>
-                </CSSTransitionGroup>
+                </CSSTransition>
               ) : null}
             </NavLink>
           </div>
@@ -194,15 +188,13 @@ class Sidenav extends PureComponent {
             >
               <img src={sidebarSettings} alt="settings" />
               {isSidebarTextVisible ? (
-                <CSSTransitionGroup
-                  transitionName="sidenav__link-text"
-                  transitionAppear={true}
-                  transitionAppearTimeout={500}
-                  transitionEnter={false}
-                  transitionLeave={false}
+                <CSSTransition
+                  key="1"
+                  timeout={{ enter: 500 }}
+                  classNames="sidenav__link-text"
                 >
                   <span key="1">Settings</span>
-                </CSSTransitionGroup>
+                </CSSTransition>
               ) : null}
             </NavLink>
             <NavLink
@@ -212,15 +204,13 @@ class Sidenav extends PureComponent {
             >
               <img src={sidebarLogout} alt="logout" />
               {isSidebarTextVisible ? (
-                <CSSTransitionGroup
-                  transitionName="sidenav__link-text"
-                  transitionAppear={true}
-                  transitionAppearTimeout={500}
-                  transitionEnter={false}
-                  transitionLeave={false}
+                <CSSTransition
+                  key="1"
+                  timeout={{ enter: 500 }}
+                  classNames="sidenav__link-text"
                 >
                   <span key="1">Logout</span>
-                </CSSTransitionGroup>
+                </CSSTransition>
               ) : null}
             </NavLink>
           </div>
