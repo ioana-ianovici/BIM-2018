@@ -275,14 +275,24 @@ class Dashboard extends Component {
   constructor(props) {
     super(props)
 
-    API.post('Users', '', {
-      body: { userName: 'ioana.ianovici@assist.ro', picture: 'masca' },
-    })
-      .then(response => {
-        console.log('succes', response)
+    // API.post('Users', '', {
+    //   body: { userName: 'ioana.ianovici@assist.ro', picture: 'masca' },
+    // })
+    //   .then(response => {
+    //     console.log('succes', response)
+    //   })
+    //   .catch(response => {
+    //     console.log('caught')
+    //   })
+    API.get('Self', '', {})
+      .then(res => {
+        console.log('coool')
+        console.log(res)
       })
-      .catch(response => {
-        console.log('caught')
+      .catch(err => {
+        console.log(
+          'In cazul in care userul nu are detailii ar trebui sa fie redirectionat sa-si editeze profilul',
+        )
       })
   }
 
