@@ -2,8 +2,29 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import propTypes from 'prop-types'
 import { styleConstants } from '../../shared/constants/styleConstants'
+import frame from './../../assets/frame.svg'
 
 const StyledUserDetails = styled.div`
+  .profile-info-section__profile-picture-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 30px;
+  }
+
+  .profile-picture-frame {
+    position: absolute;
+    top: 62px;
+    left: -101px;
+  }
+
+  .profile-picture-frame-piece {
+    position: absolute;
+    bottom: -15px;
+    left: 50px;
+    height: 25px;
+    width: 25px;
+  }
+
   .profile-picture--large {
     width: 125px;
     height: 125px;
@@ -64,6 +85,7 @@ class Dashboard extends Component {
       userName,
       userPicture,
       userTitle,
+      userFrame,
       userTitleProgressPercentage,
       userNextTitle,
       userLastTitle,
@@ -73,11 +95,19 @@ class Dashboard extends Component {
       <StyledUserDetails userProgressPercentage={userTitleProgressPercentage}>
         <section>
           <div className="profile-info-section">
-            <img
-              className="profile-picture profile-picture--large"
-              src={userPicture}
-              alt="profile"
-            />
+            <div className="profile-info-section__profile-picture-wrapper">
+              <img
+                className="profile-picture profile-picture--large"
+                src={userPicture}
+                alt="profile"
+              />
+              <img className="profile-picture-frame" src={frame} alt="frame" />
+              <img
+                className="profile-picture-frame-piece"
+                src={userFrame}
+                alt="frame-content"
+              />
+            </div>
             <div className="profile-info-section__user-name">{userName}</div>
             <div className="profile-info-section__user-title">{userTitle}</div>
             <div className="profile-info-section__user-title profile-info-section__user-title--padded">

@@ -7,7 +7,7 @@ import { Logo } from './Logo'
 
 const StyledPageLayout = styled.div`
   height: 100%;
-  overflow: hidden;
+  overflow-y: hidden;
   display: flex;
 
   .content-left {
@@ -15,6 +15,7 @@ const StyledPageLayout = styled.div`
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
+    overflow: hidden;
   }
 
   .content-right {
@@ -23,7 +24,7 @@ const StyledPageLayout = styled.div`
     flex-direction: column;
     flex-shrink: 0;
     flex-grow: 1;
-    overflow-y: hidden;
+    overflow: hidden;
   }
 
   .main::-webkit-scrollbar-track,
@@ -47,6 +48,7 @@ const StyledPageLayout = styled.div`
   }
 
   .main {
+    min-width: 480px;
     background-color: ${styleConstants.darkThemeSecondaryBackground};
     margin-left: 60px;
     padding: 20px;

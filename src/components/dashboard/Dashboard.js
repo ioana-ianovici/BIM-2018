@@ -12,6 +12,7 @@ import origamiCrane from './../../assets/badges/origami-crane.svg'
 import rescueCircle from './../../assets/badges/rescue-circle.svg'
 import trumpet from './../../assets/badges/trumpet.svg'
 import disk from './../../assets/badges/disk.svg'
+import plant from './../../assets/default-frame-set-1/plant.svg'
 
 const StyledDashboard = styled.div`
   .section-wrapper {
@@ -81,6 +82,7 @@ class Dashboard extends Component {
       userTitleProgressPercentage: 45,
       userLastTitle: 'Rookie',
       userNextTitle: 'Master',
+      userFrame: plant,
     },
     badges: [
       {

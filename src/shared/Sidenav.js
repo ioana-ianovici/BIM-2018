@@ -21,7 +21,7 @@ const StyledSidenav = styled.div`
     z-index: 1;
     top: 0;
     left: 0;
-    overflow-x: hidden;
+    overflow: hidden;
     background-color: ${styleConstants.darkThemePrimaryBackground}; //todo: get theme in app state.
     transition: width
       ${styleConstants.sidebarAnimationDurationMilliseconds + 'ms'};
