@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-// import { API } from 'aws-amplify'
+import { API } from 'aws-amplify'
 
 import { styleConstants } from '../../shared/constants/styleConstants'
 import Badges from './Badges'
@@ -284,6 +284,21 @@ class Dashboard extends Component {
         isAchieved: false,
       },
     ],
+  }
+
+  constructor(props) {
+    super(props)
+
+    API.get('Self', '', {})
+      .then(res => {
+        console.log('coool')
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(
+          'In cazul in care userul nu are detailii ar trebui sa fie redirectionat sa-si editeze profilul',
+        )
+      })
   }
 
   render() {
