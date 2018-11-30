@@ -7,6 +7,24 @@ import { Logo } from './Logo'
 
 const StyledPageLayout = styled.div`
   height: 100%;
+  overflow: hidden;
+  display: flex;
+
+  .content-left {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+  }
+
+  .content-right {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    flex-grow: 1;
+    overflow-y: hidden;
+  }
 
   .main::-webkit-scrollbar-track,
   ::-webkit-scrollbar-track {
@@ -98,26 +116,31 @@ const StyledPageLayout = styled.div`
 const PageLayout = props => {
   return (
     <StyledPageLayout>
-      <Sidenav />
-      <header>
-        <div className="header__header-left">
-          <Logo className="logo" />
-        </div>
-        <div className="header__header-right header-right">
-          <span className="header-right__text">
-            Hello,{' '}
-            <span className="header-right__text--highlighted">User name</span>!
-          </span>
-          <img
-            className="profile-picture profile-picture--small header-right--middle"
-            src="http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg"
-            alt="profile"
-          />
-        </div>
-      </header>
+      <div className="content-left">
+        <Sidenav />
+      </div>
+      <div className="content-right">
+        <header>
+          <div className="header__header-left">
+            <Logo className="logo" />
+          </div>
+          <div className="header__header-right header-right">
+            <span className="header-right__text">
+              Hello,{' '}
+              <span className="header-right__text--highlighted">User name</span>
+              !
+            </span>
+            <img
+              className="profile-picture profile-picture--small header-right--middle"
+              src="http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg"
+              alt="profile"
+            />
+          </div>
+        </header>
 
-      <div className="main" key="1">
-        {props.children}
+        <div className="main" key="1">
+          {props.children}
+        </div>
       </div>
     </StyledPageLayout>
   )

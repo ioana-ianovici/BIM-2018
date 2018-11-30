@@ -9,29 +9,29 @@ const StyledUserDetails = styled.div`
     height: 125px;
   }
 
-  .main-profile-info-section {
+  .profile-info-section {
     text-align: center;
     padding: 25px 10px;
   }
 
-  .main-profile-info-section__user-name {
+  .profile-info-section__user-name {
     font-weight: bold;
     line-height: 31px;
     font-size: 21px;
     color: ${styleConstants.mainAccent};
   }
 
-  .main-profile-info-section__user-title {
+  .profile-info-section__user-title {
     line-height: 18px;
     font-size: 14px;
     color: ${styleConstants.lightText};
   }
 
-  .main-profile-info-section__user-title--padded {
+  .profile-info-section__user-title--padded {
     padding: 40px 0;
   }
 
-  .main-profile-info-section__user-progress {
+  .profile-info-section__user-progress {
     background: ${styleConstants.mainAccent};
     background: -moz-linear-gradient(left, ${styleConstants.mainAccent} 0%, ${
   styleConstants.mainAccent
@@ -72,21 +72,17 @@ class Dashboard extends Component {
     return (
       <StyledUserDetails userProgressPercentage={userTitleProgressPercentage}>
         <section>
-          <div className="main-profile-info-section">
+          <div className="profile-info-section">
             <img
               className="profile-picture profile-picture--large"
               src={userPicture}
               alt="profile"
             />
-            <div className="main-profile-info-section__user-name">
-              {userName}
-            </div>
-            <div className="main-profile-info-section__user-title">
-              {userTitle}
-            </div>
-            <div className="main-profile-info-section__user-title main-profile-info-section__user-title--padded">
+            <div className="profile-info-section__user-name">{userName}</div>
+            <div className="profile-info-section__user-title">{userTitle}</div>
+            <div className="profile-info-section__user-title profile-info-section__user-title--padded">
               {userLastTitle}{' '}
-              <span className="main-profile-info-section__user-progress" />{' '}
+              <span className="profile-info-section__user-progress" />{' '}
               {userNextTitle}
             </div>
           </div>

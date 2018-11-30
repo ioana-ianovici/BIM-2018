@@ -1,5 +1,5 @@
 import React from 'react'
-import { Switch, Route, withRouter } from 'react-router-dom'
+import { Switch, Route, withRouter, Redirect } from 'react-router-dom'
 import { Authenticator } from 'aws-amplify-react'
 import styled from 'styled-components'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
@@ -79,6 +79,18 @@ const RoutesGuard = props => {
                 exact
                 path={AppConstants.routes.logout}
                 component={Logout}
+              />
+              <Route
+                exact
+                path={AppConstants.routes.dashboard}
+                component={Dashboard}
+              />
+              <Route
+                exact
+                path="/"
+                component={() => (
+                  <Redirect to={AppConstants.routes.dashboard} />
+                )}
               />
             </Switch>
           </div>

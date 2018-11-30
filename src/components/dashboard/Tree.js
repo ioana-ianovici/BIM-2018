@@ -1,16 +1,20 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import styled from 'styled-components'
 import propTypes from 'prop-types'
-import { StickyContainer, Sticky } from 'react-sticky'
 import { styleConstants } from '../../shared/constants/styleConstants'
+import tree from './../../assets/tree.svg'
 
 const StyledTree = styled.div`
-  /* -ms-box-orient: horizontal;
-  display: flex;
-  flex-direction: column-reverse;
-  align-items: center; */
+  color: ${styleConstants.darkThemeContrastTextColor};
   overflow: hidden;
   height: 100%;
+
+  .tree {
+    background-image: url(${tree});
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-size: cover;
+  }
 
   .tree__step {
     display: block;
@@ -19,36 +23,42 @@ const StyledTree = styled.div`
     font-size: 14px;
     color: ${styleConstants.mainAccent};
     position: relative;
+    width: 50%;
 
     &:nth-child(even) {
       left: calc(50% + 20px);
       text-align: left;
 
-      &:after {
-        content: ' ';
-        display: block;
-        position: absolute;
-        border-top: 1px solid ${styleConstants.mainAccent};
-        top: 25px;
-        left: -20px;
-        height: 1px;
-        width: 100px;
+      .step__content {
+        &:after {
+          content: ' ';
+          display: block;
+          position: absolute;
+          border-top: 1px solid ${styleConstants.mainAccent};
+          bottom: -5px;
+          left: -20px;
+          height: 1px;
+          width: 100px;
+        }
       }
     }
 
     &:nth-child(odd) {
-      right: calc(50% + 20px);
+      margin-right: calc(50% + 20px);
+      padding-right: 20px;
       text-align: right;
 
-      &:after {
-        content: ' ';
-        display: block;
-        position: absolute;
-        border-top: 1px solid ${styleConstants.mainAccent};
-        top: 25px;
-        right: -20px;
-        height: 1px;
-        width: 100px;
+      .step__content {
+        &:after {
+          content: ' ';
+          display: block;
+          position: absolute;
+          border-top: 1px solid ${styleConstants.mainAccent};
+          bottom: -5px;
+          right: -20px;
+          height: 1px;
+          width: 100px;
+        }
       }
     }
   }
@@ -58,25 +68,31 @@ const StyledTree = styled.div`
     transform: translateX(-50%);
     text-align: center;
 
-    &:after {
-      content: ' ';
-      display: block;
-      height: 99999px;
-      position: absolute;
-      top: -100005px;
-      left: 50%;
-      border-left: 1px solid ${styleConstants.mainAccent};
+    .step__content {
+      &:after {
+        content: ' ';
+        display: block;
+        height: 99999px;
+        position: absolute;
+        top: -100005px;
+        left: 50%;
+        border-left: 1px solid ${styleConstants.mainAccent};
+      }
     }
   }
 
-  .tree__step--inactive:nth-child(odd):after,
-  .tree__step--inactive:nth-child(even):after,
-  .tree__step--inactive:nth-child(1):after {
-    border-left: 1px solid ${styleConstants.darkThemePaleText};
+  .step__content {
+    position: relative;
   }
 
   .tree__step--inactive {
     color: ${styleConstants.darkThemePaleText};
+  }
+
+  .tree__step--inactive:nth-child(odd) .step__content:after,
+  .tree__step--inactive:nth-child(even) .step__content:after,
+  .tree__step--inactive:nth-child(1) .step__content:after {
+    border-left: 1px solid ${styleConstants.darkThemePaleText};
   }
 `
 
@@ -85,27 +101,21 @@ class Tree extends Component {
     const { steps } = this.props
 
     return (
-      <Fragment>
-        <StickyContainer>
-          <Sticky>{({ style }) => <h1>Sticky element</h1>}</Sticky>
-        </StickyContainer>
-
-        <StyledTree>
-          <Fragment>
-            {steps.reverse().map(step => (
-              <div
-                key={step.title}
-                className={
-                  'tree__step' +
-                  (step.isAchieved ? '' : ' tree__step--inactive')
-                }
-              >
-                {step.title}
-              </div>
-            ))}
-          </Fragment>
-        </StyledTree>
-      </Fragment>
+      <StyledTree>
+        <div className="tree">
+          {steps.reverse().map(step => (
+            <div
+              key={step.title}
+              className={
+                'tree__step step' +
+                (step.isAchieved ? '' : ' tree__step--inactive')
+              }
+            >
+              <div className="step__content">{step.title}</div>
+            </div>
+          ))}
+        </div>
+      </StyledTree>
     )
   }
 }

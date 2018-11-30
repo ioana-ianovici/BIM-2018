@@ -2,7 +2,6 @@ import { Auth } from 'aws-amplify'
 import { AppConstants } from './constants/constants'
 
 const Logout = () => {
-  debugger
   Auth.signOut()
     .catch(err => {
       console.log(err)

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { API } from 'aws-amplify'
+// import { API } from 'aws-amplify'
 
 import { styleConstants } from '../../shared/constants/styleConstants'
 import Badges from './Badges'
@@ -20,14 +20,12 @@ const StyledDashboard = styled.div`
   .section-left {
     width: 60%;
     margin-right: 20px;
-    display: inline-block;
     padding: 18px 20px;
   }
 
   .section-right {
     width: 40%;
     height: 100%;
-    display: inline-block;
     padding: 18px 20px;
     color: ${styleConstants.mainAccent};
   }
@@ -54,6 +52,22 @@ const StyledDashboard = styled.div`
 
   .section-right__text--inactive {
     color: ${styleConstants.darkThemePaleText};
+  }
+
+  @media screen and (max-width: 1000px) {
+    .section-wrapper {
+      flex-wrap: wrap;
+    }
+
+    .section-left {
+      width: 100%;
+      margin-right: 0;
+      margin-bottom: 20px;
+    }
+
+    .section-right {
+      width: 100%;
+    }
   }
 `
 
@@ -270,20 +284,6 @@ class Dashboard extends Component {
         isAchieved: false,
       },
     ],
-  }
-
-  constructor(props) {
-    super(props)
-
-    API.post('Users', '', {
-      body: { userName: 'ioana.ianovici@assist.ro', picture: 'masca' },
-    })
-      .then(response => {
-        console.log('succes', response)
-      })
-      .catch(response => {
-        console.log('caught')
-      })
   }
 
   render() {

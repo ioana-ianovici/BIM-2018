@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, withRouter } from 'react-router-dom'
 import styled from 'styled-components'
 import { CSSTransition } from 'react-transition-group'
 
@@ -13,9 +13,6 @@ import { styleConstants } from './constants/styleConstants'
 import { AppConstants } from './constants/constants'
 
 const StyledSidenav = styled.div`
-  height: 100%;
-  display: inline;
-
   .sidenav {
     height: 100%;
     width: 60px;
@@ -101,11 +98,7 @@ class Sidenav extends PureComponent {
   }
   constructor(props) {
     super(props)
-    this.handleSideButtonClick = this.handleSideButtonClick.bind(this)
     this.handleSidebarToggle = this.handleSidebarToggle.bind(this)
-  }
-  handleSideButtonClick(event) {
-    console.log(event)
   }
   handleSidebarToggle() {
     const isExpanded = this.state.isSidebarExpanded
@@ -220,4 +213,4 @@ class Sidenav extends PureComponent {
   }
 }
 
-export default Sidenav
+export default withRouter(Sidenav)
