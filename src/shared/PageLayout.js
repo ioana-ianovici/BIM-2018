@@ -99,10 +99,17 @@ const StyledPageLayout = styled.div`
     background-size: cover;
     width: 40px;
     height: 40px;
+    display: inline-block;
   }
 
   .profile-picture--small {
     border: 1px solid ${styleConstants.mainAccent};
+  }
+
+  .profile-picture--medium {
+    width: 55px;
+    height: 55px;
+    border: 2px solid ${styleConstants.darkThemeContrastBorder};
   }
 
   .logo {
@@ -111,7 +118,117 @@ const StyledPageLayout = styled.div`
   }
 
   section {
+    position: relative;
     background-color: ${styleConstants.darkThemePrimaryBackground};
+    margin-bottom: 20px;
+  }
+
+  .section--no-gutter {
+    margin: 0;
+  }
+
+  .react-select__control,
+  .react-select__menu,
+  .react-select__option {
+    background-color: ${styleConstants.darkThemePrimaryBackground};
+    color: ${styleConstants.DarkThemeLightText};
+    line-height: 18px;
+    font-size: 14px;
+  }
+
+  .react-select__value-container,
+  .react-select__placeholder {
+    overflow: visible;
+  }
+
+  .react-select__value-container.react-select__value-container--has-value,
+  .react-select__single-value {
+    color: ${styleConstants.DarkThemeLightText};
+  }
+
+  .react-select__menu {
+    margin: 0;
+  }
+
+  .react-select__option:hover {
+    color: ${styleConstants.mainAccent};
+    opacity: 0.7;
+  }
+
+  .react-select__option.is-selected {
+    color: red !important;
+  }
+
+  .react-select__option.react-select__option--is-focused {
+    color: ${styleConstants.mainAccent};
+  }
+
+  .react-select__control {
+    border: 1px solid ${styleConstants.darkThemePaleText};
+    border-radius: 2px;
+    padding: 11px 13px;
+
+    &:hover {
+      border-color: ${styleConstants.darkThemePaleText};
+    }
+  }
+
+  .react-select__indicator-separator {
+    display: none;
+  }
+
+  .react-select__control.react-select__control--is-focused {
+    border-color: ${styleConstants.darkThemePaleText};
+    box-shadow: none;
+  }
+
+  button {
+    line-height: 18px;
+    font-size: 14px;
+    text-transform: uppercase;
+    color: ${styleConstants.darkThemeButtonTextColor};
+    padding: 10px 40px;
+    background-color: ${styleConstants.mainAccent};
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+
+    &:hover {
+      text-shadow: 0px 0px 1px ${styleConstants.darkThemeButtonTextColor};
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+
+      &:hover {
+        text-shadow: none;
+      }
+    }
+  }
+
+  input {
+    border: none;
+    border-bottom: 1px solid ${styleConstants.darkThemePaleText};
+    background: transparent;
+    line-height: 18px;
+    font-size: 14px;
+    color: ${styleConstants.darkThemeContrastTextColor}
+    height: 18px;
+
+    &::placeholder {
+      color: ${styleConstants.darkThemePaleText};
+    }
+
+    &:focus {
+      outline: none;
+      color: ${styleConstants.mainAccent};
+      border-bottom: 1px solid ${styleConstants.mainAccent};
+    }
   }
 `
 

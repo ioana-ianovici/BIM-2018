@@ -93,7 +93,7 @@ class Dashboard extends Component {
 
     return (
       <StyledUserDetails userProgressPercentage={userTitleProgressPercentage}>
-        <section>
+        <section className="section--no-gutter">
           <div className="profile-info-section">
             <div className="profile-info-section__profile-picture-wrapper">
               <img
