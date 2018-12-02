@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react'
+import React, { PureComponent } from 'react'
 import styled from 'styled-components'
 import propTypes from 'prop-types'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
@@ -22,7 +22,7 @@ class Step extends PureComponent {
   }
 
   render() {
-    const { step, provided, innerRef } = this.props
+    const { step, provided } = this.props
 
     return (
       <div
@@ -55,28 +55,6 @@ class Ladder extends PureComponent {
     return result
   }
 
-  // getItemStyle(isDragging, draggableStyle) {
-  //   const grid = 8
-
-  //   return {
-  //     // some basic styles to make the items look a bit nicer
-  //     userSelect: 'none',
-  //     padding: grid * 2,
-  //     margin: `0 0 ${grid}px 0`,
-
-  //     // styles we need to apply on draggables
-  //     ...draggableStyle,
-  //   }
-  // }
-
-  // getListStyle(isDraggingOver) {
-  //   const grid = 8
-
-  //   return {
-  //     padding: grid,
-  //   }
-  // }
-
   onDragEnd(result) {
     if (!result.destination) {
       return
@@ -96,7 +74,7 @@ class Ladder extends PureComponent {
   }
 
   render() {
-    const { name } = this.state
+    const ladder = this.state
     console.log(this.state)
 
     return (
@@ -104,37 +82,22 @@ class Ladder extends PureComponent {
         <input
           type="text"
           placeholder="Ladder name"
-          value={name}
+          value={ladder.name}
           onChange={this.handleLadderNameChange}
         />
 
         <DragDropContext onDragEnd={this.onDragEnd}>
           <Droppable droppableId="droppable">
-            {(provided, snapshot) => (
-              <div
-                ref={provided.innerRef}
-                // style={this.getListStyle(snapshot.isDraggingOver)}
-              >
-                {this.state.steps.map((step, index) => (
+            {provided => (
+              <div ref={provided.innerRef}>
+                {ladder.steps.map((step, index) => (
                   <Draggable key={step.id} draggableId={step.id} index={index}>
-                    {(provided, snapshot) => (
+                    {provided => (
                       <Step
                         innerRef={provided.innerRef}
                         provided={provided}
                         step={step}
                       />
-                      // <div
-                      // className="step__name"
-                      // ref={provided.innerRef}
-                      // {...provided.draggableProps}
-                      // {...provided.dragHandleProps}
-                      //   // style={this.getItemStyle(
-                      //   //   snapshot.isDragging,
-                      //   //   provided.draggableProps.style,
-                      //   // )}
-                      // >
-                      //   {step.name}
-                      // </div>
                     )}
                   </Draggable>
                 ))}
