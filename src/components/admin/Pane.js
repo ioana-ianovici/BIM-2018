@@ -11,7 +11,7 @@ const StyledPane = styled.div`
 
 class Pane extends PureComponent {
   state = {
-    isOpen: false,
+    isOpen: true,
   }
 
   constructor(props) {

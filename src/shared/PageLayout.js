@@ -127,11 +127,30 @@ const StyledPageLayout = styled.div`
     margin: 0;
   }
 
+  .react-select__menu-list {
+    &::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: ${styleConstants.darkThemeSecondaryBackground};
+    border-left: 1px solid ${styleConstants.darkThemePaleBorder};
+    border-right: 1px solid ${styleConstants.darkThemePaleBorder};
+  }
+
+    &::-webkit-scrollbar {
+      width: 10px;
+      background-color: #f5f5f5;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: ${styleConstants.darkThemePrimaryBackground};
+      border: 1px solid ${styleConstants.darkThemePaleBorder};
+    }
+  }
+
   .react-select__control,
   .react-select__menu,
   .react-select__option {
     background-color: ${styleConstants.darkThemePrimaryBackground};
-    color: ${styleConstants.DarkThemeLightText};
+    color: ${styleConstants.darkThemeLightText};
     line-height: 18px;
     font-size: 14px;
   }
@@ -143,7 +162,7 @@ const StyledPageLayout = styled.div`
 
   .react-select__value-container.react-select__value-container--has-value,
   .react-select__single-value {
-    color: ${styleConstants.DarkThemeLightText};
+    color: ${styleConstants.darkThemeLightText};
   }
 
   .react-select__menu {
@@ -180,6 +199,25 @@ const StyledPageLayout = styled.div`
   .react-select__control.react-select__control--is-focused {
     border-color: ${styleConstants.darkThemePaleText};
     box-shadow: none;
+  }
+
+  .react-select__multi-value {
+    background: transparent;
+    border: 1px solid ${styleConstants.darkThemePaleText};
+    color: ${styleConstants.darkThemeContrastTextColor};
+  }
+
+  .react-select__multi-value__label {
+    color: ${styleConstants.darkThemeContrastTextColor};
+  }
+
+  .react-select__multi-value__remove {
+    color: ${styleConstants.darkThemeContrastTextColor};
+
+    &:hover {
+      background: transparent;
+      color: ${styleConstants.mainAccent};
+    }
   }
 
   button {

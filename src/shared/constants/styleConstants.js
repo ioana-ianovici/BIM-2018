@@ -9,7 +9,7 @@ export const styleConstants = {
   darkThemeButtonTextColor: '#0D1016',
   darkThemeSecondaryBackground: '#000000',
   greyText: '#A1AEB7',
-  DarkThemeLightText: '#C2D1D9',
+  darkThemeLightText: '#C2D1D9',
   sidebarAnimationDurationMilliseconds: 1000,
   darkThemeContrastTextColor: '#fff',
   lightThemeContrastTextColor: '#0D1016',

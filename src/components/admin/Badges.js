@@ -45,7 +45,7 @@ const StyledBadges = styled.div`
   .add-badge__text {
     line-height: 18px;
     font-size: 14px;
-    color: ${styleConstants.DarkThemeLightText};
+    color: ${styleConstants.darkThemeLightText};
   }
 
   .badges__list {
@@ -220,6 +220,7 @@ class Badges extends PureComponent {
       <StyledBadges>
         {!isAddBadge && (
           <AddNew
+            text="Add new badge"
             className="badges__add-badge add-badge"
             onClick={this.handleAddNewBadge}
           />
@@ -244,6 +245,7 @@ class Badges extends PureComponent {
               <form onSubmit={this.handleAddEditBadgeSubmit}>
                 <div className="badge__add-edit-badge add-edit-badge">
                   <div className="badge__image">
+                    {/* todo: add alt */}
                     <img src={badgeImage} alt="" />
                     <input
                       id="upload-badge"

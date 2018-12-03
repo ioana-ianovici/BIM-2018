@@ -14,7 +14,7 @@ const StyledAddImage = styled.div`
   }
 
   .add-path {
-    fill: ${styleConstants.DarkThemeLightText};
+    fill: ${styleConstants.darkThemeLightText};
   }
 `
 

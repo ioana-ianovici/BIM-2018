@@ -72,6 +72,7 @@ const ArrowLeft = ({ arrowsTopDistance, onClick }) => (
     arrowsTopDistance={arrowsTopDistance}
     className="slick-prev"
   >
+    {/* todo: add alt */}
     <img src={iconArrowLeft} alt="" />
   </ButtonArrow>
 )
@@ -87,6 +88,7 @@ const ArrowRight = ({ arrowsTopDistance, onClick }) => (
     arrowsTopDistance={arrowsTopDistance}
     className="slick-next"
   >
+    {/* todo: add alt */}
     <img src={iconArrowRight} alt="" />
   </ButtonArrow>
 )
