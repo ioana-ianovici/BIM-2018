@@ -164,7 +164,7 @@ class Badges extends PureComponent {
   }
 
   handleFileChange(event) {
-    const file = event.target.files[0]
+    const file = event.target.files && event.target.files[0]
 
     if (!file) {
       return
@@ -250,6 +250,7 @@ class Badges extends PureComponent {
                     <input
                       id="upload-badge"
                       type="file"
+                      accept="image/*"
                       className="badge__upload"
                       onChange={this.handleFileChange}
                     />

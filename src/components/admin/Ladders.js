@@ -399,6 +399,7 @@ class Ladder extends PureComponent {
   }
 
   handleSubmit() {
+    console.log(this.state)
     // todo: call api.
   }
 
@@ -532,7 +533,7 @@ class Ladders extends PureComponent {
           ))}
         </div>
 
-        <button className="save-button" onClck={this.handleSubmit}>
+        <button className="save-button" onClick={this.handleSubmit}>
           Save
         </button>
       </StyledLadders>

@@ -23,4 +23,8 @@ export const AppConstants = {
     search: '/search',
     settings: '/settings',
   },
+  theme: {
+    dark: 'dark',
+    light: 'light',
+  },
 }
