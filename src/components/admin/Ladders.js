@@ -13,14 +13,18 @@ const StyledLadders = styled.div`
   color: ${styleConstants.darkThemeContrastTextColor};
 
   .ladders {
-    margin-bottom: 50px;
   }
 
   .ladder {
-    /* overflow: auto; */
+    margin-bottom: 50px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 
   .ladder__members {
+    margin-bottom: 50px;
     /* max-width: 330px; */
   }
 
@@ -399,7 +403,7 @@ class Ladder extends PureComponent {
   }
 
   handleSubmit() {
-    console.log(this.state)
+    console.log(JSON.stringify(this.state))
     // todo: call api.
   }
 
@@ -468,6 +472,10 @@ class Ladder extends PureComponent {
           isMulti={true}
           closeMenuOnSelect={false}
         />
+
+        <button className="save-button" onClick={this.handleSubmit}>
+          Save
+        </button>
       </div>
     )
   }
@@ -532,10 +540,6 @@ class Ladders extends PureComponent {
             />
           ))}
         </div>
-
-        <button className="save-button" onClick={this.handleSubmit}>
-          Save
-        </button>
       </StyledLadders>
     )
   }
