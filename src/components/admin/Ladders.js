@@ -112,6 +112,7 @@ const StyledLadders = styled.div`
   }
 `
 class Requirement extends PureComponent {
+  // todo: make req. them as card when click outside.
   constructor(props) {
     super(props)
 
@@ -518,6 +519,7 @@ Ladder.propTypes = {
 }
 
 class Ladders extends PureComponent {
+  // todo: make ladders collapsible.
   state = {
     // allFrames: [], // todo: unocmment this, remove next, read from api.
     allFrames: ['frame x', 'frame y', 'frame a', 'frame b', 'frame c'],
