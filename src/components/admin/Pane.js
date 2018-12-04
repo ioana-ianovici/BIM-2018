@@ -4,24 +4,24 @@ import propTypes from 'prop-types'
 import styled from 'styled-components'
 
 const StyledPane = styled.div`
-  section {
-    cursor: ${props => (props.isOpen ? 'default' : 'pointer')};
+  .pane-toggler {
+    cursor: pointer;
   }
 `
 
 class Pane extends PureComponent {
   state = {
-    isOpen: true,
+    isOpen: false,
   }
 
   constructor(props) {
     super(props)
 
-    this.handleOpen = this.handleOpen.bind(this)
+    this.toggleOpen = this.toggleOpen.bind(this)
   }
 
-  handleOpen() {
-    this.setState({ isOpen: true })
+  toggleOpen() {
+    this.setState(oldState => ({ isOpen: !oldState.isOpen }))
   }
 
   render() {
@@ -30,8 +30,10 @@ class Pane extends PureComponent {
 
     return (
       <StyledPane isOpen={isOpen}>
-        <section onClick={this.handleOpen}>
-          <h2>{title}</h2>
+        <section>
+          <h2 className="pane-toggler" onClick={this.toggleOpen}>
+            {title}
+          </h2>
           {isOpen ? children : null}
         </section>
       </StyledPane>
