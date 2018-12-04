@@ -10,10 +10,10 @@ class Search extends PureComponent {
     allUsers: [
       {
         profileImage: 'lala',
+        step: 'sde 1',
         userName: 'user name 1',
         id: 9,
         ladder: 1,
-        step: 1,
         badges: [
           { id: 1, badge: 'b1', text: 'b1', count: 2 },
           { id: 2, badge: 'b2', text: 'b2', count: 3 },
@@ -36,10 +36,10 @@ class Search extends PureComponent {
       },
       {
         profileImage: 'lala',
+        step: 'sde 1',
         userName: 'user name 2',
         id: 10,
         ladder: 2,
-        step: 2,
         badges: [
           { id: 1, badge: 'b1', text: 'b1', count: 2 },
           { id: 2, badge: 'b2', text: 'b2', count: 3 },
@@ -62,10 +62,10 @@ class Search extends PureComponent {
       },
       {
         profileImage: 'lala',
+        step: 'sde 1',
         userName: 'user name 3',
         id: 11,
         ladder: 3,
-        step: 3,
         badges: [
           { id: 1, badge: 'b1', text: 'b1', count: 2 },
           { id: 2, badge: 'b2', text: 'b2', count: 3 },
@@ -88,10 +88,10 @@ class Search extends PureComponent {
       },
       {
         profileImage: 'lala',
+        step: 'sde 1',
         userName: 'user name 4',
         id: 12,
         ladder: 4,
-        step: 4,
         badges: [
           { id: 1, badge: 'b1', text: 'b1', count: 2 },
           { id: 2, badge: 'b2', text: 'b2', count: 3 },
@@ -114,10 +114,10 @@ class Search extends PureComponent {
       },
       {
         profileImage: 'lala',
+        step: 'sde 1',
         userName: 'user name 5',
         id: 13,
         ladder: 5,
-        step: 5,
         badges: [
           { id: 1, badge: 'b1', text: 'b1', count: 2 },
           { id: 2, badge: 'b2', text: 'b2', count: 3 },
@@ -140,10 +140,10 @@ class Search extends PureComponent {
       },
       {
         profileImage: 'lala',
+        step: 'sde 1',
         userName: 'user name 6',
         id: 14,
         ladder: 6,
-        step: 6,
         badges: [
           { id: 1, badge: 'b1', text: 'b1', count: 2 },
           { id: 2, badge: 'b2', text: 'b2', count: 3 },
@@ -166,10 +166,10 @@ class Search extends PureComponent {
       },
       {
         profileImage: 'lala',
+        step: 'sde 1',
         userName: 'user name 7',
         id: 15,
         ladder: 7,
-        step: 7,
         badges: [
           { id: 1, badge: 'b1', text: 'b1', count: 2 },
           { id: 2, badge: 'b2', text: 'b2', count: 3 },
@@ -192,10 +192,10 @@ class Search extends PureComponent {
       },
       {
         profileImage: 'lala',
+        step: 'sde 1',
         userName: 'user name 8',
         id: 16,
         ladder: 8,
-        step: 8,
         badges: [
           { id: 1, badge: 'b1', text: 'b1', count: 2 },
           { id: 2, badge: 'b2', text: 'b2', count: 3 },
@@ -218,10 +218,10 @@ class Search extends PureComponent {
       },
       {
         profileImage: 'lala',
+        step: 'sde 1',
         userName: 'user name 9',
         id: 17,
         ladder: 9,
-        step: 9,
         badges: [
           { id: 1, badge: 'b1', text: 'b1', count: 2 },
           { id: 2, badge: 'b2', text: 'b2', count: 3 },

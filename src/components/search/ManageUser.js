@@ -4,9 +4,76 @@ import propTypes from 'prop-types'
 
 import { styleConstants } from '../../shared/constants/styleConstants'
 import Requirements from '../../shared/Requirements'
+import LevelUp from '../../shared/images/LevelUp.image'
 
 const StyledManageUser = styled.div`
   padding: 50px;
+
+  .user-details {
+    margin: auto;
+    max-width: 300px;
+    margin-bottom: 50px;
+  }
+
+  .user-details__main-info {
+    max-width: 300px;
+    display: flex;
+    padding-bottom: 15px;
+    border-bottom: 1px solid ${styleConstants.darkThemePaleText};
+    margin-bottom: 5px;
+
+    .main-info__aside {
+      display: inline-block;
+      text-align: left;
+    }
+
+    img {
+      width: 45px;
+      height: 45px;
+      display: inline-block;
+      border: 1px solid ${styleConstants.mainAccent};
+      margin-right: 10px;
+      border-radius: 50%;
+    }
+
+    h2 {
+      font-weight: 300;
+      line-height: 31px;
+      font-size: 21px;
+      text-transform: uppercase;
+      margin: 0;
+      padding: 0;
+      color: ${styleConstants.mainAccent};
+    }
+
+    p {
+      margin: 0;
+      padding: 0;
+      line-height: 18px;
+      font-size: 14px;
+      color: ${styleConstants.darkThemePaleText};
+    }
+  }
+
+  .user-details__actions {
+    cursor: pointer;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    color: ${styleConstants.darkThemePaleBorder};
+
+    .levelup__icon {
+      margin-right: 10px;
+    }
+
+    &:hover {
+      color: ${styleConstants.mainAccent};
+
+      .levelup__icon path {
+        fill: ${styleConstants.mainAccent};
+      }
+    }
+  }
 
   .section-wrapper {
     display: flex;
@@ -207,11 +274,29 @@ class ManageUser extends Component {
     this.setState(oldState => ({ user: { ...oldState.user, requirements } }))
   }
 
+  handleLevelUp() {
+    console.log('level up')
+    // todo: call api.
+  }
+
   render() {
     const { user } = this.state
 
     return (
       <StyledManageUser>
+        <div className="user-details">
+          <div className="user-details__main-info main-info">
+            <img src={user.profileImage} alt={user.userName} />
+            <div className="main-info__aside">
+              <h2>{user.userName}</h2>
+              <p>{user.step}</p>
+            </div>
+          </div>
+          <div className="user-details__actions" onClick={this.handleLevelUp}>
+            <LevelUp className="levelup__icon" />
+            Level up
+          </div>
+        </div>
         <div className="section-wrapper">
           <section className="section-left">
             <Requirements
@@ -241,6 +326,9 @@ class ManageUser extends Component {
 
 ManageUser.propTypes = {
   user: propTypes.shape({
+    profileImage: propTypes.string.isRequired,
+    userName: propTypes.string.isRequired,
+    step: propTypes.string.isRequired,
     requirements: propTypes.arrayOf(
       propTypes.shape({
         id: propTypes.number,
