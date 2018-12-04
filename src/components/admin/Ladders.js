@@ -45,20 +45,20 @@ const StyledLadders = styled.div`
       outline: none;
     }
 
-    .step__details{
+    .step__details {
       margin-right: 25px;
       display: flex;
     }
 
     .step__requirements {
-      border: 1px solid ${styleConstants.darkThemePaleText}
+      border: 1px solid ${styleConstants.darkThemePaleText};
       border-radius: 3px;
       padding: 20px 25px;
       margin-right: 25px;
     }
 
     .step__frames {
-      border: 1px solid ${styleConstants.darkThemePaleText}
+      border: 1px solid ${styleConstants.darkThemePaleText};
       border-radius: 3px;
       padding: 20px;
       display: flex;
@@ -71,12 +71,12 @@ const StyledLadders = styled.div`
       }
 
       .frame {
-        color: ${styleConstants.darkThemePaleText}
+        color: ${styleConstants.darkThemePaleText};
         padding: 10px;
       }
 
       .frame--selected {
-        color: ${styleConstants.mainAccent}
+        color: ${styleConstants.mainAccent};
       }
     }
 
@@ -87,7 +87,7 @@ const StyledLadders = styled.div`
     }
 
     .step__remove {
-      cursor: pointer; 
+      cursor: pointer;
       margin-left: 10px;
       display: inline-block;
     }
@@ -99,7 +99,7 @@ const StyledLadders = styled.div`
     }
 
     .requirement__remove {
-      cursor: pointer; 
+      cursor: pointer;
       margin-left: 10px;
       display: inline-block;
     }

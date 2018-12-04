@@ -1,6 +1,7 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import styled from 'styled-components'
 import Select from 'react-select'
+import propTypes from 'prop-types'
 
 import { styleConstants } from '../../shared/constants/styleConstants'
 import search from './../../assets/search.svg'
@@ -112,6 +113,7 @@ const StyledUserFilter = styled.div`
     border: 1px solid ${styleConstants.darkThemePaleText};
     align-items: center;
     display: inline-flex;
+    border-radius: 3px;
 
     &--open {
       position: absolute;
@@ -122,6 +124,10 @@ const StyledUserFilter = styled.div`
       left: 0;
       background: ${styleConstants.darkThemeSecondaryBackground};
       z-index: 1;
+
+      .badge {
+        border: 1px solid ${styleConstants.darkThemePaleText};
+      }
     }
   }
 
@@ -132,11 +138,10 @@ const StyledUserFilter = styled.div`
     width: 50px;
     height: 50px;
     margin: 0;
-    border: 1px solid ${styleConstants.darkThemePaleText};
   }
 `
 
-class Search extends Component {
+class UserFilter extends PureComponent {
   state = {
     allUsers: this.props.allUsers,
     ladders: this.props.ladders,
@@ -154,7 +159,7 @@ class Search extends Component {
   constructor(props) {
     super(props)
 
-    this.handleUserSelect = this.handleUserSelect.bind(this)
+    this.onUserSelect = this.onUserSelect.bind(this)
     this.handleCardUserSelect = this.handleCardUserSelect.bind(this)
     this.handleLadderSelect = this.handleLadderSelect.bind(this)
     this.handleRequirementSelect = this.handleRequirementSelect.bind(this)
@@ -163,28 +168,12 @@ class Search extends Component {
     this.handleViewBadgesToggle = this.handleViewBadgesToggle.bind(this)
   }
 
-  componentWillReceiveProps(props) {
-    if (
-      props.selectedUser &&
-      (!this.props.selectedUser ||
-        props.selectedUser.id !== this.props.selectedUser.id)
-    ) {
-      const selectedUser = props.allUsers.find(
-        user => user.id === props.selectedUser.id,
-      )
-
-      this.setState({
-        selectedUser: { label: selectedUser.userName, value: selectedUser.id },
-      })
-    }
-  }
-
-  handleUserSelect(selectedUser) {
+  onUserSelect(selectedUser) {
     this.setState({ selectedUser })
     const selectedDisplayUser = this.props.allUsers.find(
       user => user.id === selectedUser.value,
     )
-    this.props.onUserSelect(selectedDisplayUser)
+    this.props.onUserSelect(JSON.parse(JSON.stringify(selectedDisplayUser)))
   }
 
   handleCardUserSelect(selectedDisplayUser) {
@@ -195,6 +184,7 @@ class Search extends Component {
         value: selectedDisplayUser.id,
       },
     })
+    this.props.onUserSelect(JSON.parse(JSON.stringify(selectedDisplayUser)))
   }
 
   handleLadderSelect(selectedLadder) {
@@ -232,6 +222,7 @@ class Search extends Component {
       selectedStep,
       isViewAllBadges,
     } = this.state
+
     const allFilteredUsers = allUsers.filter(
       user =>
         (!selectedLadder ||
@@ -266,7 +257,7 @@ class Search extends Component {
               className="search__select"
               classNamePrefix="react-select"
               value={selectedUser}
-              onChange={this.handleUserSelect}
+              onChange={this.onUserSelect}
               options={selectFilteredUsers}
               isSearchable={true}
             />
@@ -366,4 +357,33 @@ class Search extends Component {
   }
 }
 
-export default Search
+UserFilter.propTypes = {
+  allUsers: propTypes.arrayOf(
+    propTypes.shape({
+      // todo: tbd.
+    }),
+  ),
+  ladders: propTypes.arrayOf(
+    propTypes.shape({
+      // todo: tbd.
+    }),
+  ),
+  badges: propTypes.arrayOf(
+    propTypes.shape({
+      // todo: tbd.
+    }),
+  ),
+  steps: propTypes.arrayOf(
+    propTypes.shape({
+      // todo: tbd.
+    }),
+  ),
+  requirements: propTypes.arrayOf(
+    propTypes.shape({
+      // todo: tbd.
+    }),
+  ),
+  onUserSelect: propTypes.func,
+}
+
+export default UserFilter

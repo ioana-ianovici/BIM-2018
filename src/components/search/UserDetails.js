@@ -82,7 +82,7 @@ const StyledUserCard = styled.section`
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=${
       styleConstants.mainAccent
     }, endColorstr='#2a2f39',GradientType=1 );
-    width: 20%;
+    width: 40%;
     height: 1px;
     display: inline-block;
     vertical-align: middle;
@@ -104,7 +104,6 @@ class UserCard extends PureComponent {
   render() {
     const { user } = this.props
 
-    //todo: add real userTitleProgressPercentage.
     return (
       <StyledUserCard
         userTitleProgressPercentage={user.userTitleProgressPercentage}

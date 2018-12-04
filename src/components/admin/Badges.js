@@ -182,7 +182,7 @@ class Badges extends PureComponent {
 
   generatePreviewImgUrl(file, callback) {
     const reader = new FileReader()
-    const url = reader.readAsDataURL(file)
+    reader.readAsDataURL(file)
     reader.onloadend = e => callback(reader.result)
   }
 

@@ -101,7 +101,7 @@ class Theme extends Component {
   }
 
   render() {
-    const { theme, accentColour, displayColorPicker } = this.state
+    const { theme, accentColour } = this.state
     const isDarkTheme = theme === AppConstants.theme.dark
     const isLightTheme = theme === AppConstants.theme.light
 

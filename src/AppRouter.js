@@ -64,6 +64,14 @@ const RoutesGuard = props => {
                 path={AppConstants.routes.dashboard}
                 component={Dashboard}
               />
+              <Route
+                path={`${AppConstants.routes.dashboard}/:id`}
+                render={({
+                  match: {
+                    params: { id },
+                  },
+                }) => <Dashboard id={id} />}
+              />
               <Route exact path={AppConstants.routes.admin} component={Admin} />
               <Route
                 exact

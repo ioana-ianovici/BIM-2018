@@ -200,8 +200,6 @@ class Login extends React.Component {
       password: this.state.form.password,
     })
       .then(data => {
-        console.log('sign up done,', data)
-
         this.setState({ error: null })
 
         this.handleStateActionChange(
@@ -421,7 +419,6 @@ class Login extends React.Component {
                 className="login-box__submit"
                 onClick={() => this.handleSubmit()}
               >
-                {console.log(authState)}
                 {AppConstants.amplifyAuthActions[authState].title}
               </button>
             </div>

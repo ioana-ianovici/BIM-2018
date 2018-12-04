@@ -6,7 +6,7 @@ import { styleConstants } from '../../shared/constants/styleConstants'
 import Badges from './Badges'
 import UserDetails from './UserDetails'
 import Tree from './Tree'
-import Requirements from './Requirements'
+import Requirements from '../../shared/Requirements'
 import messageInABottle from './../../assets/badges/message-in-a-bottle.svg'
 import origamiCrane from './../../assets/badges/origami-crane.svg'
 import rescueCircle from './../../assets/badges/rescue-circle.svg'
@@ -29,30 +29,6 @@ const StyledDashboard = styled.div`
     height: 100%;
     padding: 18px 20px;
     color: ${styleConstants.mainAccent};
-  }
-
-  p {
-    margin-top: 0;
-  }
-
-  .section-right__title {
-    margin-top: 0;
-    margin-bottom: 40px;
-    text-transform: uppercase;
-    font-weight: 300;
-    line-height: 31px;
-    font-size: 21px;
-    text-transform: uppercase;
-  }
-
-  .section-right__text {
-    font-weight: normal;
-    line-height: 18px;
-    font-size: 14px;
-  }
-
-  .section-right__text--inactive {
-    color: ${styleConstants.darkThemePaleText};
   }
 
   @media screen and (max-width: 1000px) {
@@ -128,129 +104,155 @@ class Dashboard extends Component {
     ],
     requirements: [
       {
+        id: 1,
         text:
           'Can create architecture for complex applications based on programming languages on his main area of expertise;',
         isAccomplished: false,
       },
       {
+        id: 1,
         text:
           'The code he/she writes should be reviewed before going in any production environment, but if there is a critical bug that needs to be fixed as soon as possible he can take the responsibility to push the code to production and the review can come after that;',
         isAccomplished: false,
       },
       {
+        id: 1,
         text: 'Worked in teams of more than 8 developers;',
         isAccomplished: true,
       },
       {
+        id: 1,
         text: 'Is able to coordinate teams of 8+ developers;',
         isAccomplished: false,
       },
       {
+        id: 1,
         text:
           'Has worked with project management methodologies like Waterfall, Agile or Kanban for more than 1 year;',
         isAccomplished: true,
       },
-      { text: 'Has full time contract;', isAccomplished: false },
+      { id: 1, text: 'Has full time contract;', isAccomplished: false },
       {
+        id: 1,
         text:
           'Mentor for SDE I, II, III, helping them in the learning process;',
         isAccomplished: false,
       },
       {
+        id: 1,
         text:
           'Very good English communication skills in both writing and conversation;',
         isAccomplished: true,
       },
       {
+        id: 1,
         text:
           'Can communicate effectively with client, set tasks, write emails, hold skype meetings',
         isAccomplished: true,
       },
       {
+        id: 1,
         text:
           'Contributed to at least one open-source project, can be a project started inside the company;',
         isAccomplished: true,
       },
       {
+        id: 1,
         text:
           'Has at least one second area of expertise in which he/she feels confident;',
         isAccomplished: false,
       },
       {
+        id: 1,
         text: 'Is comfortable with both Unix and Windows platforms;',
         isAccomplished: false,
       },
       {
+        id: 1,
         text:
           'Ability to translate vague business requirements into concrete code, services, or recommendations;',
         isAccomplished: true,
       },
       {
+        id: 1,
         text:
           'Exposure to software development methodologies, experience in hybrid implementations a plus;',
         isAccomplished: true,
       },
       {
+        id: 1,
         text: 'Expertise in information security best practices;',
         isAccomplished: true,
       },
       {
+        id: 1,
         text:
           'Strong grasp of developer best practices with emphasis on practical resolutions to shared challenges;',
         isAccomplished: false,
       },
       {
+        id: 1,
         text: 'Experience & proficiency in Multi-threaded development;',
         isAccomplished: false,
       },
-      { text: 'Responsibilities', isAccomplished: true },
-      { text: 'Self-learning', isAccomplished: false },
+      { id: 1, text: 'Responsibilities', isAccomplished: true },
+      { id: 1, text: 'Self-learning', isAccomplished: false },
       {
+        id: 1,
         text: 'Find solutions for technical challenges inside project;',
         isAccomplished: true,
       },
       {
+        id: 1,
         text: 'Create the shell at the beginning of projects;',
         isAccomplished: true,
       },
       {
+        id: 1,
         text: 'Code parts of the app that require his expertise;',
         isAccomplished: false,
       },
       {
+        id: 1,
         text: 'Review code for critical parts of the project;',
         isAccomplished: true,
       },
       {
+        id: 1,
         text:
           'Mentor Software Developers helping them in the learning process;',
         isAccomplished: false,
       },
       {
+        id: 1,
         text:
           'Represent ASSIST in national and international conferences or workshops as speaker;',
         isAccomplished: false,
       },
       {
+        id: 1,
         text:
           'Help / organize internal, national and international workshops and conferences;',
         isAccomplished: true,
       },
-      { text: 'Take part in hiring processes;', isAccomplished: true },
+      { id: 1, text: 'Take part in hiring processes;', isAccomplished: true },
       {
+        id: 1,
         text:
           'Develop interview tests and participate in the technical interview part;',
         isAccomplished: false,
       },
       {
+        id: 1,
         text: 'Organize feedback meetings with people he/she is coordinating; ',
         isAccomplished: false,
       },
       {
+        id: 1,
         text: 'Lead at least one Open Allocation project.',
         isAccomplished: true,
       },
-      { text: '3 - 5 years’ experience', isAccomplished: true },
+      { id: 1, text: '3 - 5 years’ experience', isAccomplished: true },
     ],
     tree: [
       {
@@ -291,16 +293,19 @@ class Dashboard extends Component {
   constructor(props) {
     super(props)
 
-    API.get('Self', '', {})
-      .then(res => {
-        console.log('coool')
-        console.log(res)
-      })
-      .catch(err => {
-        console.log(
-          'In cazul in care userul nu are detailii ar trebui sa fie redirectionat sa-si editeze profilul',
-        )
-      })
+    if (props.id) {
+      // get user details by id.
+    } else {
+      API.get('Self', '', {})
+        .then(res => {
+          console.log('coool', res)
+        })
+        .catch(err => {
+          console.log(
+            'In cazul in care userul nu are detailii ar trebui sa fie redirectionat sa-si editeze profilul',
+          )
+        })
+    }
   }
 
   render() {

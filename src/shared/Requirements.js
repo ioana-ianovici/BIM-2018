@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react'
 import styled from 'styled-components'
 import propTypes from 'prop-types'
-import { styleConstants } from '../../shared/constants/styleConstants'
+
+import { styleConstants } from './constants/styleConstants'
+import Requirement from './Requirement'
 
 const StyledRequirements = styled.div`
   p {
@@ -29,30 +31,6 @@ const StyledRequirements = styled.div`
   }
 `
 
-class Requirement extends PureComponent {
-  render() {
-    const { isAccomplished, text } = this.props
-
-    return (
-      <p
-        className={
-          'section-right__text' +
-          (isAccomplished ? '' : ' section-right__text--inactive')
-        }
-      >
-        {text}
-      </p>
-    )
-  }
-}
-
-Requirement.propTypes = {
-  requirement: propTypes.shape({
-    text: propTypes.string,
-    isAccomplished: propTypes.boolean,
-  }),
-}
-
 class Requirements extends PureComponent {
   render() {
     const { requirements } = this.props
@@ -61,7 +39,11 @@ class Requirements extends PureComponent {
       <StyledRequirements>
         <h2 className="section-right__title">Requirements</h2>
         {requirements.map((requirement, i) => (
-          <Requirement {...requirement} key={i} />
+          <Requirement
+            {...requirement}
+            key={i}
+            onSelect={this.props.onSelect}
+          />
         ))}
       </StyledRequirements>
     )
@@ -71,10 +53,12 @@ class Requirements extends PureComponent {
 Requirements.propTypes = {
   requirements: propTypes.arrayOf(
     propTypes.shape({
+      id: propTypes.number,
       text: propTypes.string,
       isAccomplished: propTypes.boolean,
     }),
   ),
+  onSelect: propTypes.func,
 }
 
 export default Requirements
