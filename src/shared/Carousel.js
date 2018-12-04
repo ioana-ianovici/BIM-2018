@@ -7,38 +7,14 @@ import iconArrowRight from './../assets/chevron-right.svg'
 import 'slick-carousel/slick/slick.css'
 
 const Wrapper = styled.div`
-  /* .slick-dots {
-    margin-top: 62px;
-    margin-bottom: 0;
-    padding: 0;
-    text-align: center;
-    list-style: none;
-    li {
-      display: inline-block;
-    }
-    .slick-active button {
-      color: #2699fb;
-      background-color: #2699fb;
-    }
-    button {
-      width: 6px;
-      height: 6px;
-      padding: 0;
-      margin: 5px;
-      color: #bce0fd;
-      background-color: #bce0fd;
-      border-radius: 50%;
-      border: none;
-      overflow: hidden;
-    }
-  } */
-
   .slick-prev {
+    background: transparent;
     left: -50px;
     z-index: 0;
   }
 
   .slick-next {
+    background: transparent;
     right: -50px;
     z-index: 0;
   }

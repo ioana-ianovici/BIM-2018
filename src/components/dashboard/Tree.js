@@ -34,10 +34,10 @@ const StyledTree = styled.div`
           content: ' ';
           display: block;
           position: absolute;
-          border-top: 1px solid ${styleConstants.mainAccent};
+          border-bottom: 1px solid #09e8c2;
           bottom: -5px;
           left: -20px;
-          height: 1px;
+          height: 300px;
           width: 100px;
         }
       }
@@ -53,10 +53,10 @@ const StyledTree = styled.div`
           content: ' ';
           display: block;
           position: absolute;
-          border-top: 1px solid ${styleConstants.mainAccent};
+          border-bottom: 1px solid ${styleConstants.mainAccent};
           bottom: -5px;
           right: -20px;
-          height: 1px;
+          height: 300px;
           width: 100px;
         }
       }
@@ -77,6 +77,7 @@ const StyledTree = styled.div`
         top: -100005px;
         left: 50%;
         border-left: 1px solid ${styleConstants.mainAccent};
+        border-bottom: none;
       }
     }
   }
@@ -89,10 +90,34 @@ const StyledTree = styled.div`
     color: ${styleConstants.darkThemePaleText};
   }
 
-  .tree__step--inactive:nth-child(odd) .step__content:after,
-  .tree__step--inactive:nth-child(even) .step__content:after,
-  .tree__step--inactive:nth-child(1) .step__content:after {
-    border-left: 1px solid ${styleConstants.darkThemePaleText};
+  .tree__step--inactive:nth-child(odd) .step__content:after {
+    border-bottom: 1px solid ${styleConstants.darkThemePaleText};
+    border-right: 3px solid ${styleConstants.darkThemePaleText};
+    z-index: 1;
+    margin-right: -2px;
+  }
+
+  .tree__step--inactive:nth-child(even) .step__content:after {
+    border-bottom: 1px solid ${styleConstants.darkThemePaleText};
+    border-left: 3px solid ${styleConstants.darkThemePaleText};
+    z-index: 1;
+    margin-left: -1px;
+  }
+
+  .tree__step:nth-child(1) {
+    margin: 0 auto 90px auto;
+    padding: 0 0 10px 0;
+    width: 100%;
+    height: 100%;
+    background: ${styleConstants.darkThemePrimaryBackground};
+    text-align: center;
+    z-index: 2;
+
+    .step__content:after {
+      border-bottom: none;
+      border-right: none;
+      border-left: none;
+    }
   }
 `
 
@@ -103,7 +128,7 @@ class Tree extends Component {
     return (
       <StyledTree>
         <div className="tree">
-          {steps.reverse().map(step => (
+          {[...steps].reverse().map(step => (
             <div
               key={step.title}
               className={

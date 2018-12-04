@@ -45,7 +45,7 @@ const StyledUserDetails = styled.div`
   .profile-info-section__user-title {
     line-height: 18px;
     font-size: 14px;
-    color: ${styleConstants.lightText};
+    color: ${styleConstants.darkThemeLightText};
   }
 
   .profile-info-section__user-title--padded {

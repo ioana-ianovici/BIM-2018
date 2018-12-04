@@ -18,6 +18,10 @@ const StyledBadgesSection = styled.div`
 
   .badge {
     text-align: center;
+
+    &:focus {
+      outline: none;
+    }
   }
 
   .badge__icon {
