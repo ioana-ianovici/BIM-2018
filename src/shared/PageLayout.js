@@ -5,7 +5,6 @@ import { API } from 'aws-amplify'
 
 import Sidenav from './Sidenav'
 import { styleConstants } from './constants/styleConstants'
-import { AppConstants } from './constants/constants'
 import { Logo } from './Logo'
 
 const StyledPageLayout = styled.div`

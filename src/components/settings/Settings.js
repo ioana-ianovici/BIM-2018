@@ -148,14 +148,24 @@ class Settings extends PureComponent {
   }
 
   handleUserNameChange(event) {
+    const oldUserName = this.state.userName
+    this.setState({ userName: event.target.value })
+
     if (this.isDebounce) {
       return
     }
 
+    event.persist()
+
     this.isDebounce = true
 
     setTimeout(() => {
-      console.log('send')
+      if (this.state.userName !== oldUserName) {
+        this.isDebounce = false
+        this.handleUserNameChange(event)
+        return
+      }
+
       if (this.state.isNewUser) {
         const body = {
           userName: event.target.value,
@@ -235,6 +245,7 @@ class Settings extends PureComponent {
             type="text"
             className="edit-name__input"
             onChange={this.handleUserNameChange}
+            value={userName || ''}
             placeholder="Your name"
             name="userName"
           />
