@@ -370,7 +370,7 @@ class Dashboard extends Component {
     return (
       <StyledDashboard userProgressPercentage={45}>
         <UserDetails {...userDetails} />
-        <Badges items={badges} />
+        {badges && badges.length && <Badges items={badges} />}
         <div className="section-wrapper">
           <section className="section-left">
             <Tree steps={tree} />
