@@ -8,6 +8,19 @@ import Badges from './Badges'
 import Ladders from './Ladders'
 import Frames from './Frames'
 import Theme from './Theme'
+import badge1 from '../../assets/badges/badge1.svg'
+import badge2 from '../../assets/badges/badge2.svg'
+import badge3 from '../../assets/badges/badge3.svg'
+import badge4 from '../../assets/badges/badge4.svg'
+import badge5 from '../../assets/badges/badge5.svg'
+import badge6 from '../../assets/badges/badge6.svg'
+import badge7 from '../../assets/badges/badge7.svg'
+import badge8 from '../../assets/badges/badge8.svg'
+import badge9 from '../../assets/badges/badge9.svg'
+import badge10 from '../../assets/badges/badge10.svg'
+import badge11 from '../../assets/badges/badge11.svg'
+import badge12 from '../../assets/badges/badge12.svg'
+import badge13 from '../../assets/badges/badge13.svg'
 
 const StyledAdmin = styled.div`
   color: ${styleConstants.darkThemeContrastTextColor};
@@ -38,7 +51,71 @@ const StyledAdmin = styled.div`
 `
 
 class Admin extends Component {
+  defaultBadges = [
+    {
+      description: '',
+      name: '',
+      image: badge2,
+    },
+    {
+      description: '',
+      name: '',
+      image: badge3,
+    },
+    {
+      description: '',
+      name: '',
+      image: badge4,
+    },
+    {
+      description: '',
+      name: '',
+      image: badge5,
+    },
+    {
+      description: '',
+      name: '',
+      image: badge6,
+    },
+    {
+      description: '',
+      name: '',
+      image: badge7,
+    },
+    {
+      description: '',
+      name: '',
+      image: badge8,
+    },
+    {
+      description: '',
+      name: '',
+      image: badge9,
+    },
+    {
+      description: '',
+      name: '',
+      image: badge10,
+    },
+    {
+      description: '',
+      name: '',
+      image: badge11,
+    },
+    {
+      description: '',
+      name: '',
+      image: badge12,
+    },
+    {
+      description: '',
+      name: '',
+      image: badge13,
+    },
+  ]
+
   state = {
+    // todo: read from api.
     users: [
       { profileImage: 'lala', userName: 'user name', isPending: true, id: 1 },
       { profileImage: 'lala', userName: 'user name', isPending: true, id: 2 },
@@ -106,14 +183,15 @@ class Admin extends Component {
 
     selectedDefaultSet: 'Default Set 1',
 
-    badges: [
-      { name: 'badge 1', image: null, id: 1 },
-      { name: 'badge 2', image: null, id: 2 },
-      { name: 'badge 3', image: null, id: 3 },
-      { name: 'badge 4', image: null, id: 4 },
-      { name: 'badge 5', image: null, id: 5 },
-      { name: 'badge 6', image: null, id: 6 },
-    ],
+    // badges: [
+    //   { name: 'badge 1', image: null, id: 1 },
+    //   { name: 'badge 2', image: null, id: 2 },
+    //   { name: 'badge 3', image: null, id: 3 },
+    //   { name: 'badge 4', image: null, id: 4 },
+    //   { name: 'badge 5', image: null, id: 5 },
+    //   { name: 'badge 6', image: null, id: 6 },
+    // ],
+    badges: this.defaultBadges,
 
     ladders: [
       {

@@ -70,7 +70,7 @@ const StyledBadges = styled.div`
   .add-edit-badge {
     display: flex;
     margin-bottom: 15px;
-    align-items: center;
+    align-items: flex-start;
   }
 
   .badge__image {
@@ -105,8 +105,12 @@ const StyledBadges = styled.div`
     cursor: pointer;
   }
 
-  .badge__name {
-    display: inline-block;
+  .badge__description-wrapper {
+    .badge__name,
+    .badge__description {
+      display: block;
+      margin-bottom: 20px;
+    }
   }
 `
 
@@ -143,11 +147,15 @@ class Badges extends PureComponent {
     selectedBadge: null,
     badgeName: null,
     badgeImage: null,
+    badgeDescription: null,
   }
 
   constructor(props) {
     super(props)
     this.handleBadgeNameChange = this.handleBadgeNameChange.bind(this)
+    this.handleBadgeDescriptionChange = this.handleBadgeDescriptionChange.bind(
+      this,
+    )
     this.handleFileChange = this.handleFileChange.bind(this)
     this.handleAddEditBadgeSubmit = this.handleAddEditBadgeSubmit.bind(this)
     this.handleBadgeSelect = this.handleBadgeSelect.bind(this)
@@ -161,6 +169,10 @@ class Badges extends PureComponent {
 
   handleBadgeNameChange(event) {
     this.setState({ badgeName: event.target.value })
+  }
+
+  handleBadgeDescriptionChange(event) {
+    this.setState({ badgeDescription: event.target.value })
   }
 
   handleFileChange(event) {
@@ -188,8 +200,8 @@ class Badges extends PureComponent {
 
   handleAddEditBadgeSubmit(e) {
     e.preventDefault()
-    const { badgeImage, badgeName } = this.state
-    console.log(badgeImage, badgeName)
+    const { badgeImage, badgeName, badgeDescription } = this.state
+    console.log(badgeImage, badgeName, badgeDescription)
     // todo: call api.
   }
 
@@ -199,11 +211,17 @@ class Badges extends PureComponent {
       isAddBadge: false,
       badgeName: selectedBadge.name,
       badgeImage: selectedBadge.image,
+      badgeDescription: selectedBadge.description,
     })
   }
 
   handleAddNewBadge() {
-    this.setState({ isAddBadge: true, badgeImage: null, badgeName: null })
+    this.setState({
+      isAddBadge: true,
+      badgeImage: null,
+      badgeName: null,
+      badgeDescription: null,
+    })
   }
 
   render() {
@@ -211,6 +229,7 @@ class Badges extends PureComponent {
     const {
       defaultSets,
       badgeImage,
+      badgeDescription,
       badgeName,
       isAddBadge,
       selectedBadge,
@@ -228,7 +247,7 @@ class Badges extends PureComponent {
         <div className="badges">
           {(selectedBadge || isAddBadge) && (
             <div className="badges__add-edit-wrapper">
-              {!badges.length && (
+              {/* {!badges.length && (
                 <Select
                   placeholder="Select a default set"
                   className="badges__select-default-set"
@@ -240,7 +259,7 @@ class Badges extends PureComponent {
                   options={defaultSets}
                   isSearchable={false}
                 />
-              )}
+              )} */}
 
               <form onSubmit={this.handleAddEditBadgeSubmit}>
                 <div className="badge__add-edit-badge add-edit-badge">
@@ -251,6 +270,7 @@ class Badges extends PureComponent {
                       id="upload-badge"
                       type="file"
                       accept="image/*"
+                      multiple={false}
                       className="badge__upload"
                       onChange={this.handleFileChange}
                     />
@@ -260,24 +280,31 @@ class Badges extends PureComponent {
                       title="Upload Badge"
                     />
                   </div>
-                  <input
-                    className="badge__name"
-                    type="text"
-                    onChange={this.handleBadgeNameChange}
-                    accept="image/*"
-                    multiple={false}
-                    placeholder="Badge name"
-                    value={badgeName || ''}
-                  />
+                  <div className="badge__description-wrapper">
+                    <input
+                      className="badge__name"
+                      type="text"
+                      onChange={this.handleBadgeNameChange}
+                      placeholder="Badge name"
+                      value={badgeName || ''}
+                    />
+                    <input
+                      className="badge__description"
+                      type="text"
+                      onChange={this.handleBadgeDescriptionChange}
+                      placeholder="Description"
+                      value={badgeDescription || ''}
+                    />
+                  </div>
                 </div>
                 <button disabled={!badgeName || !badgeImage}>Save</button>
               </form>
             </div>
           )}
           <div className="badges__list">
-            {badges.map(badge => (
+            {badges.map((badge, index) => (
               <Badge
-                key={badge.id}
+                key={index}
                 badge={badge}
                 onBadgeSelect={this.handleBadgeSelect}
               />
@@ -296,6 +323,7 @@ Badges.propTypes = {
       id: propTypes.number,
       name: propTypes.string,
       image: propTypes.string,
+      description: propTypes.string,
     }),
   ),
 }
