@@ -29,6 +29,11 @@ export default {
         endpoint: process.env.REACT_APP_API_BADGES,
         region: process.env.REACT_APP_AWS_REGION,
       },
+      {
+        name: 'Self',
+        endpoint: process.env.REACT_APP_API_SELF,
+        region: process.env.REACT_APP_AWS_REGION,
+      },
     ],
   },
 }
