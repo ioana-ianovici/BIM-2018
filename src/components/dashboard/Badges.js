@@ -52,7 +52,7 @@ const StyledBadgesSection = styled.div`
 
 class Badges extends PureComponent {
   render() {
-    const items = this.props.items
+    const { items } = this.props
 
     return (
       <StyledBadgesSection>
@@ -93,7 +93,7 @@ class Badges extends PureComponent {
             ]}
           >
             {items.map((item, i) => (
-              <div className="badge" key={i}>
+              <div className="badge" key={item.picture}>
                 <img
                   src={item.picture}
                   className="badge__icon"
