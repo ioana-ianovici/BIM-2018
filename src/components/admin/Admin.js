@@ -55,6 +55,11 @@ class Admin extends Component {
     {
       description: '',
       name: '',
+      image: badge1,
+    },
+    {
+      description: '',
+      name: '',
       image: badge2,
     },
     {
@@ -181,8 +186,6 @@ class Admin extends Component {
       },
     ],
 
-    selectedDefaultSet: 'Default Set 1',
-
     // badges: [
     //   { name: 'badge 1', image: null, id: 1 },
     //   { name: 'badge 2', image: null, id: 2 },
@@ -253,7 +256,7 @@ class Admin extends Component {
   }
 
   render() {
-    const { users, selectedDefaultSet, badges, ladders } = this.state
+    const { users, badges, ladders } = this.state
 
     return (
       <StyledAdmin>
@@ -261,7 +264,7 @@ class Admin extends Component {
           <UserAdministration users={users} />
         </Pane>
         <Pane title="Badges">
-          <Badges selectedDefaultSet={selectedDefaultSet} badges={badges} />
+          <Badges badges={badges} />
         </Pane>
         <Pane title="Ladders">
           <Ladders
