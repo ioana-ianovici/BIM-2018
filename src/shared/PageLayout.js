@@ -5,7 +5,6 @@ import { API } from 'aws-amplify'
 
 import Sidenav from './Sidenav'
 import { styleConstants } from './constants/styleConstants'
-import { AppConstants } from './constants/constants'
 import { Logo } from './Logo'
 
 const StyledPageLayout = styled.div`
@@ -327,11 +326,7 @@ class PageLayout extends PureComponent {
                   </span>
                   !
                 </span>
-                <img
-                  className="profile-picture profile-picture--small header-right--middle"
-                  src={user.userPicture}
-                  alt="profile"
-                />
+                <div className="profile-picture profile-picture--small header-right--middle" />
               </div>
             )}
           </header>
