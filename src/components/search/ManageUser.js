@@ -81,7 +81,7 @@ const StyledManageUser = styled.div`
 
   .section-left {
     background: transparent;
-    width: 40%;
+    width: 50%;
     height: 100%;
     padding: 0 50px 0 0;
     color: ${styleConstants.mainAccent};

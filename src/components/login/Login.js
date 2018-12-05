@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import loginImage from './../../assets/login-illustration.svg'
+import loginImage from './../../assets/login-stars.svg'
 import styled from 'styled-components'
 import { CSSTransition } from 'react-transition-group'
 import { Auth } from 'aws-amplify'
@@ -9,22 +9,19 @@ import { AppConstants } from '../../shared/constants/constants'
 
 const StyledLogin = styled.div`
   height: 100%;
-  padding: 7% 7%;
+  padding: 10% 7%;
   margin: auto;
-  /* background: ${styleConstants.mainColor} url(${loginImage}) no-repeat left
-    center; */
-  /* todo */
-  background: ${styleConstants.darkThemePrimaryBackground};
-  background-size: contain;
+  background: ${styleConstants.darkThemePrimaryBackground} url(${loginImage})
+    no-repeat center 10%;
   overflow: auto;
 
   @media screen and (max-width: 1000px) {
-    padding: 0 5%;
+    padding: 5% 5%;
     margin: auto;
   }
 
   @media screen and (max-width: 700px) {
-    padding: 0 2%;
+    padding: 3% 2%;
     margin: auto;
   }
 
@@ -53,7 +50,7 @@ const StyledLogin = styled.div`
 
   .login-box {
     min-width: 30%;
-    max-width: 600px;
+    max-width: 500px;
     margin: auto;
     background-color: #fff;
     padding: 60px 50px;
@@ -96,11 +93,15 @@ const StyledLogin = styled.div`
         border-radius: 2px;
         display: block;
         width: 100%;
-        border: 1px solid ${styleConstants.lightText};
+        border: 1px solid ${styleConstants.darkThemeLightText};
         padding: 15px;
         margin-bottom: 15px;
         line-height: 18px;
         font-size: 14px;
+
+        &:focus {
+          outline: none;
+        }
 
         &::placeholder {
           color: ${styleConstants.lightText};
@@ -323,7 +324,6 @@ class Login extends React.Component {
 
     return (
       <StyledLogin className="login">
-        {authState}
         <div className="login__container">
           <div className="login__login-box-wrapper">
             <div className="login__logo">
