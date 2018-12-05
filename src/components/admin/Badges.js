@@ -114,9 +114,9 @@ class Badge extends PureComponent {
 
     return (
       <img
-        src={badge.image}
-        alt={badge.name}
-        name={badge.name}
+        src={badge.picture}
+        alt={badge.title}
+        name={badge.title}
         onClick={() => onBadgeSelect(badge)}
       />
     )
@@ -125,9 +125,10 @@ class Badge extends PureComponent {
 
 Badge.propTypes = {
   badge: propTypes.shape({
-    id: propTypes.number,
-    name: propTypes.string,
-    image: propTypes.string,
+    badgeId: propTypes.string,
+    title: propTypes.string,
+    picture: propTypes.string,
+    description: propTypes.string,
   }),
   onBadgeSelect: propTypes.func,
 }
@@ -199,8 +200,8 @@ class Badges extends PureComponent {
     this.setState({
       selectedBadge,
       isAddBadge: false,
-      badgeName: selectedBadge.name,
-      badgeImage: selectedBadge.image,
+      badgeName: selectedBadge.title,
+      badgeImage: selectedBadge.picture,
       badgeDescription: selectedBadge.description,
     })
   }
@@ -294,9 +295,9 @@ class Badges extends PureComponent {
 Badges.propTypes = {
   badges: propTypes.arrayOf(
     propTypes.shape({
-      id: propTypes.number,
-      name: propTypes.string,
-      image: propTypes.string,
+      badgeId: propTypes.string,
+      title: propTypes.string,
+      picture: propTypes.string,
       description: propTypes.string,
     }),
   ),
