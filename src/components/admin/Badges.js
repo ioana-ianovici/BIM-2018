@@ -217,12 +217,14 @@ class Badges extends PureComponent {
     }
 
     const updateBadge = async () => {
-      await API.put('Badges', `/${badgeId}`, { body })
+      const newBadge = await API.put('Badges', `/${badgeId}`, { body })
+      //update the selected badge on FE
       alert('saved')
     }
 
     const createBadge = async () => {
-      await API.post('Badges', '', { body })
+      const newBadge = await API.post('Badges', '', { body })
+      // update the selected badge on FE
       alert('created')
     }
 

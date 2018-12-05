@@ -277,14 +277,6 @@ class Dashboard extends Component {
               badge.count = 1
             })
 
-            // todo: remove this.
-            badges.forEach(
-              (badge, index) =>
-                (badge.picture = require(`./../../assets/badges/badge${(index +
-                  1) %
-                  13}.svg`)),
-            )
-
             this.setState({ badges: badges })
           })
           .catch(err => {
