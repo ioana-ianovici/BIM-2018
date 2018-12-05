@@ -283,16 +283,23 @@ class Dashboard extends Component {
 
     const loadUserData = () => {
       if (this.state.badgesList && this.state.badgesList.length) {
-        // request details about all badges
         let list = this.state.badgesList.toString()
-        console.log(this.state.badges)
+
         API.get('Badges', `/${list}`)
-          .then(res => {
-            console.log(res)
-            res.forEach(it => {
-              it.count = 1
+          .then(badges => {
+            badges.forEach(badge => {
+              badge.count = 1
             })
-            this.setState({ badges: res })
+
+            // todo: remove this.
+            badges.forEach(
+              (badge, index) =>
+                (badge.picture = require(`./../../assets/badges/badge${(index +
+                  1) %
+                  13}.svg`)),
+            )
+
+            this.setState({ badges: badges })
           })
           .catch(err => {
             console.log(err)
