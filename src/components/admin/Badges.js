@@ -157,11 +157,6 @@ class Badges extends PureComponent {
     this.handleAddNewBadge = this.handleAddNewBadge.bind(this)
   }
 
-  handleBadgeSetChange(set) {
-    console.log('handle badge set change', set)
-    // todo: api call.
-  }
-
   handleBadgeNameChange(event) {
     this.setState({ badgeName: event.target.value })
   }
@@ -187,6 +182,7 @@ class Badges extends PureComponent {
     })
   }
 
+  // todo: extract to utility service.
   generatePreviewImgUrl(file, callback) {
     const reader = new FileReader()
     reader.readAsDataURL(file)
