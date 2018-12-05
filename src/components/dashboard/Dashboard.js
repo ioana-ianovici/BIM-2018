@@ -51,9 +51,8 @@ const StyledDashboard = styled.div`
 class Dashboard extends Component {
   state = {
     userDetails: {
-      userName: 'User name',
-      userPicture:
-        'http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg',
+      // userName: 'User name',
+      // userPicture: 'http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg',
       userTitle: 'user title',
       userTitleProgressPercentage: 45,
       userLastTitle: 'Rookie',
@@ -293,14 +292,21 @@ class Dashboard extends Component {
   constructor(props) {
     super(props)
 
-    getUser()
-
-    function getUser() {
+    const getSelf = () => {
       API.get('Self', '', {})
         .then(res => {
-          console.log('coool', res)
+          console.log('coool')
           // load stuff here
           // first save user details
+          this.state.userDetails.userName = res.userName
+          this.state.userDetails.userPicture = res.picture
+          this.state.badgesList = res.badges
+          this.state.confirmedRequirements = res.confirmedRequirements
+          this.state.titleId = res.title
+          this.state.ladderId = res.ladder
+
+          //then load the rest of the details
+          loadUserData()
         })
         .catch(err => {
           console.log(err)
@@ -308,14 +314,35 @@ class Dashboard extends Component {
             'In cazul in care userul nu are detailii ar trebui sa fie redirectionat sa-si editeze profilul',
           )
           // add user details: only once. This must be copied to userDetails later
-          createUserDetails()
+          // createUserDetails()
         })
     }
 
-    function createUserDetails() {
+    const loadUserData = () => {
+      if (this.state.badgesList && this.state.badgesList.length > 0) {
+        // this.state.badges
+        // request details about all badges
+        let list = this.state.badgesList.toString()
+        console.log(this.state.badges)
+        API.get('Badges', `/${list}`)
+          .then(res => {
+            console.log(res)
+            res.forEach(it => {
+              it.count = 1
+            })
+            this.state.badges = res
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      }
+    }
+
+    const createUserDetails = () => {
       let body = {
         userName: 'Alex Tornea',
-        picture: '/static/media/frame.83f4d5c2.svg',
+        picture:
+          'https://www.fizikist.com/static/img/2015/02/74219032015163548-m.jpg',
       }
       API.post('Users', '', { body })
         .then(res => {
@@ -328,24 +355,13 @@ class Dashboard extends Component {
         })
     }
 
-    // if (props.id) {
-    //   // get user details by id.
-    // } else {
-    //   API.get('Self', '', {})
-    //     .then(res => {
-    //       console.log('coool', res)
-    //       // load stuff here
-    //       // first save user details
-    //
-    //     })
-    //     .catch(err => {
-    //       console.log(
-    //         'In cazul in care userul nu are detailii ar trebui sa fie redirectionat sa-si editeze profilul',
-    //       )
-    //       // add user details: only once. This must be copied to userDetails later
-    //       API.post('User', '', {})
-    //     })
-    // }
+    if (props.id) {
+      // get user details by id.
+      // when viewing another user's dashboard
+    } else {
+      // when viewing your own dashboard
+      getSelf()
+    }
   }
 
   render() {
