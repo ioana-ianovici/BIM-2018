@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import styled from 'styled-components'
 import propTypes from 'prop-types'
 import { styleConstants } from '../../shared/constants/styleConstants'
@@ -23,11 +23,14 @@ const StyledUserDetails = styled.div`
     left: 50px;
     height: 25px;
     width: 25px;
+    background-image: url(${props => props.userFrame});
   }
 
   .profile-picture--large {
     width: 125px;
     height: 125px;
+    background-image: url(${props => props.userPicture});
+    background-position: center center;
   }
 
   .profile-info-section {
@@ -56,16 +59,16 @@ const StyledUserDetails = styled.div`
     background: ${styleConstants.mainAccent};
     background: -moz-linear-gradient(left, ${styleConstants.mainAccent} 0%, ${
   styleConstants.mainAccent
-} ${props => props.userProgressPercentage}%, #2a2f39 ${props =>
-  props.userProgressPercentage}%, #2a2f39 100%);
+} ${props => props.userTitleProgressPercentage || 0}%, #2a2f39 ${props =>
+  props.userTitleProgressPercentage || 0}%, #2a2f39 100%);
     background: -webkit-linear-gradient(left, ${styleConstants.mainAccent} 0%,${
   styleConstants.mainAccent
-} ${props => props.userProgressPercentage}%,#2a2f39 ${props =>
-  props.userProgressPercentage}%,#2a2f39 100%);
+} ${props => props.userTitleProgressPercentage || 0 || 0}%,#2a2f39 ${props =>
+  props.userTitleProgressPercentage || 0}%,#2a2f39 100%);
     background: linear-gradient(to right, ${styleConstants.mainAccent} 0%,${
   styleConstants.mainAccent
-} ${props => props.userProgressPercentage}%,#2a2f39 ${props =>
-  props.userProgressPercentage}%,#2a2f39 100%);
+} ${props => props.userTitleProgressPercentage || 0 || 0}%,#2a2f39 ${props =>
+  props.userTitleProgressPercentage}%,#2a2f39 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=${
       styleConstants.mainAccent
     }, endColorstr='#2a2f39',GradientType=1 );
@@ -83,33 +86,36 @@ class Dashboard extends Component {
   render() {
     const {
       userName,
-      userPicture,
       userTitle,
       userFrame,
-      userTitleProgressPercentage,
       userNextTitle,
       userLastTitle,
+      userTitleProgressPercentage,
     } = this.props
 
     return (
-      <StyledUserDetails userProgressPercentage={userTitleProgressPercentage}>
+      <StyledUserDetails {...this.props}>
         <section className="section--no-gutter">
           <div className="profile-info-section">
             <div className="profile-info-section__profile-picture-wrapper">
-              <img
-                className="profile-picture profile-picture--large"
-                src={userPicture}
-                alt="profile"
-              />
-              <img className="profile-picture-frame" src={frame} alt="frame" />
-              <img
-                className="profile-picture-frame-piece"
-                src={userFrame}
-                alt="frame-content"
-              />
+              <div className="profile-picture profile-picture--large" />
+              {userFrame && (
+                <Fragment>
+                  <img
+                    className="profile-picture-frame"
+                    src={frame}
+                    alt="frame"
+                  />
+                  <div className="profile-picture-frame-piece" />
+                </Fragment>
+              )}
             </div>
             <div className="profile-info-section__user-name">{userName}</div>
-            <div className="profile-info-section__user-title">{userTitle}</div>
+            {userTitle && (
+              <div className="profile-info-section__user-title">
+                {userTitle}
+              </div>
+            )}
             <div className="profile-info-section__user-title profile-info-section__user-title--padded">
               {userLastTitle}{' '}
               <span className="profile-info-section__user-progress" />{' '}
@@ -126,6 +132,7 @@ Dashboard.propTypes = {
   userName: propTypes.string,
   userPicture: propTypes.string,
   userTitle: propTypes.string,
+  userFrame: propTypes.string,
   userTitleProgressPercentage: propTypes.number,
   userLastTitle: propTypes.string,
   userNextTitle: propTypes.string,
