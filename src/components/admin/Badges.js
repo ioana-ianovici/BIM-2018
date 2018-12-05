@@ -201,8 +201,9 @@ class Badges extends PureComponent {
 
     let fileName
 
+    //todo: add condition to check if a file was changed in editing mode
     // if file has changed upload the new file, else keep the same file
-    if (true) {
+    if (false) {
       fileName = file ? await s3Upload(file) : null
     } else {
       // don't upload any image
