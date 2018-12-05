@@ -34,7 +34,8 @@ const StyledBadgesSection = styled.div`
   .badge__text {
     text-align: left;
     display: inline-block;
-    vertical-align: super;
+    vertical-align: top;
+    padding-top: 5x;
 
     .badge__title {
       font-weight: bold;
@@ -43,8 +44,7 @@ const StyledBadgesSection = styled.div`
       color: ${styleConstants.darkThemePrimaryBackground};
     }
 
-    .badge__subtitle,
-    .badge__count {
+    .badge__subtitle {
       color: ${styleConstants.darkThemeContrastTextColor};
     }
   }
@@ -100,9 +100,10 @@ class Badges extends PureComponent {
                   alt="article writer"
                 />
                 <div className="badge__text">
-                  <div className="badge__title">{item.title}</div>
+                  <div className="badge__title">
+                    {item.count + ' x ' + item.title}
+                  </div>
                   <div className="badge__subtitle">{item.subtitle}</div>
-                  <div className="badge__count">{item.count}</div>
                 </div>
               </div>
             ))}

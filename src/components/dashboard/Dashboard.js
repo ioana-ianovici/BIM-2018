@@ -7,11 +7,11 @@ import Badges from './Badges'
 import UserDetails from './UserDetails'
 import Tree from './Tree'
 import Requirements from '../../shared/Requirements'
-import messageInABottle from './../../assets/badges/message-in-a-bottle.svg'
-import origamiCrane from './../../assets/badges/origami-crane.svg'
-import rescueCircle from './../../assets/badges/rescue-circle.svg'
-import trumpet from './../../assets/badges/trumpet.svg'
-import disk from './../../assets/badges/disk.svg'
+import badge1 from './../../assets/badges/badge1.svg'
+import badge2 from './../../assets/badges/badge2.svg'
+import badge3 from './../../assets/badges/badge3.svg'
+import badge4 from './../../assets/badges/badge4.svg'
+import badge5 from './../../assets/badges/badge5.svg'
 import plant from './../../assets/default-frame-set-1/plant.svg'
 
 const StyledDashboard = styled.div`
@@ -63,44 +63,44 @@ class Dashboard extends Component {
     badges: [
       {
         title: 'Article writer',
-        image: messageInABottle,
+        image: badge1,
+        subtitle: 'some details',
+        count: 1,
+      },
+      {
+        title: 'Article writer',
+        image: badge2,
+        subtitle: null,
+        count: 2,
+      },
+      { title: 'Article writer', image: badge5, subtitle: null, count: 3 },
+      {
+        title: 'Article writer',
+        image: badge3,
+        subtitle: 'some details 2',
+        count: 2,
+      },
+      { title: 'Article writer', image: badge4, subtitle: null, count: 3 },
+      {
+        title: 'Article writer',
+        image: badge1,
         subtitle: null,
         count: 1,
       },
       {
         title: 'Article writer',
-        image: origamiCrane,
-        subtitle: null,
-        count: 2,
-      },
-      { title: 'Article writer', image: disk, subtitle: null, count: 3 },
-      {
-        title: 'Article writer',
-        image: rescueCircle,
-        subtitle: null,
-        count: 2,
-      },
-      { title: 'Article writer', image: trumpet, subtitle: null, count: 3 },
-      {
-        title: 'Article writer',
-        image: messageInABottle,
-        subtitle: null,
-        count: 1,
-      },
-      {
-        title: 'Article writer',
-        image: origamiCrane,
-        subtitle: null,
+        image: badge2,
+        subtitle: 'some details 3',
         count: 3,
       },
-      { title: 'Article writer', image: disk, subtitle: null, count: 3 },
+      { title: 'Article writer', image: badge5, subtitle: null, count: 3 },
       {
         title: 'Article writer',
-        image: rescueCircle,
+        image: badge3,
         subtitle: null,
         count: 2,
       },
-      { title: 'Article writer', image: trumpet, subtitle: null, count: 1 },
+      { title: 'Article writer', image: badge4, subtitle: null, count: 1 },
     ],
     requirements: [
       {
