@@ -34,10 +34,14 @@ const StyledSettings = styled.div`
   }
 
   .user-image {
-    margin: 50px auto;
+    margin: 50px auto 100px auto;
     display: block;
     text-align: center;
     position: relative;
+  }
+
+  .profile-picture {
+    border: 1px solid ${styleConstants.darkThemeLightText};
   }
 
   .user-image__upload {
@@ -58,6 +62,8 @@ const StyledSettings = styled.div`
     font-size: 14px;
     cursor: pointer;
     color: ${styleConstants.darkThemeLightText};
+    padding-top: 140px;
+    display: block;
   }
 
   .edit-name {
@@ -220,8 +226,7 @@ class Settings extends PureComponent {
     return (
       <StyledSettings>
         <div className="user-image">
-          {/* todo: add alt */}
-          <img src={userPicture} alt="" />
+          <div className="profile-picture profile-picture--large" />
           <input
             autoComplete="off"
             id="upload-user-picture"
