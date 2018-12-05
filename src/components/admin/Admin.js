@@ -22,6 +22,7 @@ import badge11 from '../../assets/badges/badge11.svg'
 import badge12 from '../../assets/badges/badge12.svg'
 import badge13 from '../../assets/badges/badge13.svg'
 import { API } from 'aws-amplify'
+import { Storage } from 'aws-amplify'
 
 const StyledAdmin = styled.div`
   color: ${styleConstants.darkThemeContrastTextColor};
@@ -258,24 +259,15 @@ class Admin extends Component {
 
   constructor(props) {
     super(props)
-    const getBadges = () => {
-      API.get('Badges', '')
-        .then(res => {
-          // todo: remove this.
-          res.forEach(
-            (badge, index) =>
-              (badge.picture = require(`./../../assets/badges/${
-                badge.picture
-              }.svg`)),
-          )
+    const getBadges = async () => {
+      let badges = await API.get('Badges', '', {})
 
-          this.setState({
-            badges: res,
-          })
-        })
-        .catch(err => {
-          console.log(err)
-        })
+      // have to check what's wrong with below code and try loading images
+      // badges.forEach(async badge => {
+      //   badge.picture = await Storage.vault.get(badge.picture)
+      // })
+
+      this.setState({ badges: badges })
     }
     getBadges()
   }

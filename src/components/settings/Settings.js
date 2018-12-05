@@ -234,6 +234,7 @@ class Settings extends PureComponent {
           <input
             type="text"
             className="edit-name__input"
+            value={userName || ''}
             onChange={this.handleUserNameChange}
             placeholder="Your name"
             name="userName"

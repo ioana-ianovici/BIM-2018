@@ -52,7 +52,7 @@ class Dashboard extends Component {
       userTitleProgressPercentage: 45,
       userLastTitle: 'Rookie',
       userNextTitle: 'Master',
-      userFrame: plant,
+      // userFrame: plant,
     },
     badges: [],
     requirements: [

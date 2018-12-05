@@ -5,7 +5,6 @@ import propTypes from 'prop-types'
 import AddNew from './../../shared/AddNew'
 import { styleConstants } from '../../shared/constants/styleConstants'
 import { API } from 'aws-amplify'
-// import { Storage } from 'aws-amplify'
 import { s3Upload } from './awsStorage'
 
 const StyledBadges = styled.div`
@@ -167,6 +166,7 @@ class Badges extends PureComponent {
 
   handleFileChange(event) {
     const file = event.target.files && event.target.files[0]
+    this.setState({ file: file })
 
     if (!file) {
       return
@@ -177,7 +177,7 @@ class Badges extends PureComponent {
 
       if (!this.state.badgeName) {
         const friendlyName = file.name.slice(0, file.name.lastIndexOf('.'))
-        this.setState({ badgeName: friendlyName, file: file })
+        this.setState({ badgeName: friendlyName })
       }
     })
   }
@@ -189,7 +189,7 @@ class Badges extends PureComponent {
     reader.onloadend = e => callback(reader.result)
   }
 
-  handleAddEditBadgeSubmit(e) {
+  async handleAddEditBadgeSubmit(e) {
     e.preventDefault()
     const {
       badgeId,
@@ -198,54 +198,38 @@ class Badges extends PureComponent {
       badgeDescription,
       file,
     } = this.state
-    // console.log(badgeId, badgeImage, badgeName, badgeDescription)
 
-    let fileUrl = ''
-    s3Upload(file)
-      .then(res => {
-        console.log('file uploaded', res)
-      })
-      .catch(err => {
-        console.log('could not update file', err)
-      })
+    let fileName
 
-    // todo: call api.
-    // if (badgeId) {
-    //   // if there is a badgeId we update the existing badge
-    //   console.log('is going to update the current badge')
-    //   API.put('Badges', `/${badgeId}`, {
-    //     body: {
-    //       picture: file,
-    //       title: badgeName,
-    //       description: badgeDescription,
-    //     },
-    //   })
-    //     .then(res => {
-    //       console.log('badge updated', res)
-    //     })
-    //     .catch(err => {
-    //       console.log('could not update badge', err)
-    //     })
-    // } else {
-    //   // if there is no badgeId we create a new badge
-    //   console.log('is going to create a new badge')
-    //
-    //   API.post('Badges', '', {
-    //     body: {
-    //       picture: badgeImage,
-    //       title: badgeName,
-    //       description: badgeDescription,
-    //     },
-    //   })
-    //     .then(res => {
-    //       console.log('badge added')
-    //       console.log(res)
-    //     })
-    //     .catch(err => {
-    //       console.log('could not add badge')
-    //       console.log(err)
-    //     })
-    // }
+    // if file has changed upload the new file, else keep the same file
+    if (true) {
+      fileName = file ? await s3Upload(file) : null
+    } else {
+      // don't upload any image
+      fileName = badgeImage
+    }
+
+    const body = {
+      picture: fileName,
+      title: badgeName,
+      description: badgeDescription,
+    }
+
+    const updateBadge = async () => {
+      await API.put('Badges', `/${badgeId}`, { body })
+      alert('saved')
+    }
+
+    const createBadge = async () => {
+      await API.post('Badges', '', { body })
+      alert('created')
+    }
+
+    if (badgeId) {
+      updateBadge()
+    } else {
+      createBadge()
+    }
   }
 
   handleBadgeSelect(selectedBadge) {
