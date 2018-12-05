@@ -293,19 +293,59 @@ class Dashboard extends Component {
   constructor(props) {
     super(props)
 
-    if (props.id) {
-      // get user details by id.
-    } else {
+    getUser()
+
+    function getUser() {
       API.get('Self', '', {})
         .then(res => {
           console.log('coool', res)
+          // load stuff here
+          // first save user details
         })
         .catch(err => {
+          console.log(err)
           console.log(
             'In cazul in care userul nu are detailii ar trebui sa fie redirectionat sa-si editeze profilul',
           )
+          // add user details: only once. This must be copied to userDetails later
+          createUserDetails()
         })
     }
+
+    function createUserDetails() {
+      let body = {
+        userName: 'Alex Tornea',
+        picture: '/static/media/frame.83f4d5c2.svg',
+      }
+      API.post('Users', '', { body })
+        .then(res => {
+          console.log('user created')
+          console.log(res)
+        })
+        .catch(err => {
+          console.log('could not create user')
+          console.log(err)
+        })
+    }
+
+    // if (props.id) {
+    //   // get user details by id.
+    // } else {
+    //   API.get('Self', '', {})
+    //     .then(res => {
+    //       console.log('coool', res)
+    //       // load stuff here
+    //       // first save user details
+    //
+    //     })
+    //     .catch(err => {
+    //       console.log(
+    //         'In cazul in care userul nu are detailii ar trebui sa fie redirectionat sa-si editeze profilul',
+    //       )
+    //       // add user details: only once. This must be copied to userDetails later
+    //       API.post('User', '', {})
+    //     })
+    // }
   }
 
   render() {
