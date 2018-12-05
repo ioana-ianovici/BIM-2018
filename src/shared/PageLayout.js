@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { PureComponent } from 'react'
+import { withRouter } from 'react-router'
 import styled from 'styled-components'
+import { API } from 'aws-amplify'
 
 import Sidenav from './Sidenav'
 import { styleConstants } from './constants/styleConstants'
+import { AppConstants } from './constants/constants'
 import { Logo } from './Logo'
 
 const StyledPageLayout = styled.div`
@@ -100,10 +103,17 @@ const StyledPageLayout = styled.div`
     width: 40px;
     height: 40px;
     display: inline-block;
+    background-image: url(${props => props.userPicture});
+    background-position: center center;
   }
 
   .profile-picture--small {
     border: 1px solid ${styleConstants.mainAccent};
+  }
+
+  .profile-picture--large {
+    width: 125px;
+    height: 125px;
   }
 
   .profile-picture--medium {
@@ -129,11 +139,11 @@ const StyledPageLayout = styled.div`
 
   .react-select__menu-list {
     &::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    background-color: ${styleConstants.darkThemeSecondaryBackground};
-    border-left: 1px solid ${styleConstants.darkThemePaleBorder};
-    border-right: 1px solid ${styleConstants.darkThemePaleBorder};
-  }
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      background-color: ${styleConstants.darkThemeSecondaryBackground};
+      border-left: 1px solid ${styleConstants.darkThemePaleBorder};
+      border-right: 1px solid ${styleConstants.darkThemePaleBorder};
+    }
 
     &::-webkit-scrollbar {
       width: 10px;
@@ -255,7 +265,7 @@ const StyledPageLayout = styled.div`
     background: transparent;
     line-height: 18px;
     font-size: 14px;
-    color: ${styleConstants.darkThemeContrastTextColor}
+    color: ${styleConstants.darkThemeContrastTextColor};
     height: 18px;
 
     &::placeholder {
@@ -270,37 +280,69 @@ const StyledPageLayout = styled.div`
   }
 `
 
-const PageLayout = props => {
-  return (
-    <StyledPageLayout>
-      <div className="content-left">
-        <Sidenav />
-      </div>
-      <div className="content-right">
-        <header>
-          <div className="header__header-left">
-            <Logo className="logo" />
-          </div>
-          <div className="header__header-right header-right">
-            <span className="header-right__text">
-              Hello,{' '}
-              <span className="header-right__text--highlighted">User name</span>
-              !
-            </span>
-            <img
-              className="profile-picture profile-picture--small header-right--middle"
-              src="http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg"
-              alt="profile"
-            />
-          </div>
-        </header>
+class PageLayout extends PureComponent {
+  state = {
+    user: null,
+  }
 
-        <div className="main" key="1">
-          {props.children}
+  constructor(props) {
+    super(props)
+
+    this.loadUserData()
+  }
+
+  // todo: extract this method to utility service.
+  loadUserData() {
+    API.get('Self', '', {})
+      .then(response => {
+        this.setState({
+          user: {
+            userName: response.userName,
+            userPicture: response.picture,
+          },
+        })
+      })
+      .catch(err => console.log(err))
+  }
+
+  render() {
+    const { user } = this.state
+
+    return (
+      <StyledPageLayout {...user}>
+        <div className="content-left">
+          <Sidenav />
         </div>
-      </div>
-    </StyledPageLayout>
-  )
+        <div className="content-right">
+          <header>
+            <div className="header__header-left">
+              <Logo className="logo" />
+            </div>
+            {user && (
+              <div className="header__header-right header-right">
+                <span className="header-right__text">
+                  Hello,{' '}
+                  <span className="header-right__text--highlighted">
+                    {user.userName}
+                  </span>
+                  !
+                </span>
+                <img
+                  className="profile-picture profile-picture--small header-right--middle"
+                  src={user.userPicture}
+                  alt="profile"
+                />
+              </div>
+            )}
+          </header>
+
+          <div className="main" key="1">
+            {this.props.children}
+          </div>
+        </div>
+      </StyledPageLayout>
+    )
+  }
 }
 
-export default PageLayout
+export default withRouter(PageLayout)

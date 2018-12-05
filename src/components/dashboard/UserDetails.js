@@ -26,13 +26,6 @@ const StyledUserDetails = styled.div`
     background-image: url(${props => props.userFrame});
   }
 
-  .profile-picture--large {
-    width: 125px;
-    height: 125px;
-    background-image: url(${props => props.userPicture});
-    background-position: center center;
-  }
-
   .profile-info-section {
     text-align: center;
     padding: 25px 10px;
@@ -90,7 +83,6 @@ class Dashboard extends Component {
       userFrame,
       userNextTitle,
       userLastTitle,
-      userTitleProgressPercentage,
     } = this.props
 
     return (

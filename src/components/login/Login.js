@@ -161,6 +161,7 @@ const StyledLogin = styled.div`
 class Login extends React.Component {
   state = {
     error: null,
+    errorCode: null,
     form: {
       username: '',
       password: '',
@@ -178,7 +179,7 @@ class Login extends React.Component {
           AppConstants.amplifyAuthActions.signedIn.awsState,
           user,
         )
-        this.setState({ error: null })
+        this.setState({ error: null, errorCode: null })
       })
       .catch(error => {
         if (
@@ -201,7 +202,7 @@ class Login extends React.Component {
       password: this.state.form.password,
     })
       .then(data => {
-        this.setState({ error: null })
+        this.setState({ error: null, errorCode: null })
 
         this.handleStateActionChange(
           AppConstants.amplifyAuthActions.confirmSignUp.awsState,
@@ -211,6 +212,21 @@ class Login extends React.Component {
       .catch(error => this.setState({ error: error.message }))
   }
   confirmSignUp() {
+    if (
+      this.state.errorCode ===
+        AppConstants.amplifyErrorCodes.expiredCodeException ||
+      this.state.errorCode ===
+        AppConstants.amplifyErrorCodes.codeMismatchException
+    ) {
+      Auth.resendSignUp(this.state.form.email)
+        .then(() => {
+          this.setState({ error: null, errorCode: null })
+        })
+        .catch(error => this.setState({ error: error.message }))
+
+      return
+    }
+
     Auth.confirmSignUp(
       this.state.form.email,
       this.state.form.confirmationCode,
@@ -225,7 +241,9 @@ class Login extends React.Component {
           data,
         )
       })
-      .catch(error => this.setState({ error: error.message }))
+      .catch(error => {
+        this.setState({ error: error.message, errorCode: error.code })
+      })
   }
   onForgotPassword() {
     Auth.forgotPassword(this.state.form.email)
@@ -234,7 +252,7 @@ class Login extends React.Component {
           AppConstants.amplifyAuthActions.verifyContact.awsState,
           data,
         )
-        this.setState({ error: null })
+        this.setState({ error: null, errorCode: null })
       })
       .catch(error => {
         this.setState({ error: error.message })
@@ -251,7 +269,7 @@ class Login extends React.Component {
           AppConstants.amplifyAuthActions.signIn.awsState,
           data,
         )
-        this.setState({ error: null })
+        this.setState({ error: null, errorCode: null })
       })
       .catch(error => {
         this.setState({ error: error.message })
@@ -286,7 +304,7 @@ class Login extends React.Component {
   }
   handleStateActionChange(action, data) {
     this.props.onStateChange(action, data)
-    this.setState({ error: null })
+    this.setState({ error: null, errorCode: null })
   }
   handleInputChange(event) {
     event.persist()
@@ -296,6 +314,7 @@ class Login extends React.Component {
         [event.target.name]: event.target.value.trim(),
       },
       error: null,
+      errorCode: null,
     }))
   }
   render() {
@@ -307,6 +326,12 @@ class Login extends React.Component {
       authState === AppConstants.amplifyAuthActions.signUp.awsState
     const isConfirmSignUp =
       authState === AppConstants.amplifyAuthActions.confirmSignUp.awsState
+    const isResendConfirmationCode =
+      isConfirmSignUp &&
+      (this.state.errorCode ===
+        AppConstants.amplifyErrorCodes.codeMismatchException ||
+        this.state.errorCode ===
+          AppConstants.amplifyErrorCodes.expiredCodeException)
     const isForgotPassword =
       authState === AppConstants.amplifyAuthActions.forgotPassword.awsState
     const isForgotPasswordConfirm =
@@ -419,7 +444,13 @@ class Login extends React.Component {
                 className="login-box__submit"
                 onClick={() => this.handleSubmit()}
               >
-                {AppConstants.amplifyAuthActions[authState].title}
+                {
+                  AppConstants.amplifyAuthActions[
+                    isResendConfirmationCode
+                      ? 'resendConfirmationCode'
+                      : authState
+                  ].title
+                }
               </button>
             </div>
           </div>

@@ -3,16 +3,11 @@ import styled from 'styled-components'
 import { API } from 'aws-amplify'
 
 import { styleConstants } from '../../shared/constants/styleConstants'
+import { AppConstants } from '../../shared/constants/constants'
 import Badges from './Badges'
 import UserDetails from './UserDetails'
 import Tree from './Tree'
 import Requirements from '../../shared/Requirements'
-import badge1 from './../../assets/badges/badge1.svg'
-import badge2 from './../../assets/badges/badge2.svg'
-import badge3 from './../../assets/badges/badge3.svg'
-import badge4 from './../../assets/badges/badge4.svg'
-import badge5 from './../../assets/badges/badge5.svg'
-import plant from './../../assets/default-frame-set-1/plant.svg'
 
 const StyledDashboard = styled.div`
   .section-wrapper {
@@ -254,9 +249,6 @@ class Dashboard extends Component {
     const getSelf = () => {
       API.get('Self', '', {})
         .then(res => {
-          console.log('coool')
-          // load stuff here
-          // first save user details
           this.setState({
             userDetails: {
               userName: res.userName,
@@ -268,16 +260,10 @@ class Dashboard extends Component {
             ladderId: res.ladder,
           })
 
-          //then load the rest of the details
           loadUserData()
         })
         .catch(err => {
-          console.log(err)
-          console.log(
-            'In cazul in care userul nu are detailii ar trebui sa fie redirectionat sa-si editeze profilul',
-          )
-          // add user details: only once. This must be copied to userDetails later
-          // createUserDetails()
+          this.props.history.push(AppConstants.routes.settings)
         })
     }
 
@@ -307,28 +293,10 @@ class Dashboard extends Component {
       }
     }
 
-    const createUserDetails = () => {
-      let body = {
-        userName: 'Alex Tornea',
-        picture:
-          'https://www.fizikist.com/static/img/2015/02/74219032015163548-m.jpg',
-      }
-      API.post('Users', '', { body })
-        .then(res => {
-          console.log('user created')
-          console.log(res)
-        })
-        .catch(err => {
-          console.log('could not create user')
-          console.log(err)
-        })
-    }
-
     if (props.id) {
       // get user details by id.
       // when viewing another user's dashboard
     } else {
-      // when viewing your own dashboard
       getSelf()
     }
   }
