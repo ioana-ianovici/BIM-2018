@@ -1,6 +1,11 @@
 import { AppConstants } from './shared/constants/constants'
 
 export default {
+  Storage: {
+    region: process.env.REACT_APP_AWS_REGION,
+    bucket: process.env.REACT_APP_S3_BUCKET,
+    identityPoolId: process.env.REACT_APP_AWS_IDENTITY_POOL_ID,
+  },
   Auth: {
     // REQUIRED only for Federated Authentication - Amazon Cognito Identity Pool ID
     identityPoolId: process.env.REACT_APP_AWS_IDENTITY_POOL_ID,

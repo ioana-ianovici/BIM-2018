@@ -4,6 +4,9 @@ import propTypes from 'prop-types'
 
 import AddNew from './../../shared/AddNew'
 import { styleConstants } from '../../shared/constants/styleConstants'
+import { API } from 'aws-amplify'
+// import { Storage } from 'aws-amplify'
+import { s3Upload } from './awsStorage'
 
 const StyledBadges = styled.div`
   color: ${styleConstants.darkThemeContrastTextColor};
@@ -136,6 +139,7 @@ Badge.propTypes = {
 class Badges extends PureComponent {
   state = {
     selectedBadge: null,
+    badgeId: null,
     badgeName: null,
     badgeImage: null,
     badgeDescription: null,
@@ -178,7 +182,7 @@ class Badges extends PureComponent {
 
       if (!this.state.badgeName) {
         const friendlyName = file.name.slice(0, file.name.lastIndexOf('.'))
-        this.setState({ badgeName: friendlyName })
+        this.setState({ badgeName: friendlyName, file: file })
       }
     })
   }
@@ -191,15 +195,68 @@ class Badges extends PureComponent {
 
   handleAddEditBadgeSubmit(e) {
     e.preventDefault()
-    const { badgeImage, badgeName, badgeDescription } = this.state
-    console.log(badgeImage, badgeName, badgeDescription)
+    const {
+      badgeId,
+      badgeImage,
+      badgeName,
+      badgeDescription,
+      file,
+    } = this.state
+    // console.log(badgeId, badgeImage, badgeName, badgeDescription)
+
+    let fileUrl = ''
+    s3Upload(file)
+      .then(res => {
+        console.log('file uploaded', res)
+      })
+      .catch(err => {
+        console.log('could not update file', err)
+      })
+
     // todo: call api.
+    // if (badgeId) {
+    //   // if there is a badgeId we update the existing badge
+    //   console.log('is going to update the current badge')
+    //   API.put('Badges', `/${badgeId}`, {
+    //     body: {
+    //       picture: file,
+    //       title: badgeName,
+    //       description: badgeDescription,
+    //     },
+    //   })
+    //     .then(res => {
+    //       console.log('badge updated', res)
+    //     })
+    //     .catch(err => {
+    //       console.log('could not update badge', err)
+    //     })
+    // } else {
+    //   // if there is no badgeId we create a new badge
+    //   console.log('is going to create a new badge')
+    //
+    //   API.post('Badges', '', {
+    //     body: {
+    //       picture: badgeImage,
+    //       title: badgeName,
+    //       description: badgeDescription,
+    //     },
+    //   })
+    //     .then(res => {
+    //       console.log('badge added')
+    //       console.log(res)
+    //     })
+    //     .catch(err => {
+    //       console.log('could not add badge')
+    //       console.log(err)
+    //     })
+    // }
   }
 
   handleBadgeSelect(selectedBadge) {
     this.setState({
       selectedBadge,
       isAddBadge: false,
+      badgeId: selectedBadge.badgeId,
       badgeName: selectedBadge.title,
       badgeImage: selectedBadge.picture,
       badgeDescription: selectedBadge.description,
@@ -209,6 +266,7 @@ class Badges extends PureComponent {
   handleAddNewBadge() {
     this.setState({
       isAddBadge: true,
+      badgeId: null,
       badgeImage: null,
       badgeName: null,
       badgeDescription: null,
