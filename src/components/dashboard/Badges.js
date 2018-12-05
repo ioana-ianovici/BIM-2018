@@ -60,6 +60,7 @@ class Badges extends PureComponent {
           <Carousel
             slidesToShow={5}
             slidesToScroll={1}
+            totalSlides={items.length}
             centerMode
             responsive={[
               {
@@ -112,10 +113,6 @@ class Badges extends PureComponent {
       </StyledBadgesSection>
     )
   }
-}
-
-Badges.defaultProps = {
-  items: [],
 }
 
 Badges.propTypes = {

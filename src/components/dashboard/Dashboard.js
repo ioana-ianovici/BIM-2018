@@ -51,56 +51,15 @@ const StyledDashboard = styled.div`
 class Dashboard extends Component {
   state = {
     userDetails: {
-      // userName: 'User name',
-      // userPicture: 'http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg',
-      userTitle: 'user title',
-      userTitleProgressPercentage: 45,
-      userLastTitle: 'Rookie',
-      userNextTitle: 'Master',
-      userFrame: plant,
+      // // userName: 'User name',
+      // // userPicture: 'http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg',
+      // userTitle: 'user title',
+      // userTitleProgressPercentage: 45,
+      // userLastTitle: 'Rookie',
+      // userNextTitle: 'Master',
+      // userFrame: plant,
     },
-    badges: [
-      {
-        title: 'Article writer',
-        picture: badge1,
-        description: 'some details',
-        count: 1,
-      },
-      {
-        title: 'Article writer',
-        picture: badge2,
-        description: null,
-        count: 2,
-      },
-      { title: 'Article writer', picture: badge5, description: null, count: 3 },
-      {
-        title: 'Article writer',
-        picture: badge3,
-        description: 'some details 2',
-        count: 2,
-      },
-      { title: 'Article writer', picture: badge4, description: null, count: 3 },
-      {
-        title: 'Article writer',
-        picture: badge1,
-        description: null,
-        count: 1,
-      },
-      {
-        title: 'Article writer',
-        picture: badge2,
-        description: 'some details 3',
-        count: 3,
-      },
-      { title: 'Article writer', picture: badge5, description: null, count: 3 },
-      {
-        title: 'Article writer',
-        picture: badge3,
-        description: null,
-        count: 2,
-      },
-      { title: 'Article writer', picture: badge4, description: null, count: 1 },
-    ],
+    badges: [],
     requirements: [
       {
         id: 1,
@@ -298,12 +257,16 @@ class Dashboard extends Component {
           console.log('coool')
           // load stuff here
           // first save user details
-          this.state.userDetails.userName = res.userName
-          this.state.userDetails.userPicture = res.picture
-          this.state.badgesList = res.badges
-          this.state.confirmedRequirements = res.confirmedRequirements
-          this.state.titleId = res.title
-          this.state.ladderId = res.ladder
+          this.setState({
+            userDetails: {
+              userName: res.userName,
+              userPicture: res.picture,
+            },
+            badgesList: res.badges,
+            confirmedRequirements: res.confirmedRequirements,
+            titleId: res.title,
+            ladderId: res.ladder,
+          })
 
           //then load the rest of the details
           loadUserData()
@@ -319,8 +282,7 @@ class Dashboard extends Component {
     }
 
     const loadUserData = () => {
-      if (this.state.badgesList && this.state.badgesList.length > 0) {
-        // this.state.badges
+      if (this.state.badgesList && this.state.badgesList.length) {
         // request details about all badges
         let list = this.state.badgesList.toString()
         console.log(this.state.badges)
@@ -330,7 +292,7 @@ class Dashboard extends Component {
             res.forEach(it => {
               it.count = 1
             })
-            this.state.badges = res
+            this.setState({ badges: res })
           })
           .catch(err => {
             console.log(err)
