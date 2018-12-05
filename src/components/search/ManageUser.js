@@ -240,7 +240,7 @@ class ManageUser extends Component {
   }
 
   componentDidUpdate() {
-    if (this.state.user !== this.props.user) {
+    if (this.state.user.id !== this.props.user.id) {
       this.setState({ user: this.props.user })
     }
   }
