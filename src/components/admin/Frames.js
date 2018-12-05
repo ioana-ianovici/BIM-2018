@@ -1,8 +1,12 @@
-import React, { Component } from 'react'
+import React, { PureComponent, Component } from 'react'
 import styled from 'styled-components'
+import propTypes from 'prop-types'
 
 import AddNew from './../../shared/AddNew'
 import { styleConstants } from '../../shared/constants/styleConstants'
+import defaultFrame1 from '../../assets/frame-1.svg'
+import defaultFrame2 from '../../assets/frame-2.svg'
+import defaultFrame3 from '../../assets/frame-3.svg'
 
 const StyledFrames = styled.div`
   color: ${styleConstants.darkThemeContrastTextColor};
@@ -30,25 +34,60 @@ const StyledFrames = styled.div`
     flex-wrap: wrap;
 
     img {
-      width: 50px;
-      height: 50px;
+      width: 65px;
+      height: 65px;
       cursor: pointer;
       padding: 15px;
     }
   }
 `
 
-class Frames extends Component {
+class Frame extends PureComponent {
+  render() {
+    const { frame, onUpdateFrame } = this.props
+
+    return (
+      <div>
+        <input
+          id="edit-frame"
+          type="file"
+          accept="image/*"
+          className="add-frame__upload"
+          onChange={event => onUpdateFrame(event, frame)}
+        />
+        <label htmlFor="edit-frame">
+          {/* todo: add alt. */}
+          <img src={frame} alt="" />
+        </label>
+      </div>
+    )
+  }
+}
+
+Frame.propTypes = {
+  frame: propTypes.string.isRequired,
+  onUpdateFrame: propTypes.func.isRequired,
+}
+
+class Frames extends PureComponent {
   state = {
-    //todo: get from api.
-    frames: ['frame1', 'frame2', 'frame3'],
+    frames: [],
   }
 
   constructor(props) {
     super(props)
+    const defaultFrames = [defaultFrame1, defaultFrame2, defaultFrame3]
 
     this.handleAddNewFrame = this.handleAddNewFrame.bind(this)
     this.handleUpdateFrame = this.handleUpdateFrame.bind(this)
+
+    // todo: get from api.
+    this.state = {
+      frames:
+        this.state.frames && this.state.frames.length
+          ? this.state.frames
+          : defaultFrames,
+    }
   }
 
   handleAddNewFrame(event) {
@@ -91,19 +130,11 @@ class Frames extends Component {
 
         <div className="frames">
           {frames.map(frame => (
-            <div key={frame}>
-              <input
-                id="edit-frame"
-                type="file"
-                accept="image/*"
-                className="add-frame__upload"
-                onChange={event => this.handleUpdateFrame(event, frame)}
-              />
-              <label htmlFor="edit-frame">
-                {/* todo: add alt. */}
-                <img src={frame} alt="" />
-              </label>
-            </div>
+            <Frame
+              key={frame}
+              frame={frame}
+              onUpdateFrame={this.handleUpdateFrame}
+            />
           ))}
         </div>
       </StyledFrames>
