@@ -7,6 +7,7 @@ import { styleConstants } from '../../shared/constants/styleConstants'
 import defaultFrame1 from '../../assets/frame-1.svg'
 import defaultFrame2 from '../../assets/frame-2.svg'
 import defaultFrame3 from '../../assets/frame-3.svg'
+import RemoveImage from '../../shared/images/Remove.image'
 
 const StyledFrames = styled.div`
   color: ${styleConstants.darkThemeContrastTextColor};
@@ -17,7 +18,8 @@ const StyledFrames = styled.div`
     left: 200px;
   }
 
-  .add-frame__upload {
+  .add-frame__upload,
+  .frame__upload {
     opacity: 0;
     position: absolute;
     pointer-events: none;
@@ -33,6 +35,26 @@ const StyledFrames = styled.div`
     display: flex;
     flex-wrap: wrap;
 
+    .frame {
+      position: relative;
+
+      &:hover {
+        .frame__delete {
+          display: block;
+        }
+      }
+    }
+
+    .frame__delete {
+      border-radius: 50%;
+      display: none;
+      cursor: pointer;
+      position: absolute;
+      right: -5px;
+      top: -5px;
+      background-color: ${styleConstants.darkThemeSecondaryBackground};
+    }
+
     img {
       width: 65px;
       height: 65px;
@@ -44,20 +66,27 @@ const StyledFrames = styled.div`
 
 class Frame extends PureComponent {
   render() {
-    const { frame, onUpdateFrame } = this.props
+    const { frame, onUpdateFrame, onRemoveFrame } = this.props
 
     return (
-      <div>
+      <div className="frame">
         <input
           id="edit-frame"
           type="file"
           accept="image/*"
-          className="add-frame__upload"
+          className="frame__upload"
           onChange={event => onUpdateFrame(event, frame)}
         />
         <label htmlFor="edit-frame">
           {/* todo: add alt. */}
           <img src={frame} alt="" />
+          <RemoveImage
+            className="frame__delete"
+            onClick={e => {
+              e.preventDefault()
+              onRemoveFrame(frame)
+            }}
+          />
         </label>
       </div>
     )
@@ -67,6 +96,7 @@ class Frame extends PureComponent {
 Frame.propTypes = {
   frame: propTypes.string.isRequired,
   onUpdateFrame: propTypes.func.isRequired,
+  onRemoveFrame: propTypes.func.isRequired,
 }
 
 class Frames extends PureComponent {
@@ -111,6 +141,11 @@ class Frames extends PureComponent {
     // todo: call api to update oldFrame with file, reset state frames.
   }
 
+  handleRemoveFrame(frame) {
+    console.log(frame)
+    // todo: call api.
+  }
+
   render() {
     const { frames } = this.state
 
@@ -134,6 +169,7 @@ class Frames extends PureComponent {
               key={frame}
               frame={frame}
               onUpdateFrame={this.handleUpdateFrame}
+              onRemoveFrame={this.handleRemoveFrame}
             />
           ))}
         </div>

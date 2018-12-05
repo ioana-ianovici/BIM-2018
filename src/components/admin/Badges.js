@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react'
-import Select from 'react-select'
 import styled from 'styled-components'
 import propTypes from 'prop-types'
 
@@ -60,11 +59,6 @@ const StyledBadges = styled.div`
     img {
       padding: 20px;
     }
-  }
-
-  .badges__select-default-set {
-    width: 100%;
-    margin-bottom: 20px;
   }
 
   .add-edit-badge {
@@ -140,10 +134,6 @@ Badge.propTypes = {
 
 class Badges extends PureComponent {
   state = {
-    defaultSets: [
-      { value: 'Default Set 1', label: 'Default Set 1' },
-      { value: 'Default Set 2', label: 'Default Set 2' },
-    ],
     selectedBadge: null,
     badgeName: null,
     badgeImage: null,
@@ -225,9 +215,8 @@ class Badges extends PureComponent {
   }
 
   render() {
-    const { selectedDefaultSet, badges } = this.props
+    const { badges } = this.props
     const {
-      defaultSets,
       badgeImage,
       badgeDescription,
       badgeName,
@@ -247,20 +236,6 @@ class Badges extends PureComponent {
         <div className="badges">
           {(selectedBadge || isAddBadge) && (
             <div className="badges__add-edit-wrapper">
-              {/* {!badges.length && (
-                <Select
-                  placeholder="Select a default set"
-                  className="badges__select-default-set"
-                  classNamePrefix="react-select"
-                  value={defaultSets.find(
-                    set => set.value === selectedDefaultSet,
-                  )}
-                  onChange={this.handleBadgeSetChange}
-                  options={defaultSets}
-                  isSearchable={false}
-                />
-              )} */}
-
               <form onSubmit={this.handleAddEditBadgeSubmit}>
                 <div className="badge__add-edit-badge add-edit-badge">
                   <div className="badge__image">
@@ -317,7 +292,6 @@ class Badges extends PureComponent {
 }
 
 Badges.propTypes = {
-  selectedDefaultSet: propTypes.string,
   badges: propTypes.arrayOf(
     propTypes.shape({
       id: propTypes.number,
