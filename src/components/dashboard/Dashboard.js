@@ -48,11 +48,11 @@ class Dashboard extends Component {
     userDetails: {
       // // userName: 'User name',
       // // userPicture: 'http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg',
-      // userTitle: 'user title',
-      // userTitleProgressPercentage: 45,
-      // userLastTitle: 'Rookie',
-      // userNextTitle: 'Master',
-      // userFrame: plant,
+      userTitle: 'user title',
+      userTitleProgressPercentage: 45,
+      userLastTitle: 'Rookie',
+      userNextTitle: 'Master',
+      userFrame: plant,
     },
     badges: [],
     requirements: [
