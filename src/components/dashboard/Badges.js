@@ -44,7 +44,7 @@ const StyledBadgesSection = styled.div`
       color: ${styleConstants.darkThemePrimaryBackground};
     }
 
-    .badge__subtitle {
+    .badge__description {
       color: ${styleConstants.darkThemeContrastTextColor};
     }
   }
@@ -95,7 +95,7 @@ class Badges extends PureComponent {
             {items.map((item, i) => (
               <div className="badge" key={i}>
                 <img
-                  src={item.image}
+                  src={item.picture}
                   className="badge__icon"
                   alt="article writer"
                 />
@@ -103,7 +103,7 @@ class Badges extends PureComponent {
                   <div className="badge__title">
                     {item.count + ' x ' + item.title}
                   </div>
-                  <div className="badge__subtitle">{item.subtitle}</div>
+                  <div className="badge__description">{item.description}</div>
                 </div>
               </div>
             ))}
@@ -121,9 +121,9 @@ Badges.defaultProps = {
 Badges.propTypes = {
   items: propTypes.arrayOf(
     propTypes.shape({
-      image: propTypes.string,
+      picture: propTypes.string,
       title: propTypes.string,
-      subtitle: propTypes.string,
+      description: propTypes.string,
       count: propTypes.number,
     }),
   ),
