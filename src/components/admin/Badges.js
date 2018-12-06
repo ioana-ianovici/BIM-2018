@@ -1,12 +1,11 @@
 import React, { PureComponent } from 'react'
 import styled from 'styled-components'
 import propTypes from 'prop-types'
+import { API, Storage } from 'aws-amplify'
+import { s3Upload } from './awsStorage'
 
 import AddNew from './../../shared/AddNew'
 import { styleConstants } from '../../shared/constants/styleConstants'
-import { API } from 'aws-amplify'
-import { Storage } from 'aws-amplify'
-import { s3Upload } from './awsStorage'
 
 const StyledBadges = styled.div`
   color: ${styleConstants.darkThemeContrastTextColor};

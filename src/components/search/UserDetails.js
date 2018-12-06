@@ -92,8 +92,6 @@ const StyledUserCard = styled.section`
     vertical-align: middle;
     margin: 0 50px;
   }
-
-  .
   `
 
 class UserCard extends PureComponent {

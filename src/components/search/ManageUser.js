@@ -176,8 +176,11 @@ const StyledManageUser = styled.div`
 
   .badge__image {
     display: block;
-    width: 30px;
-    height: 30px;
+
+    img {
+      width: 30px;
+      height: 30px;
+    }
   }
 `
 
@@ -199,6 +202,7 @@ class Badge extends PureComponent {
 
   render() {
     const { badge } = this.props
+    console.log(badge)
 
     return (
       <div className={'badge' + (badge.count > 0 ? ' badge--selected' : '')}>
@@ -212,7 +216,6 @@ class Badge extends PureComponent {
           </div>
         </div>
         <div className="badge__image">
-          test
           <img src={badge.picture} alt={badge.title} name={badge.title} />
         </div>
       </div>
@@ -244,6 +247,7 @@ class ManageUser extends Component {
     this.handleRequirementChange = this.handleRequirementChange.bind(this)
     this.handleBadgeAdd = this.handleBadgeAdd.bind(this)
     this.handleBadgeSubstract = this.handleBadgeSubstract.bind(this)
+    this.getAllBadges = this.getAllBadges.bind(this)
     this.getUserDetails = this.getUserDetails.bind(this)
 
     this.getAllBadges().then(() => {
@@ -259,11 +263,9 @@ class ManageUser extends Component {
       .then(badges => {
         badges.forEach(badge => {
           badge.count = this.state.user.badges.filter(
-            b => b.badgeId === badge.badgeId,
+            b => b === badge.badgeId,
           ).length
         })
-
-        debugger
 
         Promise.all(
           badges.map(badge =>
@@ -272,8 +274,7 @@ class ManageUser extends Component {
               .then(res => (badge.picture = res)),
           ),
         ).then(() => {
-          debugger
-          this.setState(oldState => ({ user: { ...oldState.user, badges } }))
+          this.setState({ allBadges: badges, allBadgesLoaded: true })
         })
       })
       .catch(err => {
@@ -297,7 +298,7 @@ class ManageUser extends Component {
 
   handleBadgeAdd(id) {
     const badges = this.state.user.badges.map(badge =>
-      badge.id === id ? { ...badge, count: ++badge.count } : badge,
+      badge.badgeId === id ? { ...badge, count: ++badge.count } : badge,
     )
 
     // todo: call api.
@@ -306,7 +307,7 @@ class ManageUser extends Component {
 
   handleBadgeSubstract(id) {
     const badges = this.state.user.badges.map(badge =>
-      badge.id === id ? { ...badge, count: --badge.count } : badge,
+      badge.badgeId === id ? { ...badge, count: --badge.count } : badge,
     )
 
     // todo: call api.
@@ -330,7 +331,9 @@ class ManageUser extends Component {
   }
 
   render() {
-    const { user, allBadges } = this.state
+    const { user, allBadges, allBadgesLoaded } = this.state
+
+    console.log(user)
 
     return (
       <StyledManageUser {...user}>
@@ -357,14 +360,15 @@ class ManageUser extends Component {
           <section className="section-right">
             <h2 className="section-right__title">Badges</h2>
             <div className="badges">
-              {allBadges.map(badge => (
-                <Badge
-                  badge={badge}
-                  key={badge.badgeId}
-                  onAddBadge={this.handleBadgeAdd}
-                  onSubstractBadge={this.handleBadgeSubstract}
-                />
-              ))}
+              {allBadgesLoaded &&
+                allBadges.map(badge => (
+                  <Badge
+                    badge={badge}
+                    key={badge.picture || badge.badgeId}
+                    onAddBadge={this.handleBadgeAdd}
+                    onSubstractBadge={this.handleBadgeSubstract}
+                  />
+                ))}
             </div>
           </section>
         </div>
