@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 import { withRouter } from 'react-router'
 import styled from 'styled-components'
 import { API } from 'aws-amplify'
+import { Storage } from 'aws-amplify'
 
 import Sidenav from './Sidenav'
 import { styleConstants } from './constants/styleConstants'
@@ -316,11 +317,13 @@ class PageLayout extends PureComponent {
   loadUserData() {
     API.get(AppConstants.endpoints.self, '', {})
       .then(response => {
-        this.setState({
-          user: {
-            userName: response.userName,
-            userPicture: response.picture,
-          },
+        Storage.vault.get(response.picture, { level: 'public' }).then(res => {
+          this.setState({
+            user: {
+              userName: response.userName,
+              userPicture: res,
+            },
+          })
         })
       })
       .catch(err => console.log(err))
