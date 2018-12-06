@@ -26,6 +26,10 @@ const StyledLadders = styled.div`
     }
   }
 
+  .ladder__name {
+    margin-bottom: 50px;
+  }
+
   .ladder__remove {
     display: inline-block;
     margin-left: 30px;
@@ -319,12 +323,21 @@ Step.propTypes = {
 class Ladder extends PureComponent {
   state = {
     ...this.props.ladder,
-    members: this.props.ladder.members
-      ? this.props.ladder.members.map(member => ({
-          label: member.userName,
-          value: member.userId,
-        }))
-      : [],
+    members: this.getMembers(),
+    addedMembers: [],
+    removedMembers: [],
+  }
+
+  getMembers() {
+    const members = []
+
+    this.props.ladder.steps.forEach(step => {
+      if (step.members) {
+        members.push(...step.members)
+      }
+    })
+
+    return members
   }
 
   constructor(props) {
@@ -345,6 +358,7 @@ class Ladder extends PureComponent {
     this.handleMembersChange = this.handleMembersChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.onRemoveLadder = this.onRemoveLadder.bind(this)
+    this.getMembers = this.getMembers.bind(this)
   }
 
   onRemoveLadder() {
@@ -450,19 +464,96 @@ class Ladder extends PureComponent {
   }
 
   handleMembersChange(members) {
-    const steps = [...this.state.steps]
-    steps[0].members = members.filter(
-      m => !this.state.members.find(member => member.userId === m.userId),
+    const allMembers = this.getMembers()
+    let addedMembers = [...this.state.addedMembers]
+    let removedMembers = [...this.state.removedMembers]
+
+    const steps = [...this.state.steps].map(step => {
+      step.members = (step.members || []).filter(member => {
+        const shouldBeKept = members.find(m => m.value === member.value)
+
+        if (!shouldBeKept) {
+          if (addedMembers.find(m => m.value === member.value)) {
+            addedMembers = addedMembers.filter(m => m.value !== member.value)
+          } else if (!removedMembers.find(m => m.value === member.value)) {
+            removedMembers.push(member)
+          }
+        }
+
+        return shouldBeKept
+      })
+
+      return step
+    })
+
+    steps[0].members.push(
+      ...members.filter(m => {
+        const isNew = !allMembers.find(member => member.value === m.value)
+
+        if (isNew) {
+          if (removedMembers.find(member => m.value === member.value)) {
+            removedMembers = removedMembers.filter(
+              member => m.value !== member.value,
+            )
+          } else if (!addedMembers.find(member => member.value === m.value)) {
+            addedMembers.push({
+              value: m.value,
+              title: steps[0].stepId,
+              label: m.label,
+            })
+          }
+        }
+
+        return isNew
+      }),
     )
-    this.setState({ steps })
+
+    this.setState({ addedMembers })
+    this.setState({ removedMembers })
+    this.setState({ steps, members })
   }
 
   handleSubmit() {
-    debugger
     API.post(AppConstants.endpoints.ladders, '', { body: this.state }).then(
       ladder => {
         this.setState({ ...ladder })
-        this.props.onLaddersChange()
+
+        const addLadderToNewMembers = () => {
+          const addedMembers = this.state.addedMembers
+
+          return addedMembers.map(member => {
+            const body = {
+              title: member.title,
+              ladder: this.props.ladder.ladderId,
+            }
+
+            return API.put(AppConstants.endpoints.users, `/${member.value}`, {
+              body,
+            })
+          })
+        }
+
+        const removeLadderFromRemovedMembers = () => {
+          const removedMembers = this.state.removedMembers
+
+          return removedMembers.map(member => {
+            const body = {
+              title: null,
+              ladder: null,
+            }
+
+            return API.put(AppConstants.endpoints.users, `/${member.value}`, {
+              body,
+            })
+          })
+        }
+
+        Promise.all([
+          ...addLadderToNewMembers(),
+          ...removeLadderFromRemovedMembers(),
+        ]).then(() => {
+          this.props.onLaddersChange()
+        })
       },
     )
   }
@@ -470,17 +561,17 @@ class Ladder extends PureComponent {
   render() {
     const ladder = this.state
     const { allFrames, users } = this.props
-    let members = []
-
-    ladder.steps.forEach(step => {
-      if (step.members) {
-        members.push(...step.members)
-      }
-    })
+    const unassignedUsers = users
+      .filter(user => !user.ladder)
+      .map(user => ({
+        label: user.userName,
+        value: user.userId,
+      }))
 
     return (
       <div className="ladder">
         <input
+          className="ladder__name"
           type="text"
           placeholder="Ladder name"
           value={ladder.ladderName || ''}
@@ -536,11 +627,8 @@ class Ladder extends PureComponent {
           placeholder="Select members"
           className="ladder__members"
           classNamePrefix="react-select"
-          value={members}
-          options={users.map(user => ({
-            label: user.userName,
-            value: user.userId,
-          }))}
+          value={ladder.members}
+          options={unassignedUsers}
           onChange={this.handleMembersChange}
           isSearchable={true}
           isMulti={true}

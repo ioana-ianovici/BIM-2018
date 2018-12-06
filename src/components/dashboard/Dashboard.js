@@ -248,20 +248,21 @@ class Dashboard extends Component {
     super(props)
 
     const getSelf = () => {
-      API.get(AppConstants.endpoints.self, '', {})
-        .then(res => {
-          this.setState({
-            userDetails: {
-              userName: res.userName,
-              userPicture: res.picture,
+      API.get(AppConstants.endpoints.self, '')
+        .then(response => {
+          this.setState(
+            {
+              userDetails: {
+                userName: response.userName,
+                userPicture: response.picture,
+              },
+              badgesList: response.badges,
+              confirmedRequirements: response.confirmedRequirements,
+              titleId: response.title,
+              ladderId: response.ladder,
             },
-            badgesList: res.badges,
-            confirmedRequirements: res.confirmedRequirements,
-            titleId: res.title,
-            ladderId: res.ladder,
-          })
-
-          loadUserData()
+            loadUserData(),
+          )
         })
         .catch(err => {
           this.props.history.push(AppConstants.routes.settings)
@@ -297,8 +298,21 @@ class Dashboard extends Component {
     }
 
     if (props.id) {
-      // get user details by id.
-      // when viewing another user's dashboard
+      API.get(AppConstants.endpoints.users, `/${props.id}`).then(response => {
+        this.setState(
+          {
+            userDetails: {
+              userName: response.userName,
+              userPicture: response.picture,
+            },
+            badgesList: response.badges,
+            confirmedRequirements: response.confirmedRequirements,
+            titleId: response.title,
+            ladderId: response.ladder,
+          },
+          loadUserData(),
+        )
+      })
     } else {
       getSelf()
     }
