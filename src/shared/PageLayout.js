@@ -134,6 +134,24 @@ const StyledPageLayout = styled.div`
     position: relative;
     background-color: ${styleConstants.darkThemePrimaryBackground};
     margin-bottom: 20px;
+    overflow: auto;
+
+    ::-webkit-scrollbar-track {
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      background-color: ${styleConstants.darkThemeSecondaryBackground};
+      border-left: 1px solid ${styleConstants.darkThemePaleBorder};
+      border-right: 1px solid ${styleConstants.darkThemePaleBorder};
+    }
+
+    ::-webkit-scrollbar {
+      width: 10px;
+      background-color: #f5f5f5;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: ${styleConstants.darkThemePrimaryBackground};
+      border: 1px solid ${styleConstants.darkThemePaleBorder};
+    }
   }
 
   .section--no-gutter {
