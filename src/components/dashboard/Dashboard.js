@@ -297,7 +297,7 @@ class Dashboard extends Component {
       }
     }
 
-    if (props.id) {
+    const getUser = () => {
       API.get(AppConstants.endpoints.users, `/${props.id}`).then(response => {
         this.setState(
           {
@@ -313,6 +313,10 @@ class Dashboard extends Component {
           loadUserData(),
         )
       })
+    }
+
+    if (props.id) {
+      getUser()
     } else {
       getSelf()
     }
