@@ -273,7 +273,7 @@ class UserFilter extends PureComponent {
       label: user.userName,
       value: user.userId,
     }))
-    console.log(badges)
+
     return (
       <StyledUserFilter>
         <section className="search">
