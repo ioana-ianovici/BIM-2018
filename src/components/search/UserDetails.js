@@ -46,6 +46,10 @@ const StyledUserCard = styled.section`
   .profile-picture--large {
     width: 70px;
     height: 70px;
+    background-size: cover;
+    background-position: center;
+    background-image: url(${props =>
+      !props.isSelf ? JSON.stringify(props.userImage || '') : null})
   }
 
   .user__name {
@@ -88,6 +92,8 @@ const StyledUserCard = styled.section`
     vertical-align: middle;
     margin: 0 50px;
   }
+
+  .
   `
 
 class UserCard extends PureComponent {
@@ -102,18 +108,17 @@ class UserCard extends PureComponent {
   }
 
   render() {
-    const { user } = this.props
+    const { user, isSelf } = this.props
 
     return (
-      <StyledUserCard
-        userTitleProgressPercentage={user.userTitleProgressPercentage}
-      >
+      <StyledUserCard {...user} isSelf={isSelf} userImage={user.picture}>
         <div className="user" onClick={this.onUserSelect}>
           <div className="user__profile-picture-wrapper">
-            <img
-              className="profile-picture profile-picture--self profile-picture--large"
-              src={user.userPicture}
-              alt="profile"
+            <div
+              className={
+                'profile-picture profile-picture--large' +
+                (isSelf ? ' profile-picture--self' : '')
+              }
             />
             <img className="profile-picture-frame" src={frame} alt="frame" />
             <img
@@ -136,8 +141,9 @@ class UserCard extends PureComponent {
 
 UserCard.propTypes = {
   user: propTypes.shape({
-    id: propTypes.number.isRequired,
+    userId: propTypes.string.isRequired,
     userName: propTypes.string.isRequired,
+    picture: propTypes.string,
     // todo: add other.
   }).isRequired,
 }
@@ -161,7 +167,7 @@ class UserDetails extends PureComponent {
         {users &&
           users.map(user => (
             <UserCard
-              key={user.id}
+              key={user.userId}
               user={user}
               onUserSelect={this.onUserSelect}
             />
@@ -174,8 +180,9 @@ class UserDetails extends PureComponent {
 UserDetails.propTypes = {
   users: propTypes.arrayOf(
     propTypes.shape({
-      id: propTypes.number.isRequired,
+      userId: propTypes.string.isRequired,
       userName: propTypes.string.isRequired,
+      picture: propTypes.string,
       // todo: add other.
     }).isRequired,
   ).isRequired,

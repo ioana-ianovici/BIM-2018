@@ -1,10 +1,12 @@
 import React, { Component, PureComponent } from 'react'
 import styled from 'styled-components'
 import propTypes from 'prop-types'
+import { API, Storage } from 'aws-amplify'
 
 import { styleConstants } from '../../shared/constants/styleConstants'
 import Requirements from '../../shared/Requirements'
 import LevelUp from '../../shared/images/LevelUp.image'
+import { AppConstants } from '../../shared/constants/constants'
 
 const StyledManageUser = styled.div`
   padding: 50px;
@@ -27,13 +29,16 @@ const StyledManageUser = styled.div`
       text-align: left;
     }
 
-    img {
+    .profile-picture {
       width: 45px;
       height: 45px;
       display: inline-block;
       border: 1px solid ${styleConstants.mainAccent};
       margin-right: 10px;
       border-radius: 50%;
+      background-image: url(${props => JSON.stringify(props.picture || '')});
+      background-size: cover;
+      background-position: center;
     }
 
     h2 {
@@ -185,11 +190,11 @@ class Badge extends PureComponent {
   }
 
   onAddBadge() {
-    this.props.onAddBadge(this.props.badge.id)
+    this.props.onAddBadge(this.props.badge.badgeId)
   }
 
   onSubstractBadge() {
-    this.props.onSubstractBadge(this.props.badge.id)
+    this.props.onSubstractBadge(this.props.badge.badgeId)
   }
 
   render() {
@@ -201,14 +206,14 @@ class Badge extends PureComponent {
           <div className="badge__substract" onClick={this.onSubstractBadge}>
             -
           </div>
-          <div className="badge__count">{badge.count}</div>
+          <div className="badge__count">{badge.count || 0}</div>
           <div className="badge__add" onClick={this.onAddBadge}>
             +
           </div>
         </div>
         <div className="badge__image">
           test
-          <img src={badge.badge} alt={badge.text} name={badge.text} />
+          <img src={badge.picture} alt={badge.title} name={badge.title} />
         </div>
       </div>
     )
@@ -217,10 +222,11 @@ class Badge extends PureComponent {
 
 Badge.propTypes = {
   badge: propTypes.shape({
-    id: propTypes.number.isRequired,
-    badge: propTypes.string.isRequired,
+    badgeId: propTypes.string.isRequired,
+    picture: propTypes.string.isRequired,
     count: propTypes.number.isRequired,
-    text: propTypes.string.isRequired,
+    title: propTypes.string.isRequired,
+    description: propTypes.string,
   }).isRequired,
   onAddBadge: propTypes.func.isRequired,
   onSubstractBadge: propTypes.func.isRequired,
@@ -229,6 +235,7 @@ Badge.propTypes = {
 class ManageUser extends Component {
   state = {
     user: this.props.user,
+    allBadges: [],
   }
 
   constructor(props) {
@@ -237,6 +244,49 @@ class ManageUser extends Component {
     this.handleRequirementChange = this.handleRequirementChange.bind(this)
     this.handleBadgeAdd = this.handleBadgeAdd.bind(this)
     this.handleBadgeSubstract = this.handleBadgeSubstract.bind(this)
+    this.getUserDetails = this.getUserDetails.bind(this)
+
+    this.getAllBadges().then(() => {
+      this.getUserDetails()
+    })
+  }
+
+  getUserDetails() {
+    API.get(
+      'Badges',
+      `/${this.state.allBadges.map(badge => badge.badgeId).toString()}`,
+    )
+      .then(badges => {
+        badges.forEach(badge => {
+          badge.count = this.state.user.badges.filter(
+            b => b.badgeId === badge.badgeId,
+          ).length
+        })
+
+        debugger
+
+        Promise.all(
+          badges.map(badge =>
+            Storage.vault
+              .get(badge.picture, { level: 'public' })
+              .then(res => (badge.picture = res)),
+          ),
+        ).then(() => {
+          debugger
+          this.setState(oldState => ({ user: { ...oldState.user, badges } }))
+        })
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
+  getAllBadges() {
+    return API.get(AppConstants.endpoints.badges, '')
+      .then(allBadges => {
+        this.setState({ allBadges })
+      })
+      .catch(err => console.log(err))
   }
 
   componentDidUpdate() {
@@ -280,13 +330,13 @@ class ManageUser extends Component {
   }
 
   render() {
-    const { user } = this.state
+    const { user, allBadges } = this.state
 
     return (
-      <StyledManageUser>
+      <StyledManageUser {...user}>
         <div className="user-details">
           <div className="user-details__main-info main-info">
-            <img src={user.profileImage} alt={user.userName} />
+            <div className="profile-picture profile-picture--small" />
             <div className="main-info__aside">
               <h2>{user.userName}</h2>
               <p>{user.step}</p>
@@ -307,11 +357,10 @@ class ManageUser extends Component {
           <section className="section-right">
             <h2 className="section-right__title">Badges</h2>
             <div className="badges">
-              {user.badges.map(badge => (
+              {allBadges.map(badge => (
                 <Badge
                   badge={badge}
-                  key={badge.id}
-                  alt={badge.text}
+                  key={badge.badgeId}
                   onAddBadge={this.handleBadgeAdd}
                   onSubstractBadge={this.handleBadgeSubstract}
                 />
@@ -326,7 +375,7 @@ class ManageUser extends Component {
 
 ManageUser.propTypes = {
   user: propTypes.shape({
-    profileImage: propTypes.string.isRequired,
+    picture: propTypes.string.isRequired,
     userName: propTypes.string.isRequired,
     step: propTypes.string.isRequired,
     requirements: propTypes.arrayOf(
@@ -336,14 +385,7 @@ ManageUser.propTypes = {
         isAccomplished: propTypes.boolean,
       }).isRequired,
     ).isRequired,
-    badges: propTypes.arrayOf(
-      propTypes.shape({
-        id: propTypes.number.isRequired,
-        badge: propTypes.string.isRequired,
-        count: propTypes.number.isRequired,
-        text: propTypes.string.isRequired,
-      }).isRequired,
-    ).isRequired,
+    badges: propTypes.arrayOf(propTypes.string).isRequired,
   }).isRequired,
 }
 

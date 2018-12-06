@@ -323,7 +323,7 @@ class Dashboard extends Component {
 
     return (
       <StyledDashboard userProgressPercentage={45}>
-        <UserDetails {...userDetails} />
+        <UserDetails {...userDetails} isSelf={this.props.id} />
         {badges && badges.length && <Badges items={badges} />}
         <div className="section-wrapper">
           <section className="section-left">

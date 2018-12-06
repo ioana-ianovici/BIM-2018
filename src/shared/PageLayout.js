@@ -351,7 +351,7 @@ class PageLayout extends PureComponent {
                   </span>
                 )}
                 {user.userPicture && (
-                  <div className="profile-picture profile-picture--small header-right--middle" />
+                  <div className="profile-picture profile-picture--self profile-picture--small header-right--middle" />
                 )}
               </div>
             )}
