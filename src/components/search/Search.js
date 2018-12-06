@@ -1,5 +1,7 @@
 import React, { PureComponent, Fragment } from 'react'
+import { API } from 'aws-amplify'
 
+import { AppConstants } from '../../shared/constants/constants'
 import UserFilter from './UserFilter'
 import ManageUser from './ManageUser'
 import plant from './../../assets/default-frame-set-1/plant.svg'
@@ -7,241 +9,241 @@ import plant from './../../assets/default-frame-set-1/plant.svg'
 class Search extends PureComponent {
   state = {
     // todo: read users from api.
-    allUsers: [
-      {
-        profileImage: 'lala',
-        step: 'sde 1',
-        userName: 'user name 1',
-        id: 9,
-        ladder: 1,
-        badges: [
-          { id: 1, badge: 'b1', text: 'b1', count: 2 },
-          { id: 2, badge: 'b2', text: 'b2', count: 3 },
-          { id: 3, badge: 'b3', text: 'b3', count: 5 },
-          { id: 4, badge: 'b4', text: 'b4', count: 8 },
-        ],
-        requirements: [
-          { id: 1, text: 'req.', isAccomplished: true },
-          { id: 2, text: 'req. 2', isAccomplished: false },
-          { id: 3, text: 'req. 3', isAccomplished: true },
-          { id: 4, text: 'req. 4', isAccomplished: false },
-        ],
-        userPicture:
-          'http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg',
-        userTitle: 'user title',
-        userTitleProgressPercentage: 45,
-        userLastTitle: 'Rookie',
-        userNextTitle: 'Master',
-        userFrame: plant,
-      },
-      {
-        profileImage: 'lala',
-        step: 'sde 1',
-        userName: 'user name 2',
-        id: 10,
-        ladder: 2,
-        badges: [
-          { id: 1, badge: 'b1', text: 'b1', count: 2 },
-          { id: 2, badge: 'b2', text: 'b2', count: 3 },
-          { id: 3, badge: 'b3', text: 'b3', count: 5 },
-          { id: 4, badge: 'b4', text: 'b4', count: 8 },
-        ],
-        requirements: [
-          { id: 1, text: 'req.', isAccomplished: true },
-          { id: 2, text: 'req. 2', isAccomplished: false },
-          { id: 3, text: 'req. 3', isAccomplished: true },
-          { id: 4, text: 'req. 4', isAccomplished: false },
-        ],
-        userPicture:
-          'http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg',
-        userTitle: 'user title',
-        userTitleProgressPercentage: 45,
-        userLastTitle: 'Rookie',
-        userNextTitle: 'Master',
-        userFrame: plant,
-      },
-      {
-        profileImage: 'lala',
-        step: 'sde 1',
-        userName: 'user name 3',
-        id: 11,
-        ladder: 3,
-        badges: [
-          { id: 1, badge: 'b1', text: 'b1', count: 2 },
-          { id: 2, badge: 'b2', text: 'b2', count: 3 },
-          { id: 3, badge: 'b3', text: 'b3', count: 5 },
-          { id: 4, badge: 'b4', text: 'b4', count: 8 },
-        ],
-        requirements: [
-          { id: 1, text: 'req.', isAccomplished: true },
-          { id: 2, text: 'req. 2', isAccomplished: false },
-          { id: 3, text: 'req. 3', isAccomplished: true },
-          { id: 4, text: 'req. 4', isAccomplished: false },
-        ],
-        userPicture:
-          'http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg',
-        userTitle: 'user title',
-        userTitleProgressPercentage: 45,
-        userLastTitle: 'Rookie',
-        userNextTitle: 'Master',
-        userFrame: plant,
-      },
-      {
-        profileImage: 'lala',
-        step: 'sde 1',
-        userName: 'user name 4',
-        id: 12,
-        ladder: 4,
-        badges: [
-          { id: 1, badge: 'b1', text: 'b1', count: 2 },
-          { id: 2, badge: 'b2', text: 'b2', count: 3 },
-          { id: 3, badge: 'b3', text: 'b3', count: 5 },
-          { id: 4, badge: 'b4', text: 'b4', count: 8 },
-        ],
-        requirements: [
-          { id: 1, text: 'req.', isAccomplished: true },
-          { id: 2, text: 'req. 2', isAccomplished: false },
-          { id: 3, text: 'req. 3', isAccomplished: true },
-          { id: 4, text: 'req. 4', isAccomplished: false },
-        ],
-        userPicture:
-          'http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg',
-        userTitle: 'user title',
-        userTitleProgressPercentage: 45,
-        userLastTitle: 'Rookie',
-        userNextTitle: 'Master',
-        userFrame: plant,
-      },
-      {
-        profileImage: 'lala',
-        step: 'sde 1',
-        userName: 'user name 5',
-        id: 13,
-        ladder: 5,
-        badges: [
-          { id: 1, badge: 'b1', text: 'b1', count: 2 },
-          { id: 2, badge: 'b2', text: 'b2', count: 3 },
-          { id: 3, badge: 'b3', text: 'b3', count: 5 },
-          { id: 4, badge: 'b4', text: 'b4', count: 8 },
-        ],
-        requirements: [
-          { id: 1, text: 'req.', isAccomplished: true },
-          { id: 2, text: 'req. 2', isAccomplished: false },
-          { id: 3, text: 'req. 3', isAccomplished: true },
-          { id: 4, text: 'req. 4', isAccomplished: false },
-        ],
-        userPicture:
-          'http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg',
-        userTitle: 'user title',
-        userTitleProgressPercentage: 45,
-        userLastTitle: 'Rookie',
-        userNextTitle: 'Master',
-        userFrame: plant,
-      },
-      {
-        profileImage: 'lala',
-        step: 'sde 1',
-        userName: 'user name 6',
-        id: 14,
-        ladder: 6,
-        badges: [
-          { id: 1, badge: 'b1', text: 'b1', count: 2 },
-          { id: 2, badge: 'b2', text: 'b2', count: 3 },
-          { id: 3, badge: 'b3', text: 'b3', count: 5 },
-          { id: 4, badge: 'b4', text: 'b4', count: 8 },
-        ],
-        requirements: [
-          { id: 1, text: 'req.', isAccomplished: true },
-          { id: 2, text: 'req. 2', isAccomplished: false },
-          { id: 3, text: 'req. 3', isAccomplished: true },
-          { id: 4, text: 'req. 4', isAccomplished: false },
-        ],
-        userPicture:
-          'http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg',
-        userTitle: 'user title',
-        userTitleProgressPercentage: 45,
-        userLastTitle: 'Rookie',
-        userNextTitle: 'Master',
-        userFrame: plant,
-      },
-      {
-        profileImage: 'lala',
-        step: 'sde 1',
-        userName: 'user name 7',
-        id: 15,
-        ladder: 7,
-        badges: [
-          { id: 1, badge: 'b1', text: 'b1', count: 2 },
-          { id: 2, badge: 'b2', text: 'b2', count: 3 },
-          { id: 3, badge: 'b3', text: 'b3', count: 5 },
-          { id: 4, badge: 'b4', text: 'b4', count: 8 },
-        ],
-        requirements: [
-          { id: 1, text: 'req.', isAccomplished: true },
-          { id: 2, text: 'req. 2', isAccomplished: false },
-          { id: 3, text: 'req. 3', isAccomplished: true },
-          { id: 4, text: 'req. 4', isAccomplished: false },
-        ],
-        userPicture:
-          'http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg',
-        userTitle: 'user title',
-        userTitleProgressPercentage: 45,
-        userLastTitle: 'Rookie',
-        userNextTitle: 'Master',
-        userFrame: plant,
-      },
-      {
-        profileImage: 'lala',
-        step: 'sde 1',
-        userName: 'user name 8',
-        id: 16,
-        ladder: 8,
-        badges: [
-          { id: 1, badge: 'b1', text: 'b1', count: 2 },
-          { id: 2, badge: 'b2', text: 'b2', count: 3 },
-          { id: 3, badge: 'b3', text: 'b3', count: 5 },
-          { id: 4, badge: 'b4', text: 'b4', count: 8 },
-        ],
-        requirements: [
-          { id: 1, text: 'req.', isAccomplished: true },
-          { id: 2, text: 'req. 2', isAccomplished: false },
-          { id: 3, text: 'req. 3', isAccomplished: true },
-          { id: 4, text: 'req. 4', isAccomplished: false },
-        ],
-        userPicture:
-          'http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg',
-        userTitle: 'user title',
-        userTitleProgressPercentage: 45,
-        userLastTitle: 'Rookie',
-        userNextTitle: 'Master',
-        userFrame: plant,
-      },
-      {
-        profileImage: 'lala',
-        step: 'sde 1',
-        userName: 'user name 9',
-        id: 17,
-        ladder: 9,
-        badges: [
-          { id: 1, badge: 'b1', text: 'b1', count: 2 },
-          { id: 2, badge: 'b2', text: 'b2', count: 3 },
-          { id: 3, badge: 'b3', text: 'b3', count: 5 },
-          { id: 4, badge: 'b4', text: 'b4', count: 8 },
-        ],
-        requirements: [
-          { id: 1, text: 'req.', isAccomplished: true },
-          { id: 2, text: 'req. 2', isAccomplished: false },
-          { id: 3, text: 'req. 3', isAccomplished: true },
-          { id: 4, text: 'req. 4', isAccomplished: false },
-        ],
-        userPicture:
-          'http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg',
-        userTitle: 'user title',
-        userTitleProgressPercentage: 45,
-        userLastTitle: 'Rookie',
-        userNextTitle: 'Master',
-        userFrame: plant,
-      },
+    users: [
+      // {
+      //   profileImage: 'lala',
+      //   step: 'sde 1',
+      //   userName: 'user name 1',
+      //   id: 9,
+      //   ladder: 1,
+      //   badges: [
+      //     { id: 1, badge: 'b1', text: 'b1', count: 2 },
+      //     { id: 2, badge: 'b2', text: 'b2', count: 3 },
+      //     { id: 3, badge: 'b3', text: 'b3', count: 5 },
+      //     { id: 4, badge: 'b4', text: 'b4', count: 8 },
+      //   ],
+      //   requirements: [
+      //     { id: 1, text: 'req.', isAccomplished: true },
+      //     { id: 2, text: 'req. 2', isAccomplished: false },
+      //     { id: 3, text: 'req. 3', isAccomplished: true },
+      //     { id: 4, text: 'req. 4', isAccomplished: false },
+      //   ],
+      //   userPicture:
+      //     'http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg',
+      //   userTitle: 'user title',
+      //   userTitleProgressPercentage: 45,
+      //   userLastTitle: 'Rookie',
+      //   userNextTitle: 'Master',
+      //   userFrame: plant,
+      // },
+      // {
+      //   profileImage: 'lala',
+      //   step: 'sde 1',
+      //   userName: 'user name 2',
+      //   id: 10,
+      //   ladder: 2,
+      //   badges: [
+      //     { id: 1, badge: 'b1', text: 'b1', count: 2 },
+      //     { id: 2, badge: 'b2', text: 'b2', count: 3 },
+      //     { id: 3, badge: 'b3', text: 'b3', count: 5 },
+      //     { id: 4, badge: 'b4', text: 'b4', count: 8 },
+      //   ],
+      //   requirements: [
+      //     { id: 1, text: 'req.', isAccomplished: true },
+      //     { id: 2, text: 'req. 2', isAccomplished: false },
+      //     { id: 3, text: 'req. 3', isAccomplished: true },
+      //     { id: 4, text: 'req. 4', isAccomplished: false },
+      //   ],
+      //   userPicture:
+      //     'http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg',
+      //   userTitle: 'user title',
+      //   userTitleProgressPercentage: 45,
+      //   userLastTitle: 'Rookie',
+      //   userNextTitle: 'Master',
+      //   userFrame: plant,
+      // },
+      // {
+      //   profileImage: 'lala',
+      //   step: 'sde 1',
+      //   userName: 'user name 3',
+      //   id: 11,
+      //   ladder: 3,
+      //   badges: [
+      //     { id: 1, badge: 'b1', text: 'b1', count: 2 },
+      //     { id: 2, badge: 'b2', text: 'b2', count: 3 },
+      //     { id: 3, badge: 'b3', text: 'b3', count: 5 },
+      //     { id: 4, badge: 'b4', text: 'b4', count: 8 },
+      //   ],
+      //   requirements: [
+      //     { id: 1, text: 'req.', isAccomplished: true },
+      //     { id: 2, text: 'req. 2', isAccomplished: false },
+      //     { id: 3, text: 'req. 3', isAccomplished: true },
+      //     { id: 4, text: 'req. 4', isAccomplished: false },
+      //   ],
+      //   userPicture:
+      //     'http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg',
+      //   userTitle: 'user title',
+      //   userTitleProgressPercentage: 45,
+      //   userLastTitle: 'Rookie',
+      //   userNextTitle: 'Master',
+      //   userFrame: plant,
+      // },
+      // {
+      //   profileImage: 'lala',
+      //   step: 'sde 1',
+      //   userName: 'user name 4',
+      //   id: 12,
+      //   ladder: 4,
+      //   badges: [
+      //     { id: 1, badge: 'b1', text: 'b1', count: 2 },
+      //     { id: 2, badge: 'b2', text: 'b2', count: 3 },
+      //     { id: 3, badge: 'b3', text: 'b3', count: 5 },
+      //     { id: 4, badge: 'b4', text: 'b4', count: 8 },
+      //   ],
+      //   requirements: [
+      //     { id: 1, text: 'req.', isAccomplished: true },
+      //     { id: 2, text: 'req. 2', isAccomplished: false },
+      //     { id: 3, text: 'req. 3', isAccomplished: true },
+      //     { id: 4, text: 'req. 4', isAccomplished: false },
+      //   ],
+      //   userPicture:
+      //     'http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg',
+      //   userTitle: 'user title',
+      //   userTitleProgressPercentage: 45,
+      //   userLastTitle: 'Rookie',
+      //   userNextTitle: 'Master',
+      //   userFrame: plant,
+      // },
+      // {
+      //   profileImage: 'lala',
+      //   step: 'sde 1',
+      //   userName: 'user name 5',
+      //   id: 13,
+      //   ladder: 5,
+      //   badges: [
+      //     { id: 1, badge: 'b1', text: 'b1', count: 2 },
+      //     { id: 2, badge: 'b2', text: 'b2', count: 3 },
+      //     { id: 3, badge: 'b3', text: 'b3', count: 5 },
+      //     { id: 4, badge: 'b4', text: 'b4', count: 8 },
+      //   ],
+      //   requirements: [
+      //     { id: 1, text: 'req.', isAccomplished: true },
+      //     { id: 2, text: 'req. 2', isAccomplished: false },
+      //     { id: 3, text: 'req. 3', isAccomplished: true },
+      //     { id: 4, text: 'req. 4', isAccomplished: false },
+      //   ],
+      //   userPicture:
+      //     'http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg',
+      //   userTitle: 'user title',
+      //   userTitleProgressPercentage: 45,
+      //   userLastTitle: 'Rookie',
+      //   userNextTitle: 'Master',
+      //   userFrame: plant,
+      // },
+      // {
+      //   profileImage: 'lala',
+      //   step: 'sde 1',
+      //   userName: 'user name 6',
+      //   id: 14,
+      //   ladder: 6,
+      //   badges: [
+      //     { id: 1, badge: 'b1', text: 'b1', count: 2 },
+      //     { id: 2, badge: 'b2', text: 'b2', count: 3 },
+      //     { id: 3, badge: 'b3', text: 'b3', count: 5 },
+      //     { id: 4, badge: 'b4', text: 'b4', count: 8 },
+      //   ],
+      //   requirements: [
+      //     { id: 1, text: 'req.', isAccomplished: true },
+      //     { id: 2, text: 'req. 2', isAccomplished: false },
+      //     { id: 3, text: 'req. 3', isAccomplished: true },
+      //     { id: 4, text: 'req. 4', isAccomplished: false },
+      //   ],
+      //   userPicture:
+      //     'http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg',
+      //   userTitle: 'user title',
+      //   userTitleProgressPercentage: 45,
+      //   userLastTitle: 'Rookie',
+      //   userNextTitle: 'Master',
+      //   userFrame: plant,
+      // },
+      // {
+      //   profileImage: 'lala',
+      //   step: 'sde 1',
+      //   userName: 'user name 7',
+      //   id: 15,
+      //   ladder: 7,
+      //   badges: [
+      //     { id: 1, badge: 'b1', text: 'b1', count: 2 },
+      //     { id: 2, badge: 'b2', text: 'b2', count: 3 },
+      //     { id: 3, badge: 'b3', text: 'b3', count: 5 },
+      //     { id: 4, badge: 'b4', text: 'b4', count: 8 },
+      //   ],
+      //   requirements: [
+      //     { id: 1, text: 'req.', isAccomplished: true },
+      //     { id: 2, text: 'req. 2', isAccomplished: false },
+      //     { id: 3, text: 'req. 3', isAccomplished: true },
+      //     { id: 4, text: 'req. 4', isAccomplished: false },
+      //   ],
+      //   userPicture:
+      //     'http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg',
+      //   userTitle: 'user title',
+      //   userTitleProgressPercentage: 45,
+      //   userLastTitle: 'Rookie',
+      //   userNextTitle: 'Master',
+      //   userFrame: plant,
+      // },
+      // {
+      //   profileImage: 'lala',
+      //   step: 'sde 1',
+      //   userName: 'user name 8',
+      //   id: 16,
+      //   ladder: 8,
+      //   badges: [
+      //     { id: 1, badge: 'b1', text: 'b1', count: 2 },
+      //     { id: 2, badge: 'b2', text: 'b2', count: 3 },
+      //     { id: 3, badge: 'b3', text: 'b3', count: 5 },
+      //     { id: 4, badge: 'b4', text: 'b4', count: 8 },
+      //   ],
+      //   requirements: [
+      //     { id: 1, text: 'req.', isAccomplished: true },
+      //     { id: 2, text: 'req. 2', isAccomplished: false },
+      //     { id: 3, text: 'req. 3', isAccomplished: true },
+      //     { id: 4, text: 'req. 4', isAccomplished: false },
+      //   ],
+      //   userPicture:
+      //     'http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg',
+      //   userTitle: 'user title',
+      //   userTitleProgressPercentage: 45,
+      //   userLastTitle: 'Rookie',
+      //   userNextTitle: 'Master',
+      //   userFrame: plant,
+      // },
+      // {
+      //   profileImage: 'lala',
+      //   step: 'sde 1',
+      //   userName: 'user name 9',
+      //   id: 17,
+      //   ladder: 9,
+      //   badges: [
+      //     { id: 1, badge: 'b1', text: 'b1', count: 2 },
+      //     { id: 2, badge: 'b2', text: 'b2', count: 3 },
+      //     { id: 3, badge: 'b3', text: 'b3', count: 5 },
+      //     { id: 4, badge: 'b4', text: 'b4', count: 8 },
+      //   ],
+      //   requirements: [
+      //     { id: 1, text: 'req.', isAccomplished: true },
+      //     { id: 2, text: 'req. 2', isAccomplished: false },
+      //     { id: 3, text: 'req. 3', isAccomplished: true },
+      //     { id: 4, text: 'req. 4', isAccomplished: false },
+      //   ],
+      //   userPicture:
+      //     'http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg',
+      //   userTitle: 'user title',
+      //   userTitleProgressPercentage: 45,
+      //   userLastTitle: 'Rookie',
+      //   userNextTitle: 'Master',
+      //   userFrame: plant,
+      // },
     ],
     selectedUser: null,
     // todo: read from api.
@@ -451,6 +453,14 @@ class Search extends PureComponent {
     super(props)
 
     this.handleUserSelect = this.handleUserSelect.bind(this)
+
+    this.getUsers()
+  }
+
+  getUsers() {
+    API.get(AppConstants.endpoints.users, '').then(users => {
+      this.setState({ users })
+    })
   }
 
   handleUserSelect(selectedUser) {
@@ -461,7 +471,7 @@ class Search extends PureComponent {
   render() {
     const {
       selectedUser,
-      allUsers,
+      users,
       ladders,
       requirements,
       badges,
@@ -472,7 +482,7 @@ class Search extends PureComponent {
       <Fragment>
         <UserFilter
           onUserSelect={this.handleUserSelect}
-          allUsers={allUsers}
+          users={users}
           ladders={ladders}
           requirements={requirements}
           badges={badges}

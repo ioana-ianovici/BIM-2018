@@ -143,7 +143,7 @@ const StyledUserFilter = styled.div`
 
 class UserFilter extends PureComponent {
   state = {
-    allUsers: this.props.allUsers,
+    users: this.props.users,
     ladders: this.props.ladders,
     badges: this.props.badges,
     steps: this.props.steps,
@@ -168,9 +168,15 @@ class UserFilter extends PureComponent {
     this.handleViewBadgesToggle = this.handleViewBadgesToggle.bind(this)
   }
 
+  componentDidUpdate() {
+    if (this.state.users !== this.props.users) {
+      this.setState({ users: this.props.users })
+    }
+  }
+
   onUserSelect(selectedUser) {
     this.setState({ selectedUser })
-    const selectedDisplayUser = this.props.allUsers.find(
+    const selectedDisplayUser = this.props.users.find(
       user => user.id === selectedUser.value,
     )
     this.props.onUserSelect(JSON.parse(JSON.stringify(selectedDisplayUser)))
@@ -210,7 +216,7 @@ class UserFilter extends PureComponent {
 
   render() {
     const {
-      allUsers,
+      users,
       selectedUser,
       ladders,
       requirements,
@@ -223,7 +229,7 @@ class UserFilter extends PureComponent {
       isViewAllBadges,
     } = this.state
 
-    const allFilteredUsers = allUsers.filter(
+    const allFilteredUsers = users.filter(
       user =>
         (!selectedLadder ||
           !selectedLadder.value ||
@@ -319,6 +325,7 @@ class UserFilter extends PureComponent {
               {isViewAllBadges && (
                 <div className="filter__badges--open">
                   {isViewAllBadges &&
+                    badges &&
                     badges.map(badge => (
                       <img
                         className="badge"
@@ -350,6 +357,7 @@ class UserFilter extends PureComponent {
           <UserDetails
             users={allFilteredUsers}
             onUserSelect={this.handleCardUserSelect}
+            isSelf={false}
           />
         )}
       </StyledUserFilter>
@@ -358,7 +366,7 @@ class UserFilter extends PureComponent {
 }
 
 UserFilter.propTypes = {
-  allUsers: propTypes.arrayOf(
+  users: propTypes.arrayOf(
     propTypes.shape({
       // todo: tbd.
     }),

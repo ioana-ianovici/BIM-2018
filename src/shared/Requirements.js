@@ -38,13 +38,14 @@ class Requirements extends PureComponent {
     return (
       <StyledRequirements>
         <h2 className="section-right__title">Requirements</h2>
-        {requirements.map((requirement, i) => (
-          <Requirement
-            {...requirement}
-            key={i}
-            onSelect={this.props.onSelect}
-          />
-        ))}
+        {requirements &&
+          requirements.map((requirement, i) => (
+            <Requirement
+              {...requirement}
+              key={i}
+              onSelect={this.props.onSelect}
+            />
+          ))}
       </StyledRequirements>
     )
   }
