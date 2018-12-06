@@ -174,10 +174,8 @@ class Settings extends PureComponent {
     }
 
     if (!this.state.userId) {
-      console.log('new user')
-      // this.createUser()
+      this.createUser()
     } else {
-      console.log('old as a dog')
       this.updateUserDetails()
     }
   }
@@ -195,9 +193,8 @@ class Settings extends PureComponent {
     this.isDebounce = true
 
     setTimeout(() => {
-      if (this.state.userName !== oldUserName) {
+      if (this.state.userName === oldUserName) {
         this.isDebounce = false
-        this.handleUserNameChange(event)
         return
       }
 
