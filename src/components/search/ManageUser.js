@@ -252,7 +252,6 @@ class ManageUser extends Component {
   }
 
   componentWillReceiveProps(props) {
-    debugger
     this.mapBadges(props)
 
     if (this.state.user.id !== props.user.id) {
