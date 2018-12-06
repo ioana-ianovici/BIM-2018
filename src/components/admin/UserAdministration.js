@@ -185,8 +185,8 @@ UserAdministration.propTypes = {
   users: propTypes.arrayOf(
     propTypes.shape({
       isPending: propTypes.boolean, // todo: will be required.
-      picture: propTypes.string.isRequired,
-      userName: propTypes.string.isRequired,
+      picture: propTypes.string,
+      userName: propTypes.string,
       userId: propTypes.string.isRequired,
     }),
   ),

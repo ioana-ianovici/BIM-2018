@@ -115,7 +115,7 @@ class Settings extends PureComponent {
   }
 
   loadUserData() {
-    API.get('Self', '', {})
+    API.get(AppConstants.endpoints.self, '', {})
       .then(response => {
         this.setState({
           id: response.id,
@@ -246,7 +246,7 @@ class Settings extends PureComponent {
   }
 
   render() {
-    const { userPicture, userName } = this.state
+    const { userName } = this.state
 
     return (
       <StyledSettings>
@@ -274,7 +274,6 @@ class Settings extends PureComponent {
           <input
             type="text"
             className="edit-name__input"
-            value={userName || ''}
             onChange={this.handleUserNameChange}
             value={userName || ''}
             placeholder="Your name"

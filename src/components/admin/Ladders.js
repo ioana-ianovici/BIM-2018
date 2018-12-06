@@ -3,8 +3,11 @@ import styled from 'styled-components'
 import propTypes from 'prop-types'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import Select from 'react-select'
+import { API } from 'aws-amplify'
 
+import Spinner from '../../shared/Spinner'
 import { styleConstants } from '../../shared/constants/styleConstants'
+import { AppConstants } from '../../shared/constants/constants'
 import DragAndDropImage from './../../shared/images/DragAndDrop.image'
 import RemoveLargeImage from './../../shared/images/RemoveLarge.image'
 import AddNew from './../../shared/AddNew'
@@ -20,6 +23,17 @@ const StyledLadders = styled.div`
 
     &:last-child {
       margin-bottom: 0;
+    }
+  }
+
+  .ladder__remove {
+    display: inline-block;
+    margin-left: 30px;
+    background: transparent;
+    color: ${styleConstants.darkThemeLightText};
+
+    &:hover {
+      color: ${styleConstants.mainAccent};
     }
   }
 
@@ -137,7 +151,7 @@ class Requirement extends PureComponent {
           type="text"
           className="requirement__text"
           placeholder="Requirement name"
-          value={requirement.text}
+          value={requirement.text || ''}
           onChange={this.onRequirementTextChange}
         />
         <RemoveLargeImage
@@ -151,10 +165,11 @@ class Requirement extends PureComponent {
 
 Requirement.propTypes = {
   requirement: propTypes.shape({
-    id: propTypes.number.isRequired,
-    text: propTypes.string.isRequired,
+    id: propTypes.string,
+    text: propTypes.string,
   }).isRequired,
   index: propTypes.number.isRequired,
+  onRequirementTextChange: propTypes.func.isRequired,
 }
 
 class Step extends PureComponent {
@@ -169,6 +184,7 @@ class Step extends PureComponent {
     this.onStepRemove = this.onStepRemove.bind(this)
     this.onAddNewRequirement = this.onAddNewRequirement.bind(this)
     this.onRequirementRemove = this.onRequirementRemove.bind(this)
+    this.onRequirementTextChange = this.onRequirementTextChange.bind(this)
     this.handleFramesClick = this.handleFramesClick.bind(this)
     this.handleFrameChoice = this.handleFrameChoice.bind(this)
 
@@ -198,6 +214,10 @@ class Step extends PureComponent {
     this.props.onRequirementRemove(this.props.index, requirementIndex)
   }
 
+  onRequirementTextChange(requirementId, text) {
+    this.props.onRequirementTextChange(this.props.index, requirementId, text)
+  }
+
   handleFramesClick() {
     this.setState({ isVisibleAllFrames: true })
   }
@@ -223,7 +243,7 @@ class Step extends PureComponent {
           <DragAndDropImage className="step__drag" />
           <input
             type="text"
-            value={step.name}
+            value={step.name || ''}
             onChange={this.onStepNameChange}
           />
           <RemoveLargeImage
@@ -234,10 +254,11 @@ class Step extends PureComponent {
         <div className="step__requirements">
           {step.requirements.map((requirement, index) => (
             <Requirement
-              key={index}
+              key={requirement.requirementId || index}
               index={index}
               requirement={requirement}
               onRequirementRemove={this.onRequirementRemove}
+              onRequirementTextChange={this.onRequirementTextChange}
             />
           ))}
           <AddNew
@@ -272,16 +293,16 @@ class Step extends PureComponent {
 
 Step.propTypes = {
   step: propTypes.shape({
-    id: propTypes.number.isRequired,
-    name: propTypes.string.isRequired,
-    frame: propTypes.string.isRequired,
+    stepId: propTypes.string,
+    name: propTypes.string,
+    frame: propTypes.string,
     requirements: propTypes.arrayOf(
       propTypes.shape({
-        id: propTypes.number.isRequired,
-        text: propTypes.string.isRequired,
-      }).isRequired,
-    ).isRequired,
-  }).isRequired,
+        id: propTypes.string,
+        text: propTypes.string,
+      }),
+    ),
+  }),
   provided: propTypes.shape({
     draggableProps: propTypes.any,
     dragHandleProps: propTypes.any,
@@ -298,10 +319,12 @@ Step.propTypes = {
 class Ladder extends PureComponent {
   state = {
     ...this.props.ladder,
-    members: this.props.ladder.members.map(member => ({
-      label: member.userName,
-      value: member.id,
-    })),
+    members: this.props.ladder.members
+      ? this.props.ladder.members.map(member => ({
+          label: member.userName,
+          value: member.userId,
+        }))
+      : [],
   }
 
   constructor(props) {
@@ -314,10 +337,25 @@ class Ladder extends PureComponent {
     this.handleStepRemove = this.handleStepRemove.bind(this)
     this.handleAddNewRequirement = this.handleAddNewRequirement.bind(this)
     this.handleRequirementRemove = this.handleRequirementRemove.bind(this)
+    this.handleRequirementTextChange = this.handleRequirementTextChange.bind(
+      this,
+    )
     this.handleAddNewStep = this.handleAddNewStep.bind(this)
     this.handleFrameChoice = this.handleFrameChoice.bind(this)
     this.handleMembersChange = this.handleMembersChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.onRemoveLadder = this.onRemoveLadder.bind(this)
+  }
+
+  onRemoveLadder() {
+    // todo: confirm through modal.
+    debugger
+    API.del(
+      AppConstants.endpoints.ladders,
+      `/${this.props.ladder.ladderId}`,
+    ).then(() => {
+      this.props.onLaddersChange()
+    })
   }
 
   reorder(list, startIndex, endIndex) {
@@ -343,7 +381,7 @@ class Ladder extends PureComponent {
   }
 
   handleLadderNameChange(event) {
-    this.setState({ name: event.target.value })
+    this.setState({ ladderName: event.target.value })
   }
 
   handleStepNameChange(index, name) {
@@ -364,7 +402,7 @@ class Ladder extends PureComponent {
         this.state.steps.find((step, indx) => indx === index).requirements,
       ),
     )
-    requirements.push({ text: '', id: 0 })
+    requirements.push({ text: '' })
     const steps = this.state.steps.map((step, indx) =>
       indx === index ? { ...step, requirements } : step,
     )
@@ -372,11 +410,24 @@ class Ladder extends PureComponent {
   }
 
   handleRequirementRemove(stepIndex, requirementIndex) {
-    const step = this.state.steps.find((step, indx) => indx === stepIndex)
+    const step = this.state.steps.find((_, indx) => indx === stepIndex)
     step.requirements.splice(requirementIndex, 1)
     const steps = this.state.steps.map((step, indx) =>
       indx === stepIndex ? { ...step, requirements: step.requirements } : step,
     )
+
+    this.setState({ steps })
+  }
+
+  handleRequirementTextChange(stepIndex, requirementIndex, text) {
+    const step = this.state.steps.find((_, indx) => indx === stepIndex)
+    const requirements = step.requirements.map((requirement, indx) =>
+      requirementIndex === indx ? { ...requirement, text } : requirement,
+    )
+    const steps = this.state.steps.map((step, indx) =>
+      indx === stepIndex ? { ...step, requirements } : step,
+    )
+
     this.setState({ steps })
   }
 
@@ -404,8 +455,12 @@ class Ladder extends PureComponent {
   }
 
   handleSubmit() {
-    console.log(JSON.stringify(this.state))
-    // todo: call api.
+    API.post(AppConstants.endpoints.ladders, '', { body: this.state }).then(
+      ladder => {
+        this.setState({ ...ladder })
+        this.props.onLaddersChange()
+      },
+    )
   }
 
   render() {
@@ -417,8 +472,12 @@ class Ladder extends PureComponent {
         <input
           type="text"
           placeholder="Ladder name"
-          value={ladder.name}
+          value={ladder.ladderName || ''}
           onChange={this.handleLadderNameChange}
+        />
+        <RemoveLargeImage
+          className="ladder__remove"
+          onClick={this.onRemoveLadder}
         />
 
         <DragDropContext onDragEnd={this.onDragEnd}>
@@ -427,7 +486,7 @@ class Ladder extends PureComponent {
               <div ref={provided.innerRef}>
                 {ladder.steps.map((step, index) => (
                   <Draggable
-                    key={index}
+                    key={step.stepId || index}
                     draggableId={'a' + index}
                     index={index}
                   >
@@ -442,6 +501,9 @@ class Ladder extends PureComponent {
                         onStepRemove={this.handleStepRemove}
                         onAddNewRequirement={this.handleAddNewRequirement}
                         onRequirementRemove={this.handleRequirementRemove}
+                        onRequirementTextChange={
+                          this.handleRequirementTextChange
+                        }
                         handleFrameChoice={this.handleFrameChoice}
                       />
                     )}
@@ -463,10 +525,10 @@ class Ladder extends PureComponent {
           placeholder="Select members"
           className="ladder__members"
           classNamePrefix="react-select"
-          value={ladder.members}
+          value={ladder.members || []}
           options={users.map(user => ({
             label: user.userName,
-            value: user.id,
+            value: user.userId,
           }))}
           onChange={this.handleMembersChange}
           isSearchable={true}
@@ -484,101 +546,109 @@ class Ladder extends PureComponent {
 
 Ladder.propTypes = {
   ladder: propTypes.shape({
-    id: propTypes.number.isRequired,
-    name: propTypes.string.isRequired,
+    ladderId: propTypes.string,
+    ladderName: propTypes.string,
     steps: propTypes.arrayOf(
       propTypes.shape({
-        id: propTypes.number.isRequired,
-        name: propTypes.string.isRequired,
-        frame: propTypes.string.isRequired,
+        stepId: propTypes.string,
+        name: propTypes.string,
+        frame: propTypes.string,
         requirements: propTypes.arrayOf(
           propTypes.shape({
-            id: propTypes.number.isRequired,
-            text: propTypes.string.isRequired,
-          }).isRequired,
-        ).isRequired,
-      }).isRequired,
-    ).isRequired,
+            id: propTypes.string,
+            text: propTypes.string,
+          }),
+        ),
+      }),
+    ),
     members: propTypes.arrayOf(
       propTypes.shape({
-        profileImage: propTypes.string.isRequired,
-        userName: propTypes.string.isRequired,
-        id: propTypes.number.isRequired,
+        picture: propTypes.string,
+        userName: propTypes.string,
+        userId: propTypes.string.isRequired,
       }).isRequired,
-    ).isRequired,
+    ), // todo: remove? move to step?
   }).isRequired,
   index: propTypes.number.isRequired,
   allFrames: propTypes.arrayOf(propTypes.string),
   users: propTypes.arrayOf(
     propTypes.shape({
-      profileImage: propTypes.string.isRequired,
-      userName: propTypes.string.isRequired,
-      id: propTypes.number.isRequired,
+      picture: propTypes.string,
+      userName: propTypes.string,
+      userId: propTypes.string.isRequired,
     }).isRequired,
   ).isRequired,
+  onLaddersChange: propTypes.func.isRequired,
 }
 
 class Ladders extends PureComponent {
   // todo: make ladders collapsible.
   state = {
+    ladders: [],
     // allFrames: [], // todo: unocmment this, remove next, read from api.
     allFrames: ['frame x', 'frame y', 'frame a', 'frame b', 'frame c'],
   }
 
+  constructor(props) {
+    super(props)
+
+    this.getLadders = this.getLadders.bind(this)
+    this.handleAddNewLadder = this.handleAddNewLadder.bind(this)
+
+    this.getLadders()
+  }
+
+  getLadders() {
+    API.get(AppConstants.endpoints.ladders, '').then(ladders => {
+      this.setState({ ladders })
+    })
+  }
+
+  handleAddNewLadder() {
+    const ladders = [
+      ...this.state.ladders,
+      { ladderName: '', steps: [], members: [] },
+    ]
+    this.setState({ ladders })
+  }
+
   render() {
-    const { ladders, users } = this.props
-    const { allFrames } = this.state
+    const { users } = this.props
+    const { ladders, allFrames } = this.state
 
     return (
       <StyledLadders>
         <div className="ladders">
-          {ladders.map((ladder, index) => (
-            <Ladder
-              key={index}
-              index={index}
-              ladder={ladder}
-              allFrames={allFrames}
-              users={users}
-            />
-          ))}
+          {ladders &&
+            ladders.map((ladder, index) => (
+              <Ladder
+                key={ladder.ladderId || index}
+                index={index}
+                ladder={ladder}
+                allFrames={allFrames}
+                users={users}
+                onLaddersChange={this.getLadders}
+              />
+            ))}
+          {(!ladders || !ladders.length) && <Spinner />}
         </div>
+
+        <AddNew
+          text="Add new ladder"
+          className="ladder__add-new-step"
+          onClick={this.handleAddNewLadder}
+        />
       </StyledLadders>
     )
   }
 }
 
 Ladders.propTypes = {
-  ladders: propTypes.arrayOf(
-    propTypes.shape({
-      id: propTypes.number.isRequired,
-      name: propTypes.string.isRequired,
-      steps: propTypes.arrayOf(
-        propTypes.shape({
-          id: propTypes.number.isRequired,
-          name: propTypes.string.isRequired,
-          frame: propTypes.string.isRequired,
-          requirements: propTypes.arrayOf(
-            propTypes.shape({
-              id: propTypes.number.isRequired,
-              text: propTypes.string.isRequired,
-            }).isRequired,
-          ).isRequired,
-        }).isRequired,
-      ).isRequired,
-      members: propTypes.arrayOf(
-        propTypes.shape({
-          profileImage: propTypes.string.isRequired,
-          userName: propTypes.string.isRequired,
-          id: propTypes.number.isRequired,
-        }).isRequired,
-      ).isRequired,
-    }).isRequired,
-  ).isRequired,
   users: propTypes.arrayOf(
     propTypes.shape({
-      profileImage: propTypes.string.isRequired,
-      userName: propTypes.string.isRequired,
-      id: propTypes.number.isRequired,
+      picture: propTypes.string,
+      userName: propTypes.string,
+      userId: propTypes.string.isRequired,
     }),
   ),
 }

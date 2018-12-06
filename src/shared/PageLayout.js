@@ -5,6 +5,7 @@ import { API } from 'aws-amplify'
 
 import Sidenav from './Sidenav'
 import { styleConstants } from './constants/styleConstants'
+import { AppConstants } from './constants/constants'
 import { Logo } from './Logo'
 
 const StyledPageLayout = styled.div`
@@ -295,7 +296,7 @@ class PageLayout extends PureComponent {
 
   // todo: extract this method to utility service.
   loadUserData() {
-    API.get('Self', '', {})
+    API.get(AppConstants.endpoints.self, '', {})
       .then(response => {
         this.setState({
           user: {
