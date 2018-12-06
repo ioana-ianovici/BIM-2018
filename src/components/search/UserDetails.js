@@ -1,6 +1,7 @@
-import React, { PureComponent } from 'react'
+import React, { Component, PureComponent } from 'react'
 import styled from 'styled-components'
 import propTypes from 'prop-types'
+import { Storage } from 'aws-amplify'
 
 import { styleConstants } from '../../shared/constants/styleConstants'
 import frame from '../../assets/frame.svg'
@@ -48,8 +49,7 @@ const StyledUserCard = styled.section`
     height: 70px;
     background-size: cover;
     background-position: center;
-    background-image: url(${props =>
-      !props.isSelf ? JSON.stringify(props.userImage || '') : null})
+    background-image: url(${props => JSON.stringify(props.userImage || '')})
   }
 
   .user__name {
@@ -94,11 +94,41 @@ const StyledUserCard = styled.section`
   }
   `
 
-class UserCard extends PureComponent {
+class UserCard extends Component {
+  state = {
+    user: this.props.user,
+  }
+
   constructor(props) {
     super(props)
 
     this.onUserSelect = this.onUserSelect.bind(this)
+    this.setUserImage = this.setUserImage.bind(this)
+
+    this.setUserImage()
+  }
+
+  componentDidUpdate() {
+    if (this.props.user !== this.state.user) {
+      this.setState({ user: this.props.user })
+
+      this.setUserImage()
+    }
+  }
+
+  // todo: extract to utility service.
+  setUserImage() {
+    const user = this.state.user
+
+    if (!user.picture) {
+      return
+    }
+
+    Storage.vault.get(user.picture, { level: 'public' }).then(res => {
+      user.picture = res
+
+      this.setState({ user })
+    })
   }
 
   onUserSelect() {
@@ -106,24 +136,27 @@ class UserCard extends PureComponent {
   }
 
   render() {
-    const { user, isSelf } = this.props
+    const { user } = this.state
 
     return (
-      <StyledUserCard {...user} isSelf={isSelf} userImage={user.picture}>
+      <StyledUserCard {...user} userImage={user.picture}>
         <div className="user" onClick={this.onUserSelect}>
           <div className="user__profile-picture-wrapper">
             <div
               className={
-                'profile-picture profile-picture--large' +
-                (isSelf ? ' profile-picture--self' : '')
+                'profile-picture profile-picture--large profile-picture--self'
               }
             />
-            <img className="profile-picture-frame" src={frame} alt="frame" />
-            <img
-              className="profile-picture-frame-piece"
-              src={user.userFrame}
-              alt="frame-content"
-            />
+            {user && user.ladder && user.ladder.frame && (
+              <img className="profile-picture-frame" src={frame} alt="frame" />
+            )}
+            {user && user.ladder && user.ladder.frame && (
+              <img
+                className="profile-picture-frame-piece"
+                src={user.ladder.frame}
+                alt="frame-content"
+              />
+            )}
           </div>
           <div className="user__name">{user.userName}</div>
           <div className="user__title">{user.userTitle}</div>

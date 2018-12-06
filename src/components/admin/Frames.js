@@ -123,11 +123,15 @@ class Frames extends PureComponent {
     API.get('Frames', '')
       .then(frames => {
         Promise.all(
-          frames.map(frame =>
-            Storage.vault.get(frame.picture, { level: 'public' }).then(res => {
-              frame.image = res
-            }),
-          ),
+          frames
+            .filter(f => f.picture)
+            .map(frame =>
+              Storage.vault
+                .get(frame.picture, { level: 'public' })
+                .then(res => {
+                  frame.image = res
+                }),
+            ),
         ).then(() => {
           this.setState({ frames })
         })

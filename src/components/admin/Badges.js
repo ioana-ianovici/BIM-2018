@@ -165,11 +165,13 @@ class Badges extends PureComponent {
   getBadges() {
     API.get('Badges', '', {}).then(badges => {
       Promise.all(
-        badges.map(badge =>
-          Storage.vault
-            .get(badge.picture, { level: 'public' })
-            .then(res => (badge.image = res)),
-        ),
+        badges
+          .filter(b => b.picture)
+          .map(badge =>
+            Storage.vault
+              .get(badge.picture, { level: 'public' })
+              .then(res => (badge.image = res)),
+          ),
       ).then(() => {
         this.setState({ badges })
       })

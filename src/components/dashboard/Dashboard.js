@@ -280,11 +280,13 @@ class Dashboard extends Component {
             })
 
             Promise.all(
-              badges.map(badge =>
-                Storage.vault
-                  .get(badge.picture, { level: 'public' })
-                  .then(res => (badge.image = res)),
-              ),
+              badges
+                .filter(b => b.picture)
+                .map(badge =>
+                  Storage.vault
+                    .get(badge.picture, { level: 'public' })
+                    .then(res => (badge.image = res)),
+                ),
             ).then(() => {
               this.setState({ badges })
             })
@@ -325,7 +327,7 @@ class Dashboard extends Component {
 
     return (
       <StyledDashboard userProgressPercentage={45}>
-        <UserDetails {...userDetails} isSelf={this.props.id} />
+        <UserDetails {...userDetails} />
         {badges && badges.length && <Badges items={badges} />}
         <div className="section-wrapper">
           <section className="section-left">

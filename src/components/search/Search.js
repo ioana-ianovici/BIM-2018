@@ -37,207 +37,10 @@ class Search extends PureComponent {
       // },
     ],
     selectedUser: null,
-    // todo: read from api.
-    allLadders: [
-      {
-        id: 1,
-        name: 'Development',
-      },
-      {
-        id: 2,
-        name: 'QA',
-      },
-      {
-        id: 3,
-        name: 'Design',
-      },
-      {
-        id: 4,
-        name: 'Management',
-      },
-      {
-        id: 5,
-        name: 'Marketing',
-      },
-      {
-        id: 6,
-        name: 'DevOps',
-      },
-    ],
-    // todo: map allLadders
-    ladders: [
-      { value: null, label: 'empty...' },
-      {
-        value: 1,
-        label: 'Development',
-      },
-      {
-        value: 2,
-        label: 'QA',
-      },
-      {
-        value: 3,
-        label: 'Design',
-      },
-      {
-        value: 4,
-        label: 'Management',
-      },
-      {
-        value: 5,
-        label: 'Marketing',
-      },
-      {
-        value: 6,
-        label: 'DevOps',
-      },
-    ],
-    // todo: read from api.
-    allRequirements: [
-      {
-        id: 1,
-        text: 'is able to abc',
-      },
-      {
-        id: 2,
-        text: 'is able to def',
-      },
-      {
-        id: 3,
-        text: 'is able to ghi',
-      },
-      {
-        id: 4,
-        text: 'is able to jkl',
-      },
-      {
-        id: 5,
-        text: 'is able to mno',
-      },
-      {
-        id: 6,
-        text: 'is able to pqr',
-      },
-      {
-        id: 7,
-        text: 'is able to stu',
-      },
-    ],
-    //todo: map from allRequirements
-    requirements: [
-      { value: null, label: 'empty...' },
-      {
-        value: 1,
-        label: 'is able to abc',
-      },
-      {
-        value: 2,
-        label: 'is able to def',
-      },
-      {
-        value: 3,
-        label: 'is able to ghi',
-      },
-      {
-        value: 4,
-        label: 'is able to jkl',
-      },
-      {
-        value: 5,
-        label: 'is able to mno',
-      },
-      {
-        value: 6,
-        label: 'is able to pqr',
-      },
-      {
-        value: 7,
-        label: 'is able to stu',
-      },
-    ],
-    // todo: read from api.
-    badges: [
-      {
-        id: 1,
-        text: 'b1',
-        url: 'bb1',
-      },
-      {
-        id: 2,
-        text: 'b2',
-        url: 'bb2',
-      },
-      {
-        id: 3,
-        text: 'b3',
-        url: 'bb13',
-      },
-      {
-        id: 4,
-        text: 'b4',
-        url: 'bb4',
-      },
-      {
-        id: 5,
-        text: 'b5',
-        url: 'bb5',
-      },
-    ],
-    // todo: read from api.
-    allSteps: [
-      {
-        id: 1,
-        text: 'step 1',
-      },
-      {
-        id: 2,
-        text: 'step 2',
-      },
-      {
-        id: 3,
-        text: 'step 3',
-      },
-      {
-        id: 4,
-        text: 'step 4',
-      },
-      {
-        id: 5,
-        text: 'step 5',
-      },
-      {
-        id: 6,
-        text: 'step 6',
-      },
-    ],
-    // todo: map from allSteps.
-    steps: [
-      { value: null, label: '' },
-      {
-        value: 1,
-        label: 'step 1',
-      },
-      {
-        value: 2,
-        label: 'step 2',
-      },
-      {
-        value: 3,
-        label: 'step 3',
-      },
-      {
-        value: 4,
-        label: 'step 4',
-      },
-      {
-        value: 5,
-        label: 'step 5',
-      },
-      {
-        value: 6,
-        label: 'step 6',
-      },
-    ],
+    ladders: [],
+    requirements: [],
+    badges: [],
+    steps: [],
   }
 
   constructor(props) {
@@ -260,6 +63,9 @@ class Search extends PureComponent {
   getLadders() {
     API.get(AppConstants.endpoints.ladders, '').then(ladders => {
       let users = this.state.users
+      let steps = []
+      let requirements = []
+      const badges = this.state.badges.map(b => b)
 
       ladders.forEach(ladder => {
         users
@@ -267,7 +73,64 @@ class Search extends PureComponent {
           .forEach(user => (user.ladder = ladder))
       })
 
-      this.setState({ users, ladders })
+      ladders.forEach(ladder => {
+        steps.push(...ladder.steps)
+      })
+
+      users.forEach(user => {
+        const titleIndex =
+          user.ladder && user.ladder.steps
+            ? user.ladder.steps.findIndex(step => user.title === step.stepId)
+            : null
+        user.userTitle =
+          titleIndex != null ? user.ladder.steps[titleIndex].name : null
+        user.userLastTitle =
+          titleIndex != null
+            ? titleIndex > 0
+              ? user.ladder.steps[titleIndex - 1].name
+              : user.ladder.steps[titleIndex].name
+            : null
+        user.userNextTitle =
+          titleIndex != null
+            ? titleIndex < user.ladder.steps.length - 1
+              ? user.ladder.steps[titleIndex + 1].name
+              : user.ladder.steps[user.ladder.steps.length - 1].name
+            : null
+      })
+
+      steps.forEach(step => {
+        requirements.push(...step.requirements)
+      })
+
+      requirements = requirements.map(requirement => ({
+        value: requirement.id,
+        label: requirement.text,
+      }))
+
+      steps = steps.map(step => ({
+        value: step.stepId,
+        label: step.name,
+      }))
+
+      ladders = ladders.map(ladder => ({
+        label: ladder.ladderName,
+        value: ladder.ladderId,
+      }))
+
+      const emptyItem = { label: '', value: null }
+
+      ladders.unshift(emptyItem)
+      steps.unshift(emptyItem)
+      requirements.unshift(emptyItem)
+      badges.unshift(emptyItem)
+
+      this.setState({
+        users,
+        ladders,
+        steps,
+        requirements,
+        badges,
+      })
     })
   }
 
@@ -286,28 +149,24 @@ class Search extends PureComponent {
         let users = this.state.users
 
         Promise.all(
-          badges.map(badge =>
-            Storage.vault.get(badge.picture, { level: 'public' }).then(res => {
-              badge.picture = res
+          badges
+            .filter(badge => badge.picture)
+            .map(badge =>
+              Storage.vault
+                .get(badge.picture, { level: 'public' })
+                .then(res => {
+                  badge.picture = res
 
-              users.forEach(user => {
-                if (user.badge === badge.badgeId) {
-                  user.badge = badge
-                }
-              })
-            }),
-          ),
+                  users.forEach(user => {
+                    if (user.badge === badge.badgeId) {
+                      user.badge = badge
+                    }
+                  })
+                }),
+            ),
         ).then(() => {
           this.setState({ badges })
         })
-
-        // badges.forEach(badge => {
-
-        //   // users.filter(user => user.badge === badge.badgeId)
-        //   // .forEach(user => user.ladder = ladder)
-        // });
-
-        // this.setState({users, badges})
       },
     )
   }

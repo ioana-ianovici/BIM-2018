@@ -317,6 +317,10 @@ class PageLayout extends PureComponent {
   loadUserData() {
     API.get(AppConstants.endpoints.self, '', {})
       .then(response => {
+        if (!response.picture) {
+          return
+        }
+
         Storage.vault.get(response.picture, { level: 'public' }).then(res => {
           this.setState({
             user: {

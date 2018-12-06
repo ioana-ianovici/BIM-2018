@@ -268,11 +268,13 @@ class ManageUser extends Component {
         })
 
         Promise.all(
-          badges.map(badge =>
-            Storage.vault
-              .get(badge.picture, { level: 'public' })
-              .then(res => (badge.picture = res)),
-          ),
+          badges
+            .filter(b => b.picture)
+            .map(badge =>
+              Storage.vault
+                .get(badge.picture, { level: 'public' })
+                .then(res => (badge.picture = res)),
+            ),
         ).then(() => {
           this.setState({ allBadges: badges, allBadgesLoaded: true })
         })
@@ -280,6 +282,18 @@ class ManageUser extends Component {
       .catch(err => {
         console.log(err)
       })
+
+    const user = this.state.user
+
+    if (!user.picture) {
+      return
+    }
+
+    Storage.vault.get(user.picture, { level: 'public' }).then(res => {
+      user.picture = res
+
+      this.setState({ user })
+    })
   }
 
   getAllBadges() {
@@ -332,8 +346,6 @@ class ManageUser extends Component {
 
   render() {
     const { user, allBadges, allBadgesLoaded } = this.state
-
-    console.log(user)
 
     return (
       <StyledManageUser {...user}>

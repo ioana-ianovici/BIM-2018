@@ -11,6 +11,7 @@ import UserDetails from './UserDetails'
 const StyledUserFilter = styled.div`
   .search {
     padding: 25px 70px 25px 85px;
+    overflow: visible;
   }
 
   .search__text {
@@ -170,21 +171,34 @@ class UserFilter extends PureComponent {
   }
 
   componentDidUpdate() {
-    if (this.state.users !== this.props.users) {
-      this.setState({ users: this.props.users })
-    }
-    if (this.state.ladders !== this.props.ladders) {
-      this.setState({ ladders: this.props.ladders })
-    }
-    if (this.state.badges !== this.props.badges) {
-      this.setState({ badges: this.props.badges })
-    }
+    this.setState({
+      users:
+        this.state.users !== this.props.users
+          ? this.props.users
+          : this.state.users,
+      ladders:
+        this.state.ladders !== this.props.ladders
+          ? this.props.ladders
+          : this.state.ladders,
+      badges:
+        this.state.badges !== this.props.badges
+          ? this.props.badges
+          : this.state.badges,
+      steps:
+        this.state.steps !== this.props.steps
+          ? this.props.steps
+          : this.state.steps,
+      requirements:
+        this.state.requirements !== this.props.requirements
+          ? this.props.requirements
+          : this.state.requirements,
+    })
   }
 
   onUserSelect(selectedUser) {
     this.setState({ selectedUser })
     const selectedDisplayUser = this.props.users.find(
-      user => user.id === selectedUser.value,
+      user => user.userId === selectedUser.value,
     )
     this.props.onUserSelect(JSON.parse(JSON.stringify(selectedDisplayUser)))
   }
@@ -194,7 +208,7 @@ class UserFilter extends PureComponent {
       selectedDisplayUser,
       selectedUser: {
         label: selectedDisplayUser.userName,
-        value: selectedDisplayUser.id,
+        value: selectedDisplayUser.userId,
       },
     })
     this.props.onUserSelect(JSON.parse(JSON.stringify(selectedDisplayUser)))
@@ -256,7 +270,7 @@ class UserFilter extends PureComponent {
     )
     const selectFilteredUsers = allFilteredUsers.map(user => ({
       label: user.userName,
-      value: user.id,
+      value: user.userId,
     }))
 
     return (
@@ -373,7 +387,6 @@ class UserFilter extends PureComponent {
           <UserDetails
             users={allFilteredUsers}
             onUserSelect={this.handleCardUserSelect}
-            isSelf={false}
           />
         )}
       </StyledUserFilter>
