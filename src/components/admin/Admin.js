@@ -259,17 +259,6 @@ class Admin extends Component {
 
   constructor(props) {
     super(props)
-    const getBadges = async () => {
-      let badges = await API.get('Badges', '', {})
-
-      // have to check what's wrong with below code and try loading images
-      // badges.forEach(async badge => {
-      //   badge.picture = await Storage.vault.get(badge.picture)
-      // })
-
-      this.setState({ badges: badges })
-    }
-    getBadges()
   }
 
   render() {
@@ -281,7 +270,7 @@ class Admin extends Component {
           <UserAdministration users={users} />
         </Pane>
         <Pane title="Badges">
-          <Badges badges={badges} />
+          <Badges />
         </Pane>
         <Pane title="Ladders">
           <Ladders

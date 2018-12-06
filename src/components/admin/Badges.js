@@ -59,7 +59,9 @@ const StyledBadges = styled.div`
     text-align: center;
 
     img {
-      padding: 20px;
+      padding: 10px;
+      width: 70px;
+      height: 70px;
     }
   }
 
@@ -154,6 +156,20 @@ class Badges extends PureComponent {
     this.handleAddEditBadgeSubmit = this.handleAddEditBadgeSubmit.bind(this)
     this.handleBadgeSelect = this.handleBadgeSelect.bind(this)
     this.handleAddNewBadge = this.handleAddNewBadge.bind(this)
+
+    this.getBadges()
+  }
+
+  getBadges() {
+    debugger
+    API.get('Badges', '', {}).then(badges => {
+      // have to check what's wrong with below code and try loading images
+      // badges.forEach(async badge => {
+      //   badge.picture = await Storage.vault.get(badge.picture)
+      // })
+
+      this.setState({ badges })
+    })
   }
 
   handleBadgeNameChange(event) {
@@ -189,7 +205,7 @@ class Badges extends PureComponent {
     reader.onloadend = e => callback(reader.result)
   }
 
-  async handleAddEditBadgeSubmit(e) {
+  handleAddEditBadgeSubmit(e) {
     e.preventDefault()
     const {
       badgeId,
@@ -204,7 +220,7 @@ class Badges extends PureComponent {
     //todo: add condition to check if a file was changed in editing mode
     // if file has changed upload the new file, else keep the same file
     if (false) {
-      fileName = file ? await s3Upload(file) : null
+      fileName = file ? s3Upload(file) : null
     } else {
       // don't upload any image
       fileName = badgeImage
@@ -216,16 +232,16 @@ class Badges extends PureComponent {
       description: badgeDescription,
     }
 
-    const updateBadge = async () => {
-      const newBadge = await API.put('Badges', `/${badgeId}`, { body })
-      //update the selected badge on FE
-      alert('saved')
+    const updateBadge = () => {
+      API.put('Badges', `/${badgeId}`, { body }).then(() => {
+        this.getBadges()
+      })
     }
 
-    const createBadge = async () => {
-      const newBadge = await API.post('Badges', '', { body })
-      // update the selected badge on FE
-      alert('created')
+    const createBadge = () => {
+      API.post('Badges', '', { body }).then(() => {
+        this.getBadges()
+      })
     }
 
     if (badgeId) {
@@ -257,7 +273,7 @@ class Badges extends PureComponent {
   }
 
   render() {
-    const { badges } = this.props
+    const { badges } = this.state
     const {
       badgeImage,
       badgeDescription,
@@ -314,34 +330,26 @@ class Badges extends PureComponent {
                     />
                   </div>
                 </div>
-                <button disabled={!badgeName || !badgeImage}>Save</button>
+                <button type="submit" disabled={!badgeName || !badgeImage}>
+                  Save
+                </button>
               </form>
             </div>
           )}
           <div className="badges__list">
-            {badges.map((badge, index) => (
-              <Badge
-                key={index}
-                badge={badge}
-                onBadgeSelect={this.handleBadgeSelect}
-              />
-            ))}
+            {badges &&
+              badges.map((badge, index) => (
+                <Badge
+                  key={index}
+                  badge={badge}
+                  onBadgeSelect={this.handleBadgeSelect}
+                />
+              ))}
           </div>
         </div>
       </StyledBadges>
     )
   }
-}
-
-Badges.propTypes = {
-  badges: propTypes.arrayOf(
-    propTypes.shape({
-      badgeId: propTypes.string,
-      title: propTypes.string,
-      picture: propTypes.string,
-      description: propTypes.string,
-    }),
-  ),
 }
 
 export default Badges
