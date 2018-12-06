@@ -44,6 +44,11 @@ export default {
         endpoint: process.env.REACT_APP_API_LADDERS,
         region: process.env.REACT_APP_AWS_REGION,
       },
+      {
+        name: 'Frames',
+        endpoint: process.env.REACT_APP_API_FRAMES,
+        region: process.env.REACT_APP_AWS_REGION,
+      },
     ],
   },
 }
