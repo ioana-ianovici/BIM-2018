@@ -142,12 +142,13 @@ class UserAdministration extends PureComponent {
 
   render() {
     const { users } = this.props
+    const isPendingUsers = users.find(user => user.isPending)
 
     return (
       <StyledUserAdministration>
         <div className="users">
           <div className="users__existing-users">
-            <h3>Existing</h3>
+            {isPendingUsers && <h3>Existing</h3>}
             <div className="users__wrapper">
               {users
                 .filter(user => !user.isPending)
@@ -160,21 +161,23 @@ class UserAdministration extends PureComponent {
                 ))}
             </div>
           </div>
-          <div className="users__pending-users">
-            <h3>Pending</h3>
-            <div className="users__wrapper">
-              {users
-                .filter(user => user.isPending)
-                .map(user => (
-                  <PendingUser
-                    key={user.userId}
-                    user={user}
-                    handleRemoveUser={this.handleRemoveUser}
-                    handleConfirmUser={this.handleConfirmUser}
-                  />
-                ))}
+          {isPendingUsers && (
+            <div className="users__pending-users">
+              <h3>Pending</h3>
+              <div className="users__wrapper">
+                {users
+                  .filter(user => user.isPending)
+                  .map(user => (
+                    <PendingUser
+                      key={user.userId}
+                      user={user}
+                      handleRemoveUser={this.handleRemoveUser}
+                      handleConfirmUser={this.handleConfirmUser}
+                    />
+                  ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </StyledUserAdministration>
     )

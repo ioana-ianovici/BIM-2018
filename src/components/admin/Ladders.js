@@ -349,7 +349,6 @@ class Ladder extends PureComponent {
 
   onRemoveLadder() {
     // todo: confirm through modal.
-    debugger
     API.del(
       AppConstants.endpoints.ladders,
       `/${this.props.ladder.ladderId}`,
@@ -451,10 +450,15 @@ class Ladder extends PureComponent {
   }
 
   handleMembersChange(members) {
-    this.setState(oldState => ({ ...oldState, members }))
+    const steps = [...this.state.steps]
+    steps[0].members = members.filter(
+      m => !this.state.members.find(member => member.userId === m.userId),
+    )
+    this.setState({ steps })
   }
 
   handleSubmit() {
+    debugger
     API.post(AppConstants.endpoints.ladders, '', { body: this.state }).then(
       ladder => {
         this.setState({ ...ladder })
@@ -466,6 +470,13 @@ class Ladder extends PureComponent {
   render() {
     const ladder = this.state
     const { allFrames, users } = this.props
+    let members = []
+
+    ladder.steps.forEach(step => {
+      if (step.members) {
+        members.push(...step.members)
+      }
+    })
 
     return (
       <div className="ladder">
@@ -525,7 +536,7 @@ class Ladder extends PureComponent {
           placeholder="Select members"
           className="ladder__members"
           classNamePrefix="react-select"
-          value={ladder.members || []}
+          value={members}
           options={users.map(user => ({
             label: user.userName,
             value: user.userId,

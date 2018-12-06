@@ -321,16 +321,20 @@ class PageLayout extends PureComponent {
             <div className="header__header-left">
               <Logo className="logo" />
             </div>
-            {user && (
+            {user && (user.userName || user.userPicture) && (
               <div className="header__header-right header-right">
-                <span className="header-right__text">
-                  Hello,{' '}
-                  <span className="header-right__text--highlighted">
-                    {user.userName}
+                {user.userName && (
+                  <span className="header-right__text">
+                    Hello,{' '}
+                    <span className="header-right__text--highlighted">
+                      {user.userName}
+                    </span>
+                    !
                   </span>
-                  !
-                </span>
-                <div className="profile-picture profile-picture--small header-right--middle" />
+                )}
+                {user.userPicture && (
+                  <div className="profile-picture profile-picture--small header-right--middle" />
+                )}
               </div>
             )}
           </header>
