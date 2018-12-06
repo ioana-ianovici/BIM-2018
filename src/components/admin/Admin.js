@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import { API } from 'aws-amplify'
 
 import { styleConstants } from '../../shared/constants/styleConstants'
+import { AppConstants } from '../../shared/constants/constants'
 import Pane from './Pane'
 import UserAdministration from './UserAdministration'
 import Badges from './Badges'
@@ -21,8 +23,6 @@ import badge10 from '../../assets/badges/badge10.svg'
 import badge11 from '../../assets/badges/badge11.svg'
 import badge12 from '../../assets/badges/badge12.svg'
 import badge13 from '../../assets/badges/badge13.svg'
-import { API } from 'aws-amplify'
-import { Storage } from 'aws-amplify'
 
 const StyledAdmin = styled.div`
   color: ${styleConstants.darkThemeContrastTextColor};
@@ -124,68 +124,68 @@ class Admin extends Component {
   state = {
     // todo: read from api.
     users: [
-      { profileImage: 'lala', userName: 'user name', isPending: true, id: 1 },
-      { profileImage: 'lala', userName: 'user name', isPending: true, id: 2 },
-      { profileImage: 'lala', userName: 'user name', isPending: true, id: 3 },
-      { profileImage: 'lala', userName: 'user name', isPending: true, id: 4 },
-      { profileImage: 'lala', userName: 'user name', isPending: true, id: 5 },
-      { profileImage: 'lala', userName: 'user name', isPending: true, id: 6 },
-      { profileImage: 'lala', userName: 'user name', isPending: true, id: 7 },
-      { profileImage: 'lala', userName: 'user name', isPending: true, id: 8 },
-      {
-        profileImage: 'lala',
-        userName: 'user name 1',
-        isPending: false,
-        id: 9,
-      },
-      {
-        profileImage: 'lala',
-        userName: 'user name 2',
-        isPending: false,
-        id: 10,
-      },
-      {
-        profileImage: 'lala',
-        userName: 'user name 3',
-        isPending: false,
-        id: 11,
-      },
-      {
-        profileImage: 'lala',
-        userName: 'user name 4',
-        isPending: false,
-        id: 12,
-      },
-      {
-        profileImage: 'lala',
-        userName: 'user name 5',
-        isPending: false,
-        id: 13,
-      },
-      {
-        profileImage: 'lala',
-        userName: 'user name 6',
-        isPending: false,
-        id: 14,
-      },
-      {
-        profileImage: 'lala',
-        userName: 'user name 7',
-        isPending: false,
-        id: 15,
-      },
-      {
-        profileImage: 'lala',
-        userName: 'user name 8',
-        isPending: false,
-        id: 16,
-      },
-      {
-        profileImage: 'lala',
-        userName: 'user name 9',
-        isPending: false,
-        id: 17,
-      },
+      // { profileImage: 'lala', userName: 'user name', isPending: true, id: 1 },
+      // { profileImage: 'lala', userName: 'user name', isPending: true, id: 2 },
+      // { profileImage: 'lala', userName: 'user name', isPending: true, id: 3 },
+      // { profileImage: 'lala', userName: 'user name', isPending: true, id: 4 },
+      // { profileImage: 'lala', userName: 'user name', isPending: true, id: 5 },
+      // { profileImage: 'lala', userName: 'user name', isPending: true, id: 6 },
+      // { profileImage: 'lala', userName: 'user name', isPending: true, id: 7 },
+      // { profileImage: 'lala', userName: 'user name', isPending: true, id: 8 },
+      // {
+      //   profileImage: 'lala',
+      //   userName: 'user name 1',
+      //   isPending: false,
+      //   id: 9,
+      // },
+      // {
+      //   profileImage: 'lala',
+      //   userName: 'user name 2',
+      //   isPending: false,
+      //   id: 10,
+      // },
+      // {
+      //   profileImage: 'lala',
+      //   userName: 'user name 3',
+      //   isPending: false,
+      //   id: 11,
+      // },
+      // {
+      //   profileImage: 'lala',
+      //   userName: 'user name 4',
+      //   isPending: false,
+      //   id: 12,
+      // },
+      // {
+      //   profileImage: 'lala',
+      //   userName: 'user name 5',
+      //   isPending: false,
+      //   id: 13,
+      // },
+      // {
+      //   profileImage: 'lala',
+      //   userName: 'user name 6',
+      //   isPending: false,
+      //   id: 14,
+      // },
+      // {
+      //   profileImage: 'lala',
+      //   userName: 'user name 7',
+      //   isPending: false,
+      //   id: 15,
+      // },
+      // {
+      //   profileImage: 'lala',
+      //   userName: 'user name 8',
+      //   isPending: false,
+      //   id: 16,
+      // },
+      // {
+      //   profileImage: 'lala',
+      //   userName: 'user name 9',
+      //   isPending: false,
+      //   id: 17,
+      // },
     ],
 
     // badges: [
@@ -259,6 +259,17 @@ class Admin extends Component {
 
   constructor(props) {
     super(props)
+
+    this.getUsers = this.getUsers.bind(this)
+
+    this.getUsers()
+  }
+
+  getUsers() {
+    // todo: implement pending functionality. (now there are no pending users ever)
+    API.get(AppConstants.endpoints.users, '').then(users =>
+      this.setState({ users }),
+    )
   }
 
   render() {
@@ -267,7 +278,7 @@ class Admin extends Component {
     return (
       <StyledAdmin>
         <Pane title="User Administration">
-          <UserAdministration users={users} />
+          <UserAdministration users={users} handleUserChange={this.getUsers} />
         </Pane>
         <Pane title="Badges">
           <Badges />

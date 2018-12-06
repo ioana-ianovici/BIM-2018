@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { API } from 'aws-amplify'
 
 import { styleConstants } from './../../shared/constants/styleConstants'
+import { AppConstants } from './../../shared/constants/constants'
 
 const StyledSettings = styled.div`
   h2 {
@@ -145,7 +146,7 @@ class Settings extends PureComponent {
     }
 
     if (this.state.isNewUser) {
-      API.post('Users', '', { body })
+      API.post(AppConstants.endpoints.users, '', { body })
         .then(() => {
           window.location.reload()
         })
@@ -153,7 +154,7 @@ class Settings extends PureComponent {
           console.log(err)
         })
     } else {
-      API.put('Users', `/${this.state.id}`, { body })
+      API.put(AppConstants.endpoints.users, `/${this.state.id}`, { body })
         .then(() => {
           window.location.reload()
         })
@@ -188,7 +189,7 @@ class Settings extends PureComponent {
       }
 
       if (this.state.isNewUser) {
-        API.post('Users', '', { body })
+        API.post(AppConstants.endpoints.users, '', { body })
           .then(() => {
             window.location.reload()
           })
@@ -196,7 +197,7 @@ class Settings extends PureComponent {
             console.log(err)
           })
       } else {
-        API.put('Users', `/${this.state.id}`, { body })
+        API.put(AppConstants.endpoints.users, `/${this.state.id}`, { body })
           .then(() => {
             window.location.reload()
           })
@@ -216,7 +217,7 @@ class Settings extends PureComponent {
     }
 
     if (this.state.isNewUser) {
-      API.post('Users', '', { body })
+      API.post(AppConstants.endpoints.users, '', { body })
         .then(() => {
           this.loadUserData()
         })
@@ -224,7 +225,7 @@ class Settings extends PureComponent {
           console.log(err)
         })
     } else {
-      API.put('Users', `/${this.state.id}`, { body })
+      API.put(AppConstants.endpoints.users, `/${this.state.id}`, { body })
         .then(() => {
           this.loadUserData()
         })
