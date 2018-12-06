@@ -144,21 +144,28 @@ class Dashboard extends Component {
           } catch (e) {
             nextTitle = 'Boss'
           }
-          this.setState({
-            userTitle: step.name,
-            userLastTitle: lastTitle,
-            userNextTitle: nextTitle,
-          })
           let requirements = []
+          let countConfirmed = 0
           step.requirements.map(val => {
             let el = {
               id: val.id,
               text: val.text,
               isAccomplished: confirmedRequirements.indexOf(val.id) > -1,
             }
+            countConfirmed += el.isAccomplished ? 1 : 0
             requirements.push(el)
           })
-          this.setState({ requirements })
+          this.setState({
+            requirements,
+            userDetails: {
+              userTitleProgressPercentage: Math.ceil(
+                (countConfirmed / requirements.length) * 100,
+              ),
+              userTitle: step.name,
+              userLastTitle: lastTitle,
+              userNextTitle: nextTitle,
+            },
+          })
         }
         let el = { title: step.name, isAchieved: currentPosition >= index }
         tree.push(el)
