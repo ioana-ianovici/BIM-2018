@@ -94,9 +94,9 @@ class Badges extends PureComponent {
             ]}
           >
             {items.map((item, i) => (
-              <div className="badge" key={item.picture}>
+              <div className="badge" key={item.image}>
                 <img
-                  src={item.picture}
+                  src={item.image}
                   className="badge__icon"
                   alt="article writer"
                 />
@@ -118,7 +118,7 @@ class Badges extends PureComponent {
 Badges.propTypes = {
   items: propTypes.arrayOf(
     propTypes.shape({
-      picture: propTypes.string,
+      image: propTypes.string,
       title: propTypes.string,
       description: propTypes.string,
       count: propTypes.number,

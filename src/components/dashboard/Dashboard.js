@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { API } from 'aws-amplify'
+import { Storage } from 'aws-amplify'
 
 import { styleConstants } from '../../shared/constants/styleConstants'
 import { AppConstants } from '../../shared/constants/constants'
@@ -278,7 +279,17 @@ class Dashboard extends Component {
               badge.count = 1
             })
 
-            this.setState({ badges: badges })
+            Promise.all(
+              badges.map(badge =>
+                Storage.vault
+                  .get(badge.picture, { level: 'public' })
+                  .then(res => (badge.image = res)),
+              ),
+            ).then(() => {
+              this.setState({ badges })
+            })
+
+            // this.setState({ badges: badges })
           })
           .catch(err => {
             console.log(err)

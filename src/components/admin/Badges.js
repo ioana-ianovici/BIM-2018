@@ -5,6 +5,7 @@ import propTypes from 'prop-types'
 import AddNew from './../../shared/AddNew'
 import { styleConstants } from '../../shared/constants/styleConstants'
 import { API } from 'aws-amplify'
+import { Storage } from 'aws-amplify'
 import { s3Upload } from './awsStorage'
 
 const StyledBadges = styled.div`
@@ -118,7 +119,7 @@ class Badge extends PureComponent {
 
     return (
       <img
-        src={badge.picture.toString()}
+        src={badge.image}
         alt={badge.title}
         name={badge.title}
         onClick={() => onBadgeSelect(badge)}
@@ -131,7 +132,8 @@ Badge.propTypes = {
   badge: propTypes.shape({
     badgeId: propTypes.string,
     title: propTypes.string,
-    picture: propTypes.string | propTypes.shape,
+    picture: propTypes.string,
+    image: propTypes.string | propTypes.shape,
     description: propTypes.string,
   }),
   onBadgeSelect: propTypes.func,
@@ -143,6 +145,7 @@ class Badges extends PureComponent {
     badgeId: null,
     badgeName: null,
     badgeImage: null,
+    badgeImageName: null,
     badgeDescription: null,
   }
 
@@ -162,13 +165,22 @@ class Badges extends PureComponent {
 
   getBadges() {
     API.get('Badges', '', {}).then(badges => {
-      // have to check what's wrong with below code and try loading images
-      // badges.forEach(async badge => {
-      //   badge.picture = await Storage.vault.get(badge.picture)
-      // })
-
-      this.setState({ badges })
+      Promise.all(
+        badges.map(badge =>
+          Storage.vault
+            .get(badge.picture, { level: 'public' })
+            .then(res => (badge.image = res)),
+        ),
+      ).then(() => {
+        this.setState({ badges })
+      })
     })
+
+    // badges.forEach(async badge => {
+    //   badge.image = await Storage.vault.get(badge.picture, { level: 'public' })
+    // })
+
+    // this.setState({ badges })
   }
 
   handleBadgeNameChange(event) {
@@ -181,7 +193,7 @@ class Badges extends PureComponent {
 
   handleFileChange(event) {
     const file = event.target.files && event.target.files[0]
-    this.setState({ file: file })
+    this.setState({ file: file, fileChanged: true })
 
     if (!file) {
       return
@@ -208,19 +220,19 @@ class Badges extends PureComponent {
     e.preventDefault()
     const {
       badgeId,
-      badgeImage,
+      badgeImageName,
       badgeName,
       badgeDescription,
       file,
+      fileChanged,
     } = this.state
 
     let fileName
 
-    debugger
-    if (!file || badgeImage.toString() === file.toString()) {
-      fileName = badgeImage
-    } else {
+    if (fileChanged && file) {
       fileName = await s3Upload(file)
+    } else {
+      fileName = badgeImageName
     }
 
     const body = {
@@ -229,16 +241,14 @@ class Badges extends PureComponent {
       description: badgeDescription,
     }
 
-    const updateBadge = () => {
-      API.put('Badges', `/${badgeId}`, { body }).then(() => {
-        this.getBadges()
-      })
+    const updateBadge = async () => {
+      await API.put('Badges', `/${badgeId}`, { body })
+      this.getBadges()
     }
 
-    const createBadge = () => {
-      API.post('Badges', '', { body }).then(() => {
-        this.getBadges()
-      })
+    const createBadge = async () => {
+      await API.post('Badges', '', { body })
+      this.getBadges()
     }
 
     if (badgeId) {
@@ -254,8 +264,10 @@ class Badges extends PureComponent {
       isAddBadge: false,
       badgeId: selectedBadge.badgeId,
       badgeName: selectedBadge.title,
-      badgeImage: selectedBadge.picture,
+      badgeImage: selectedBadge.image,
+      badgeImageName: selectedBadge.picture,
       badgeDescription: selectedBadge.description,
+      fileChanged: false,
     })
   }
 
@@ -266,6 +278,7 @@ class Badges extends PureComponent {
       badgeImage: null,
       badgeName: null,
       badgeDescription: null,
+      fileChanged: false,
     })
   }
 
