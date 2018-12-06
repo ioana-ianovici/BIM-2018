@@ -90,7 +90,7 @@ class Dashboard extends Component {
         <section className="section--no-gutter">
           <div className="profile-info-section">
             <div className="profile-info-section__profile-picture-wrapper">
-              <div className="profile-picture profile-picture--large" />
+              <div className="profile-picture profile-picture--self profile-picture--large" />
               {userFrame && (
                 <Fragment>
                   <img

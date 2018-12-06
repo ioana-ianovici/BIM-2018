@@ -111,7 +111,7 @@ class UserCard extends PureComponent {
         <div className="user" onClick={this.onUserSelect}>
           <div className="user__profile-picture-wrapper">
             <img
-              className="profile-picture profile-picture--large"
+              className="profile-picture profile-picture--self profile-picture--large"
               src={user.userPicture}
               alt="profile"
             />

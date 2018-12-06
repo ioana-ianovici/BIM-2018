@@ -102,8 +102,11 @@ const StyledPageLayout = styled.div`
     width: 40px;
     height: 40px;
     display: inline-block;
-    background-image: url(${props => props.userPicture});
     background-position: center center;
+  }
+
+  .profile-picture--self {
+    background-image: url(${props => props.userPicture});
   }
 
   .profile-picture--small {

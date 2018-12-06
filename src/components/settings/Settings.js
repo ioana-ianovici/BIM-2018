@@ -93,6 +93,8 @@ const StyledSettings = styled.div`
 
 class Settings extends PureComponent {
   state = {
+    id: null,
+    // todo: replace isNewUser with id.
     isNewUser: false,
     userPicture: null,
     userName: null,
@@ -115,6 +117,7 @@ class Settings extends PureComponent {
     API.get('Self', '', {})
       .then(response => {
         this.setState({
+          id: response.id,
           userName: response.userName,
           userPicture: response.picture,
         })
@@ -136,11 +139,12 @@ class Settings extends PureComponent {
       this.setState({ userPicture })
     })
 
+    const body = {
+      userName: this.state.userName,
+      picture: this.state.userPicture,
+    }
+
     if (this.state.isNewUser) {
-      const body = {
-        userName: this.state.userName,
-        picture: this.state.userPicture,
-      }
       API.post('Users', '', { body })
         .then(() => {
           window.location.reload()
@@ -149,7 +153,13 @@ class Settings extends PureComponent {
           console.log(err)
         })
     } else {
-      // todo: call api to update user details.
+      API.put('Users', `/${this.state.id}`, { body })
+        .then(() => {
+          window.location.reload()
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
   }
 
@@ -172,11 +182,12 @@ class Settings extends PureComponent {
         return
       }
 
+      const body = {
+        userName: event.target.value,
+        picture: this.state.userPicture,
+      }
+
       if (this.state.isNewUser) {
-        const body = {
-          userName: event.target.value,
-          picture: this.state.userPicture,
-        }
         API.post('Users', '', { body })
           .then(() => {
             window.location.reload()
@@ -185,7 +196,13 @@ class Settings extends PureComponent {
             console.log(err)
           })
       } else {
-        // todo: call api to update user details.
+        API.put('Users', `/${this.state.id}`, { body })
+          .then(() => {
+            window.location.reload()
+          })
+          .catch(err => {
+            console.log(err)
+          })
       }
 
       this.isDebounce = false
@@ -193,11 +210,12 @@ class Settings extends PureComponent {
   }
 
   handleResetPassword() {
+    const body = {
+      userName: this.state.userName,
+      picture: this.state.userPicture,
+    }
+
     if (this.state.isNewUser) {
-      const body = {
-        userName: this.state.userName,
-        picture: this.state.userPicture,
-      }
       API.post('Users', '', { body })
         .then(() => {
           this.loadUserData()
@@ -206,7 +224,13 @@ class Settings extends PureComponent {
           console.log(err)
         })
     } else {
-      // todo: call api to update user details.
+      API.put('Users', `/${this.state.id}`, { body })
+        .then(() => {
+          this.loadUserData()
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
   }
 
