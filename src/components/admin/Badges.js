@@ -118,7 +118,7 @@ class Badge extends PureComponent {
 
     return (
       <img
-        src={badge.picture}
+        src={badge.picture.toString()}
         alt={badge.title}
         name={badge.title}
         onClick={() => onBadgeSelect(badge)}
@@ -131,7 +131,7 @@ Badge.propTypes = {
   badge: propTypes.shape({
     badgeId: propTypes.string,
     title: propTypes.string,
-    picture: propTypes.string,
+    picture: propTypes.string | propTypes.shape,
     description: propTypes.string,
   }),
   onBadgeSelect: propTypes.func,
@@ -161,7 +161,6 @@ class Badges extends PureComponent {
   }
 
   getBadges() {
-    debugger
     API.get('Badges', '', {}).then(badges => {
       // have to check what's wrong with below code and try loading images
       // badges.forEach(async badge => {
@@ -205,7 +204,7 @@ class Badges extends PureComponent {
     reader.onloadend = e => callback(reader.result)
   }
 
-  handleAddEditBadgeSubmit(e) {
+  async handleAddEditBadgeSubmit(e) {
     e.preventDefault()
     const {
       badgeId,
@@ -217,13 +216,11 @@ class Badges extends PureComponent {
 
     let fileName
 
-    //todo: add condition to check if a file was changed in editing mode
-    // if file has changed upload the new file, else keep the same file
-    if (false) {
-      fileName = file ? s3Upload(file) : null
-    } else {
-      // don't upload any image
+    debugger
+    if (!file || badgeImage.toString() === file.toString()) {
       fileName = badgeImage
+    } else {
+      fileName = await s3Upload(file)
     }
 
     const body = {
