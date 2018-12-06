@@ -21,6 +21,8 @@ export const AppConstants = {
   endpoints: {
     users: 'Users',
     badges: 'Badges',
+    ladders: 'Ladders',
+    self: 'Self',
   },
   routes: {
     dashboard: '/dashboard',

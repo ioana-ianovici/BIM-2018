@@ -106,6 +106,7 @@ class Frames extends PureComponent {
 
   constructor(props) {
     super(props)
+    // todo: remove this.
     const defaultFrames = [defaultFrame1, defaultFrame2, defaultFrame3]
 
     this.handleAddNewFrame = this.handleAddNewFrame.bind(this)
@@ -113,6 +114,7 @@ class Frames extends PureComponent {
 
     // todo: get from api.
     this.state = {
+      // todo: remove defaultFrames.
       frames:
         this.state.frames && this.state.frames.length
           ? this.state.frames

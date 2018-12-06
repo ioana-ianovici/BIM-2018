@@ -35,8 +35,13 @@ export default {
         region: process.env.REACT_APP_AWS_REGION,
       },
       {
-        name: 'Self',
+        name: AppConstants.endpoints.self,
         endpoint: process.env.REACT_APP_API_SELF,
+        region: process.env.REACT_APP_AWS_REGION,
+      },
+      {
+        name: AppConstants.endpoints.ladders,
+        endpoint: process.env.REACT_APP_API_LADDERS,
         region: process.env.REACT_APP_AWS_REGION,
       },
     ],

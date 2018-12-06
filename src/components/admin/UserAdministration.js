@@ -1,8 +1,10 @@
 import React, { PureComponent } from 'react'
 import styled from 'styled-components'
 import propTypes from 'prop-types'
+import { API } from 'aws-amplify'
 
 import { styleConstants } from '../../shared/constants/styleConstants'
+import { AppConstants } from '../../shared/constants/constants'
 import ConfirmImage from '../../shared/images/Confirm.image'
 import RemoveImage from '../../shared/images/Remove.image'
 
@@ -30,9 +32,9 @@ class ExistingUser extends PureComponent {
 ExistingUser.propTypes = {
   user: propTypes.shape({
     isPending: propTypes.boolean,
-    profileImage: propTypes.string,
+    picture: propTypes.string,
     userName: propTypes.string,
-    id: propTypes.id,
+    userId: propTypes.string,
   }),
   handleRemoveUser: propTypes.func,
 }
@@ -65,9 +67,9 @@ class PendingUser extends PureComponent {
 PendingUser.propTypes = {
   user: propTypes.shape({
     isPending: propTypes.boolean,
-    profileImage: propTypes.string,
+    picture: propTypes.string,
     userName: propTypes.string,
-    id: propTypes.id,
+    userId: propTypes.string,
   }),
   handleRemoveUser: propTypes.func,
   handleConfirmUser: propTypes.func,
@@ -120,51 +122,62 @@ const StyledUserAdministration = styled.div`
 `
 
 class UserAdministration extends PureComponent {
+  constructor(props) {
+    super(props)
+
+    this.handleRemoveUser = this.handleRemoveUser.bind(this)
+    this.handleConfirmUser = this.handleConfirmUser.bind(this)
+  }
+
   handleConfirmUser(user) {
-    console.log('confirm,', user.id)
+    console.log('confirm,', user.userId)
     // todo: call api.
   }
 
   handleRemoveUser(user) {
-    console.log('remove,', user.id)
-    // todo: call api.
+    API.del(AppConstants.endpoints.users, `/${user.userId}`).then(() => {
+      this.props.handleUserChange()
+    })
   }
 
   render() {
     const { users } = this.props
+    const isPendingUsers = users.find(user => user.isPending)
 
     return (
       <StyledUserAdministration>
         <div className="users">
           <div className="users__existing-users">
-            <h3>Existing</h3>
+            {isPendingUsers && <h3>Existing</h3>}
             <div className="users__wrapper">
               {users
                 .filter(user => !user.isPending)
                 .map(user => (
                   <ExistingUser
-                    key={user.id}
+                    key={user.userId}
                     user={user}
                     handleRemoveUser={this.handleRemoveUser}
                   />
                 ))}
             </div>
           </div>
-          <div className="users__pending-users">
-            <h3>Pending</h3>
-            <div className="users__wrapper">
-              {users
-                .filter(user => user.isPending)
-                .map(user => (
-                  <PendingUser
-                    key={user.id}
-                    user={user}
-                    handleRemoveUser={this.handleRemoveUser}
-                    handleConfirmUser={this.handleConfirmUser}
-                  />
-                ))}
+          {isPendingUsers && (
+            <div className="users__pending-users">
+              <h3>Pending</h3>
+              <div className="users__wrapper">
+                {users
+                  .filter(user => user.isPending)
+                  .map(user => (
+                    <PendingUser
+                      key={user.userId}
+                      user={user}
+                      handleRemoveUser={this.handleRemoveUser}
+                      handleConfirmUser={this.handleConfirmUser}
+                    />
+                  ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </StyledUserAdministration>
     )
@@ -174,12 +187,13 @@ class UserAdministration extends PureComponent {
 UserAdministration.propTypes = {
   users: propTypes.arrayOf(
     propTypes.shape({
-      isPending: propTypes.boolean,
-      profileImage: propTypes.string,
+      isPending: propTypes.boolean, // todo: will be required.
+      picture: propTypes.string,
       userName: propTypes.string,
-      id: propTypes.id,
+      userId: propTypes.string.isRequired,
     }),
   ),
+  handleUserChange: propTypes.func.isRequired,
 }
 
 export default UserAdministration

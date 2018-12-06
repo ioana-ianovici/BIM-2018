@@ -247,7 +247,7 @@ class Dashboard extends Component {
     super(props)
 
     const getSelf = () => {
-      API.get('Self', '', {})
+      API.get(AppConstants.endpoints.self, '', {})
         .then(res => {
           this.setState({
             userDetails: {
