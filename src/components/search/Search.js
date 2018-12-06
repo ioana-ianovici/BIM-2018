@@ -96,6 +96,8 @@ class Search extends PureComponent {
               ? user.ladder.steps[titleIndex + 1].name
               : user.ladder.steps[user.ladder.steps.length - 1].name
             : null
+        // todo:
+        // user.userTitleProgressPercentage =
       })
 
       steps.forEach(step => {

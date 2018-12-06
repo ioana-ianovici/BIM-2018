@@ -73,16 +73,16 @@ const StyledUserCard = styled.section`
     background: ${styleConstants.mainAccent};
     background: -moz-linear-gradient(left, ${styleConstants.mainAccent} 0%, ${
   styleConstants.mainAccent
-} ${props => props.userTitleProgressPercentage}%, #2a2f39 ${props =>
-  props.userTitleProgressPercentage}%, #2a2f39 100%);
+} ${props => props.userTitleProgressPercentage || 0}%, #2a2f39 ${props =>
+  props.userTitleProgressPercentage || 0}%, #2a2f39 100%);
     background: -webkit-linear-gradient(left, ${styleConstants.mainAccent} 0%,${
   styleConstants.mainAccent
-} ${props => props.userTitleProgressPercentage}%,#2a2f39 ${props =>
-  props.userTitleProgressPercentage}%,#2a2f39 100%);
+} ${props => props.userTitleProgressPercentage || 0}%,#2a2f39 ${props =>
+  props.userTitleProgressPercentage || 0}%,#2a2f39 100%);
     background: linear-gradient(to right, ${styleConstants.mainAccent} 0%,${
   styleConstants.mainAccent
-} ${props => props.userTitleProgressPercentage}%,#2a2f39 ${props =>
-  props.userTitleProgressPercentage}%,#2a2f39 100%);
+} ${props => props.userTitleProgressPercentage || 0}%,#2a2f39 ${props =>
+  props.userTitleProgressPercentage || 0}%,#2a2f39 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=${
       styleConstants.mainAccent
     }, endColorstr='#2a2f39',GradientType=1 );
