@@ -50,198 +50,165 @@ class Dashboard extends Component {
       // // userName: 'User name',
       // // userPicture: 'http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg',
       // userTitle: 'user title',
-      // userTitleProgressPercentage: 45,
-      // userLastTitle: 'Rookie',
-      // userNextTitle: 'Master',
+      userTitleProgressPercentage: 45,
+      userLastTitle: 'Rookie',
+      userNextTitle: 'Master',
       // userFrame: plant,
     },
     badges: [],
     requirements: [
-      {
-        id: 1,
-        text:
-          'Can create architecture for complex applications based on programming languages on his main area of expertise;',
-        isAccomplished: false,
-      },
-      {
-        id: 1,
-        text:
-          'The code he/she writes should be reviewed before going in any production environment, but if there is a critical bug that needs to be fixed as soon as possible he can take the responsibility to push the code to production and the review can come after that;',
-        isAccomplished: false,
-      },
-      {
-        id: 1,
-        text: 'Worked in teams of more than 8 developers;',
-        isAccomplished: true,
-      },
-      {
-        id: 1,
-        text: 'Is able to coordinate teams of 8+ developers;',
-        isAccomplished: false,
-      },
-      {
-        id: 1,
-        text:
-          'Has worked with project management methodologies like Waterfall, Agile or Kanban for more than 1 year;',
-        isAccomplished: true,
-      },
-      { id: 1, text: 'Has full time contract;', isAccomplished: false },
-      {
-        id: 1,
-        text:
-          'Mentor for SDE I, II, III, helping them in the learning process;',
-        isAccomplished: false,
-      },
-      {
-        id: 1,
-        text:
-          'Very good English communication skills in both writing and conversation;',
-        isAccomplished: true,
-      },
-      {
-        id: 1,
-        text:
-          'Can communicate effectively with client, set tasks, write emails, hold skype meetings',
-        isAccomplished: true,
-      },
-      {
-        id: 1,
-        text:
-          'Contributed to at least one open-source project, can be a project started inside the company;',
-        isAccomplished: true,
-      },
-      {
-        id: 1,
-        text:
-          'Has at least one second area of expertise in which he/she feels confident;',
-        isAccomplished: false,
-      },
-      {
-        id: 1,
-        text: 'Is comfortable with both Unix and Windows platforms;',
-        isAccomplished: false,
-      },
-      {
-        id: 1,
-        text:
-          'Ability to translate vague business requirements into concrete code, services, or recommendations;',
-        isAccomplished: true,
-      },
-      {
-        id: 1,
-        text:
-          'Exposure to software development methodologies, experience in hybrid implementations a plus;',
-        isAccomplished: true,
-      },
-      {
-        id: 1,
-        text: 'Expertise in information security best practices;',
-        isAccomplished: true,
-      },
-      {
-        id: 1,
-        text:
-          'Strong grasp of developer best practices with emphasis on practical resolutions to shared challenges;',
-        isAccomplished: false,
-      },
-      {
-        id: 1,
-        text: 'Experience & proficiency in Multi-threaded development;',
-        isAccomplished: false,
-      },
-      { id: 1, text: 'Responsibilities', isAccomplished: true },
-      { id: 1, text: 'Self-learning', isAccomplished: false },
-      {
-        id: 1,
-        text: 'Find solutions for technical challenges inside project;',
-        isAccomplished: true,
-      },
-      {
-        id: 1,
-        text: 'Create the shell at the beginning of projects;',
-        isAccomplished: true,
-      },
-      {
-        id: 1,
-        text: 'Code parts of the app that require his expertise;',
-        isAccomplished: false,
-      },
-      {
-        id: 1,
-        text: 'Review code for critical parts of the project;',
-        isAccomplished: true,
-      },
-      {
-        id: 1,
-        text:
-          'Mentor Software Developers helping them in the learning process;',
-        isAccomplished: false,
-      },
-      {
-        id: 1,
-        text:
-          'Represent ASSIST in national and international conferences or workshops as speaker;',
-        isAccomplished: false,
-      },
-      {
-        id: 1,
-        text:
-          'Help / organize internal, national and international workshops and conferences;',
-        isAccomplished: true,
-      },
-      { id: 1, text: 'Take part in hiring processes;', isAccomplished: true },
-      {
-        id: 1,
-        text:
-          'Develop interview tests and participate in the technical interview part;',
-        isAccomplished: false,
-      },
-      {
-        id: 1,
-        text: 'Organize feedback meetings with people he/she is coordinating; ',
-        isAccomplished: false,
-      },
-      {
-        id: 1,
-        text: 'Lead at least one Open Allocation project.',
-        isAccomplished: true,
-      },
-      { id: 1, text: '3 - 5 years’ experience', isAccomplished: true },
+      // {
+      //   id: 1,
+      //   text:
+      //     'Can create architecture for complex applications based on programming languages on his main area of expertise;',
+      //   isAccomplished: false,
+      // },
+      // {
+      //   id: 1,
+      //   text:
+      //     'The code he/she writes should be reviewed before going in any production environment, but if there is a critical bug that needs to be fixed as soon as possible he can take the responsibility to push the code to production and the review can come after that;',
+      //   isAccomplished: false,
+      // },
+      // {
+      //   id: 1,
+      //   text: 'Worked in teams of more than 8 developers;',
+      //   isAccomplished: true,
+      // },
+      // {
+      //   id: 1,
+      //   text: 'Is able to coordinate teams of 8+ developers;',
+      //   isAccomplished: false,
+      // },
+      // {
+      //   id: 1,
+      //   text:
+      //     'Has worked with project management methodologies like Waterfall, Agile or Kanban for more than 1 year;',
+      //   isAccomplished: true,
+      // },
+      // { id: 1, text: 'Has full time contract;', isAccomplished: false },
+      // {
+      //   id: 1,
+      //   text:
+      //     'Mentor for SDE I, II, III, helping them in the learning process;',
+      //   isAccomplished: false,
+      // },
+      // {
+      //   id: 1,
+      //   text:
+      //     'Very good English communication skills in both writing and conversation;',
+      //   isAccomplished: true,
+      // },
+      // {
+      //   id: 1,
+      //   text:
+      //     'Can communicate effectively with client, set tasks, write emails, hold skype meetings',
+      //   isAccomplished: true,
+      // },
+      // {
+      //   id: 1,
+      //   text:
+      //     'Contributed to at least one open-source project, can be a project started inside the company;',
+      //   isAccomplished: true,
+      // },
+      // {
+      //   id: 1,
+      //   text:
+      //     'Has at least one second area of expertise in which he/she feels confident;',
+      //   isAccomplished: false,
+      // },
+      // {
+      //   id: 1,
+      //   text: 'Is comfortable with both Unix and Windows platforms;',
+      //   isAccomplished: false,
+      // },
+      // {
+      //   id: 1,
+      //   text:
+      //     'Ability to translate vague business requirements into concrete code, services, or recommendations;',
+      //   isAccomplished: true,
+      // },
+      // {
+      //   id: 1,
+      //   text:
+      //     'Exposure to software development methodologies, experience in hybrid implementations a plus;',
+      //   isAccomplished: true,
+      // },
+      // {
+      //   id: 1,
+      //   text: 'Expertise in information security best practices;',
+      //   isAccomplished: true,
+      // },
+      // {
+      //   id: 1,
+      //   text:
+      //     'Strong grasp of developer best practices with emphasis on practical resolutions to shared challenges;',
+      //   isAccomplished: false,
+      // },
+      // {
+      //   id: 1,
+      //   text: 'Experience & proficiency in Multi-threaded development;',
+      //   isAccomplished: false,
+      // },
+      // { id: 1, text: 'Responsibilities', isAccomplished: true },
+      // { id: 1, text: 'Self-learning', isAccomplished: false },
+      // {
+      //   id: 1,
+      //   text: 'Find solutions for technical challenges inside project;',
+      //   isAccomplished: true,
+      // },
+      // {
+      //   id: 1,
+      //   text: 'Create the shell at the beginning of projects;',
+      //   isAccomplished: true,
+      // },
+      // {
+      //   id: 1,
+      //   text: 'Code parts of the app that require his expertise;',
+      //   isAccomplished: false,
+      // },
+      // {
+      //   id: 1,
+      //   text: 'Review code for critical parts of the project;',
+      //   isAccomplished: true,
+      // },
+      // {
+      //   id: 1,
+      //   text:
+      //     'Mentor Software Developers helping them in the learning process;',
+      //   isAccomplished: false,
+      // },
+      // {
+      //   id: 1,
+      //   text:
+      //     'Represent ASSIST in national and international conferences or workshops as speaker;',
+      //   isAccomplished: false,
+      // },
+      // {
+      //   id: 1,
+      //   text:
+      //     'Help / organize internal, national and international workshops and conferences;',
+      //   isAccomplished: true,
+      // },
+      // { id: 1, text: 'Take part in hiring processes;', isAccomplished: true },
+      // {
+      //   id: 1,
+      //   text:
+      //     'Develop interview tests and participate in the technical interview part;',
+      //   isAccomplished: false,
+      // },
+      // {
+      //   id: 1,
+      //   text: 'Organize feedback meetings with people he/she is coordinating; ',
+      //   isAccomplished: false,
+      // },
+      // {
+      //   id: 1,
+      //   text: 'Lead at least one Open Allocation project.',
+      //   isAccomplished: true,
+      // },
+      // { id: 1, text: '3 - 5 years’ experience', isAccomplished: true },
     ],
-    tree: [
-      {
-        title: 'ASSIST Intern',
-        isAchieved: true,
-      },
-      {
-        title: 'Software Development Engineer I',
-        isAchieved: true,
-      },
-      {
-        title: 'Software Development Engineer II',
-        isAchieved: true,
-      },
-      {
-        title: 'Software Development Engineer III',
-        isAchieved: true,
-      },
-      {
-        title: 'Senior Software Development Engineer',
-        isAchieved: false,
-      },
-      {
-        title: 'Senior Principal Engineer',
-        isAchieved: false,
-      },
-      {
-        title: 'Software Development Manager I',
-        isAchieved: false,
-      },
-      {
-        title: 'Software Development Manager II',
-        isAchieved: false,
-      },
-    ],
+    tree: [],
   }
 
   constructor(props) {
@@ -256,7 +223,7 @@ class Dashboard extends Component {
               userPicture: response.picture,
             },
             badgesList: response.badges,
-            confirmedRequirements: response.confirmedRequirements,
+            confirmedRequirements: response.confirmedRequirements || [],
             titleId: response.title,
             ladderId: response.ladder,
           })
@@ -270,13 +237,15 @@ class Dashboard extends Component {
     const loadUserData = () => {
       if (this.state.badgesList && this.state.badgesList.length) {
         let list = this.state.badgesList.toString()
+        const { ladderId } = this.state
 
+        // load badges
         API.get('Badges', `/${list}`)
           .then(badges => {
             badges.forEach(badge => {
+              // todo: badge count se face dupa numarul de repetitii in lista cu badge-uri
               badge.count = 1
             })
-
             Promise.all(
               badges
                 .filter(b => b.picture)
@@ -292,24 +261,60 @@ class Dashboard extends Component {
           .catch(err => {
             console.log(err)
           })
+
+        // load ladder
+        API.get('Ladders', `/${ladderId}`)
+          .then(res => {
+            this.setState({ ladder: res })
+            createTree()
+          })
+          .catch(err => {
+            console.log(err)
+          })
       }
+    }
+
+    const createTree = () => {
+      const { ladder, titleId, confirmedRequirements } = this.state
+      let currentPossition = ladder.steps.length
+      let tree = []
+      ladder.steps.map((step, index) => {
+        if (step.stepId === titleId) {
+          // todo: mai intai cauta current possition si apoi se face verificarea daca isAchieved
+          currentPossition = index
+          this.setState({ userTitle: step.name })
+          let requirements = []
+          step.requirements.map(val => {
+            let el = {
+              id: val.id,
+              text: val.text,
+              isAchieved: confirmedRequirements.indexOf(val.id) > -1,
+            }
+            requirements.push(el)
+          })
+          this.setState({ requirements })
+        }
+        let el = { title: step.name, isAchieved: currentPossition >= index }
+        tree.push(el)
+      })
+      this.setState({ tree })
+      console.log('current possition', currentPossition)
+      console.log(this.state)
     }
 
     const getUser = () => {
       API.get(AppConstants.endpoints.users, `/${props.id}`).then(response => {
-        this.setState(
-          {
-            userDetails: {
-              userName: response.userName,
-              userPicture: response.picture,
-            },
-            badgesList: response.badges,
-            confirmedRequirements: response.confirmedRequirements,
-            titleId: response.title,
-            ladderId: response.ladder,
+        this.setState({
+          userDetails: {
+            userName: response.userName,
+            userPicture: response.picture,
           },
-          loadUserData(),
-        )
+          badgesList: response.badges,
+          confirmedRequirements: response.confirmedRequirements,
+          titleId: response.title,
+          ladderId: response.ladder,
+        })
+        loadUserData()
       })
     }
 

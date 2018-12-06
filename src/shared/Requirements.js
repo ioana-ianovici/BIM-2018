@@ -54,7 +54,7 @@ class Requirements extends PureComponent {
 Requirements.propTypes = {
   requirements: propTypes.arrayOf(
     propTypes.shape({
-      id: propTypes.number,
+      id: propTypes.string,
       text: propTypes.string,
       isAccomplished: propTypes.boolean,
     }),
