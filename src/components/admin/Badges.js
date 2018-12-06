@@ -291,7 +291,6 @@ class Badges extends PureComponent {
       isAddBadge,
       selectedBadge,
     } = this.state
-    console.log(this.state)
 
     return (
       <StyledBadges>
