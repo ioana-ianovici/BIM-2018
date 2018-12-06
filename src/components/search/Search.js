@@ -96,8 +96,36 @@ class Search extends PureComponent {
               ? user.ladder.steps[titleIndex + 1].name
               : user.ladder.steps[user.ladder.steps.length - 1].name
             : null
-        // todo:
-        // user.userTitleProgressPercentage =
+        user.badges = user.badges.map(badge =>
+          this.state.badges.find(b => b.badgeId === badge),
+        )
+        user.requirements = JSON.parse(
+          JSON.stringify(
+            user.ladder && user.ladder.steps && user.title
+              ? user.ladder.steps
+                  .find(step => step.stepId === user.title)
+                  .requirements.map(requirement => {
+                    requirement.isAccomplished = Boolean(
+                      user.confirmedRequirements &&
+                        user.confirmedRequirements.find(
+                          r => r === requirement.id,
+                        ),
+                    )
+                    return requirement
+                  })
+              : [],
+          ),
+        )
+        user.userTitleProgressPercentage =
+          user.requirements && user.requirements.length
+            ? Math.ceil(
+                (user.requirements.filter(
+                  requirement => requirement.isAccomplished,
+                ).length /
+                  user.requirements.length) *
+                  100,
+              )
+            : 0
       })
 
       steps.forEach(step => {
@@ -198,7 +226,7 @@ class Search extends PureComponent {
           steps={steps}
           onUserSelect={this.handleUserSelect}
         />
-        {selectedUser && <ManageUser user={selectedUser} />}
+        {selectedUser && <ManageUser user={selectedUser} badges={badges} />}
       </Fragment>
     )
   }

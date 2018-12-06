@@ -238,7 +238,7 @@ Badge.propTypes = {
 class ManageUser extends Component {
   state = {
     user: this.props.user,
-    allBadges: [],
+    allBadges: this.props.badges,
   }
 
   constructor(props) {
@@ -247,73 +247,60 @@ class ManageUser extends Component {
     this.handleRequirementChange = this.handleRequirementChange.bind(this)
     this.handleBadgeAdd = this.handleBadgeAdd.bind(this)
     this.handleBadgeSubstract = this.handleBadgeSubstract.bind(this)
-    this.getAllBadges = this.getAllBadges.bind(this)
-    this.getUserDetails = this.getUserDetails.bind(this)
 
-    this.getAllBadges().then(() => {
-      this.getUserDetails()
-    })
+    this.mapBadges(this.props)
   }
 
-  getUserDetails() {
-    API.get(
-      'Badges',
-      `/${this.state.allBadges.map(badge => badge.badgeId).toString()}`,
-    )
-      .then(badges => {
-        badges.forEach(badge => {
-          badge.count = this.state.user.badges.filter(
-            b => b === badge.badgeId,
-          ).length
-        })
+  componentWillReceiveProps(props) {
+    debugger
+    this.mapBadges(props)
 
-        Promise.all(
-          badges
-            .filter(b => b.picture)
-            .map(badge =>
-              Storage.vault
-                .get(badge.picture, { level: 'public' })
-                .then(res => (badge.picture = res)),
-            ),
-        ).then(() => {
-          this.setState({ allBadges: badges, allBadgesLoaded: true })
-        })
+    if (this.state.user.id !== props.user.id) {
+      this.setState({
+        user:
+          this.state.user.id !== props.user.id ? props.user : this.state.user,
       })
-      .catch(err => {
-        console.log(err)
-      })
-  }
-
-  getAllBadges() {
-    return API.get(AppConstants.endpoints.badges, '')
-      .then(allBadges => {
-        this.setState({ allBadges })
-      })
-      .catch(err => console.log(err))
-  }
-
-  componentDidUpdate() {
-    if (this.state.user.id !== this.props.user.id) {
-      this.setState({ user: this.props.user })
     }
   }
 
+  mapBadges(props) {
+    const allBadges = props.badges || []
+
+    allBadges.forEach(badge => {
+      badge.count = this.state.user.badges.filter(
+        b => b && badge && b.badgeId === badge.badgeId,
+      ).length
+    })
+
+    this.setState({ allBadges })
+  }
+
   handleBadgeAdd(id) {
-    const badges = this.state.user.badges.map(badge =>
+    const allBadges = this.state.allBadges.map(badge =>
       badge.badgeId === id ? { ...badge, count: ++badge.count } : badge,
     )
 
-    // todo: call api.
-    this.setState(oldState => ({ user: { ...oldState.user, badges } }))
+    API.put(
+      AppConstants.endpoints.users,
+      `/${this.props.user.userId}/assign-badge`,
+      { body: { badgeId: id } },
+    ).then(() => {
+      this.setState({ allBadges })
+    })
   }
 
   handleBadgeSubstract(id) {
-    const badges = this.state.user.badges.map(badge =>
+    const allBadges = this.state.allBadges.map(badge =>
       badge.badgeId === id ? { ...badge, count: --badge.count } : badge,
     )
 
-    // todo: call api.
-    this.setState(oldState => ({ user: { ...oldState.user, badges } }))
+    API.put(
+      AppConstants.endpoints.users,
+      `/${this.props.user.userId}/remove-badge`,
+      { body: { badgeId: id } },
+    ).then(() => {
+      this.setState({ allBadges })
+    })
   }
 
   handleRequirementChange(id) {
@@ -323,8 +310,19 @@ class ManageUser extends Component {
         : requirement,
     )
 
-    // todo: call api.
-    this.setState(oldState => ({ user: { ...oldState.user, requirements } }))
+    const isAccomplished = requirements.find(
+      requirement => requirement.id === id,
+    ).isAccomplished
+
+    API.put(
+      AppConstants.endpoints.users,
+      `/${this.state.user.userId}/${
+        isAccomplished ? 'confirm-requirement' : 'unconfirm-requirement'
+      }`,
+      { body: { requirementId: id } },
+    ).then(() => {
+      this.setState(oldState => ({ user: { ...oldState.user, requirements } }))
+    })
   }
 
   handleLevelUp() {
@@ -333,7 +331,7 @@ class ManageUser extends Component {
   }
 
   render() {
-    const { user, allBadges, allBadgesLoaded } = this.state
+    const { user, allBadges } = this.state
 
     return (
       <StyledManageUser {...user}>
@@ -342,7 +340,7 @@ class ManageUser extends Component {
             <div className="profile-picture profile-picture--small" />
             <div className="main-info__aside">
               <h2>{user.userName}</h2>
-              <p>{user.step}</p>
+              <p>{user.userTitle}</p>
             </div>
           </div>
           <div className="user-details__actions" onClick={this.handleLevelUp}>
@@ -360,15 +358,14 @@ class ManageUser extends Component {
           <section className="section-right">
             <h2 className="section-right__title">Badges</h2>
             <div className="badges">
-              {allBadgesLoaded &&
-                allBadges.map(badge => (
-                  <Badge
-                    badge={badge}
-                    key={badge.picture || badge.badgeId}
-                    onAddBadge={this.handleBadgeAdd}
-                    onSubstractBadge={this.handleBadgeSubstract}
-                  />
-                ))}
+              {allBadges.map((badge, index) => (
+                <Badge
+                  badge={badge}
+                  key={badge.picture || badge.badgeId || index}
+                  onAddBadge={this.handleBadgeAdd}
+                  onSubstractBadge={this.handleBadgeSubstract}
+                />
+              ))}
             </div>
           </section>
         </div>
@@ -381,10 +378,9 @@ ManageUser.propTypes = {
   user: propTypes.shape({
     picture: propTypes.string.isRequired,
     userName: propTypes.string.isRequired,
-    step: propTypes.string.isRequired,
     requirements: propTypes.arrayOf(
       propTypes.shape({
-        id: propTypes.number,
+        id: propTypes.string,
         text: propTypes.string,
         isAccomplished: propTypes.boolean,
       }).isRequired,
