@@ -124,6 +124,8 @@ const StyledUserFilter = styled.div`
       left: 0;
       background: ${styleConstants.darkThemeSecondaryBackground};
       z-index: 1;
+      flex-wrap: wrap;
+      width: 200px;
 
       .badge {
         border: 1px solid ${styleConstants.darkThemePaleText};
@@ -171,6 +173,12 @@ class UserFilter extends PureComponent {
   componentDidUpdate() {
     if (this.state.users !== this.props.users) {
       this.setState({ users: this.props.users })
+    }
+    if (this.state.ladders !== this.props.ladders) {
+      this.setState({ ladders: this.props.ladders })
+    }
+    if (this.state.badges !== this.props.badges) {
+      this.setState({ badges: this.props.badges })
     }
   }
 
@@ -238,8 +246,8 @@ class UserFilter extends PureComponent {
           !selectedStep.value ||
           user.step === selectedStep.value) &&
         (!selectedBadge ||
-          !selectedBadge.id ||
-          user.badge === selectedBadge.id) &&
+          !selectedBadge.badgeId ||
+          user.badge === selectedBadge.badgeId) &&
         (!selectedRequirements ||
           !selectedRequirements.value ||
           !selectedRequirements.length ||
@@ -314,13 +322,21 @@ class UserFilter extends PureComponent {
             <div className="search__text">Badges</div>
             <div className="filter__badges-wrapper">
               <div className="filter__badges">
-                <img
-                  className="badge"
-                  src={selectedBadge ? selectedBadge.url : null}
-                  alt={selectedBadge ? selectedBadge.text : 'Choose badge'}
-                  name={selectedBadge ? selectedBadge.text : 'Choose badge'}
-                  onClick={this.handleViewBadgesToggle}
-                />
+                {selectedBadge && (
+                  <img
+                    className="badge"
+                    src={selectedBadge.picture}
+                    alt={selectedBadge.title}
+                    name={selectedBadge.title}
+                    onClick={this.handleViewBadgesToggle}
+                  />
+                )}
+                {!selectedBadge && (
+                  <div
+                    className="badge"
+                    onClick={this.handleViewBadgesToggle}
+                  />
+                )}
               </div>
               {isViewAllBadges && (
                 <div className="filter__badges--open">
@@ -329,9 +345,9 @@ class UserFilter extends PureComponent {
                     badges.map(badge => (
                       <img
                         className="badge"
-                        key={badge.id}
-                        src={badge.url}
-                        alt={badge.text}
+                        key={badge.badgeId}
+                        src={badge.picture}
+                        alt={badge.title}
                         onClick={() => this.handleBadgeSelect(badge)}
                       />
                     ))}
@@ -393,5 +409,7 @@ UserFilter.propTypes = {
   ),
   onUserSelect: propTypes.func,
 }
+
+// todo: add propTypes.
 
 export default UserFilter
