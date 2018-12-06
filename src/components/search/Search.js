@@ -298,7 +298,6 @@ class Search extends PureComponent {
             }),
           ),
         ).then(() => {
-          debugger
           this.setState({ badges })
         })
 

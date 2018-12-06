@@ -36,6 +36,7 @@ const StyledUserFilter = styled.div`
 
   .search__select {
     width: 100%;
+    min-width: 200px;
     background: transparent;
 
     .react-select__control {
@@ -58,9 +59,10 @@ const StyledUserFilter = styled.div`
   .search__filters {
     display: flex;
     flex-wrap: wrap;
+    align-content: center;
     margin: 0 100px;
     align-items: flex-end;
-    justify-content: space-between;
+    justify-content: space-evenly;
   }
 
   .filter__select-wrapper {
@@ -75,8 +77,8 @@ const StyledUserFilter = styled.div`
 
   .search__filter,
   .filter {
-    min-width: 24%;
     position: relative;
+    margin-right: 10px;
   }
 
   .filter__role-icon,
@@ -88,6 +90,7 @@ const StyledUserFilter = styled.div`
   .filter__requirements-select,
   .filter__step-select {
     .react-select__control {
+      min-width: 200px;
       padding: 0;
       display: flex;
       flex-wrap: nowrap;
@@ -303,7 +306,7 @@ class UserFilter extends PureComponent {
                 alt="search icon"
               />
               <Select
-                placeholder="Role"
+                placeholder="Requirements"
                 className="search__select"
                 classNamePrefix="react-select"
                 value={selectedRequirements}
@@ -338,6 +341,7 @@ class UserFilter extends PureComponent {
                 <div className="filter__badges--open">
                   {isViewAllBadges &&
                     badges &&
+                    badges.length &&
                     badges.map(badge => (
                       <img
                         className="badge"
