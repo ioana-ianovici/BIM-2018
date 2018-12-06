@@ -175,12 +175,6 @@ class Badges extends PureComponent {
         this.setState({ badges })
       })
     })
-
-    // badges.forEach(async badge => {
-    //   badge.image = await Storage.vault.get(badge.picture, { level: 'public' })
-    // })
-
-    // this.setState({ badges })
   }
 
   handleBadgeNameChange(event) {

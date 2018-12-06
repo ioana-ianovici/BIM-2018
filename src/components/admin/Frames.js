@@ -1,13 +1,13 @@
 import React, { PureComponent } from 'react'
 import styled from 'styled-components'
 import propTypes from 'prop-types'
+import { API } from 'aws-amplify'
+import { Storage } from 'aws-amplify'
 
 import AddNew from './../../shared/AddNew'
 import { styleConstants } from '../../shared/constants/styleConstants'
-import defaultFrame1 from '../../assets/frame-1.svg'
-import defaultFrame2 from '../../assets/frame-2.svg'
-import defaultFrame3 from '../../assets/frame-3.svg'
 import RemoveImage from '../../shared/images/Remove.image'
+import { s3Upload } from './awsStorage'
 
 const StyledFrames = styled.div`
   color: ${styleConstants.darkThemeContrastTextColor};
@@ -79,12 +79,12 @@ class Frame extends PureComponent {
         />
         <label htmlFor="edit-frame">
           {/* todo: add alt. */}
-          <img src={frame} alt="" />
+          <img src={frame.image} alt="" />
           <RemoveImage
             className="frame__delete"
             onClick={e => {
               e.preventDefault()
-              onRemoveFrame(frame)
+              onRemoveFrame(frame.frameId)
             }}
           />
         </label>
@@ -94,7 +94,11 @@ class Frame extends PureComponent {
 }
 
 Frame.propTypes = {
-  frame: propTypes.string.isRequired,
+  frame: propTypes.shape({
+    frameId: propTypes.string.isRequired,
+    image: propTypes.string.isRequired,
+    picture: propTypes.string.isRequired,
+  }).isRequired,
   onUpdateFrame: propTypes.func.isRequired,
   onRemoveFrame: propTypes.func.isRequired,
 }
@@ -106,30 +110,53 @@ class Frames extends PureComponent {
 
   constructor(props) {
     super(props)
-    // todo: remove this.
-    const defaultFrames = [defaultFrame1, defaultFrame2, defaultFrame3]
 
     this.handleAddNewFrame = this.handleAddNewFrame.bind(this)
     this.handleUpdateFrame = this.handleUpdateFrame.bind(this)
+    this.handleRemoveFrame = this.handleRemoveFrame.bind(this)
+    this.getFrames = this.getFrames.bind(this)
 
-    // todo: get from api.
-    this.state = {
-      // todo: remove defaultFrames.
-      frames:
-        this.state.frames && this.state.frames.length
-          ? this.state.frames
-          : defaultFrames,
-    }
+    this.getFrames()
   }
 
-  handleAddNewFrame(event) {
+  getFrames() {
+    API.get('Frames', '')
+      .then(frames => {
+        Promise.all(
+          frames.map(frame =>
+            Storage.vault.get(frame.picture, { level: 'public' }).then(res => {
+              frame.image = res
+            }),
+          ),
+        ).then(() => {
+          this.setState({ frames })
+        })
+      })
+      .catch(err => {
+        console.log('error loading frames', err)
+      })
+  }
+
+  async handleAddNewFrame(event) {
     const file = event.target.files && event.target.files[0]
 
     if (!file) {
       return
     }
 
-    // todo: call api to set new file as new frame, reset state frames.
+    const fileName = await s3Upload(file)
+
+    const body = {
+      picture: fileName,
+    }
+
+    API.post('Frames', '', { body })
+      .then(res => {
+        this.getFrames()
+      })
+      .catch(err => {
+        console.log('error adding frame', err)
+      })
   }
 
   handleUpdateFrame(event, oldFrame) {
@@ -144,8 +171,13 @@ class Frames extends PureComponent {
   }
 
   handleRemoveFrame(frame) {
-    console.log(frame)
-    // todo: call api.
+    API.del('Frames', `/${frame}`)
+      .then(res => {
+        this.getFrames()
+      })
+      .catch(err => {
+        console.log('could not remove frame', err)
+      })
   }
 
   render() {
@@ -168,7 +200,7 @@ class Frames extends PureComponent {
         <div className="frames">
           {frames.map(frame => (
             <Frame
-              key={frame}
+              key={frame.frameId}
               frame={frame}
               onUpdateFrame={this.handleUpdateFrame}
               onRemoveFrame={this.handleRemoveFrame}
