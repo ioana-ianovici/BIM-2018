@@ -248,21 +248,20 @@ class Dashboard extends Component {
     super(props)
 
     const getSelf = () => {
+      console.log('loading user')
       API.get(AppConstants.endpoints.self, '')
         .then(response => {
-          this.setState(
-            {
-              userDetails: {
-                userName: response.userName,
-                userPicture: response.picture,
-              },
-              badgesList: response.badges,
-              confirmedRequirements: response.confirmedRequirements,
-              titleId: response.title,
-              ladderId: response.ladder,
+          this.setState({
+            userDetails: {
+              userName: response.userName,
+              userPicture: response.picture,
             },
-            loadUserData(),
-          )
+            badgesList: response.badges,
+            confirmedRequirements: response.confirmedRequirements,
+            titleId: response.title,
+            ladderId: response.ladder,
+          })
+          loadUserData()
         })
         .catch(err => {
           this.props.history.push(AppConstants.routes.settings)
@@ -270,6 +269,8 @@ class Dashboard extends Component {
     }
 
     const loadUserData = () => {
+      console.log('loading user data')
+      console.log(this.state)
       if (this.state.badgesList && this.state.badgesList.length) {
         let list = this.state.badgesList.toString()
 
@@ -289,6 +290,8 @@ class Dashboard extends Component {
                 ),
             ).then(() => {
               this.setState({ badges })
+              console.log('badges', badges)
+              console.log(this.state.badges)
             })
           })
           .catch(err => {
