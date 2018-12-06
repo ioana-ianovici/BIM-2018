@@ -254,13 +254,14 @@ class UserFilter extends PureComponent {
       user =>
         (!selectedLadder ||
           !selectedLadder.value ||
-          user.ladder === selectedLadder.value) &&
+          (user.ladder && user.ladder.ladderId === selectedLadder.value)) &&
         (!selectedStep ||
           !selectedStep.value ||
-          user.step === selectedStep.value) &&
+          user.title === selectedStep.value) &&
         (!selectedBadge ||
           !selectedBadge.badgeId ||
-          user.badge === selectedBadge.badgeId) &&
+          (user.badges &&
+            user.badges.find(b => b === selectedBadge.badgeId))) &&
         (!selectedRequirements ||
           !selectedRequirements.value ||
           !selectedRequirements.length ||
@@ -272,7 +273,7 @@ class UserFilter extends PureComponent {
       label: user.userName,
       value: user.userId,
     }))
-
+    console.log(badges)
     return (
       <StyledUserFilter>
         <section className="search">
@@ -335,7 +336,7 @@ class UserFilter extends PureComponent {
             <div className="search__text">Badges</div>
             <div className="filter__badges-wrapper">
               <div className="filter__badges">
-                {selectedBadge && (
+                {selectedBadge && selectedBadge.picture && (
                   <img
                     className="badge"
                     src={selectedBadge.picture}
@@ -356,10 +357,10 @@ class UserFilter extends PureComponent {
                   {isViewAllBadges &&
                     badges &&
                     badges.length &&
-                    badges.map(badge => (
+                    badges.map((badge, index) => (
                       <img
                         className="badge"
-                        key={badge.picture || badge.badgeId}
+                        key={badge.picture || badge.badgeId || index}
                         src={badge.picture}
                         alt={badge.title}
                         onClick={() => this.handleBadgeSelect(badge)}

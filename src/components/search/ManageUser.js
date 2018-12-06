@@ -170,7 +170,8 @@ const StyledManageUser = styled.div`
     cursor: pointer;
 
     &:hover {
-      color: ${styleConstants.mainAccent};
+      color: ${styleConstants.darkThemeContrastTextColor};
+      text-shadow: 0px 0px 1px ${styleConstants.darkThemeContrastTextColor};
     }
   }
 
@@ -202,7 +203,6 @@ class Badge extends PureComponent {
 
   render() {
     const { badge } = this.props
-    console.log(badge)
 
     return (
       <div className={'badge' + (badge.count > 0 ? ' badge--selected' : '')}>
@@ -282,18 +282,6 @@ class ManageUser extends Component {
       .catch(err => {
         console.log(err)
       })
-
-    const user = this.state.user
-
-    if (!user.picture) {
-      return
-    }
-
-    Storage.vault.get(user.picture, { level: 'public' }).then(res => {
-      user.picture = res
-
-      this.setState({ user })
-    })
   }
 
   getAllBadges() {
