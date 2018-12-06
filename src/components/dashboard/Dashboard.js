@@ -288,8 +288,6 @@ class Dashboard extends Component {
             ).then(() => {
               this.setState({ badges })
             })
-
-            // this.setState({ badges: badges })
           })
           .catch(err => {
             console.log(err)

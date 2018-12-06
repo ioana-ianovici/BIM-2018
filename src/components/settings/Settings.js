@@ -4,6 +4,7 @@ import { API } from 'aws-amplify'
 
 import { styleConstants } from './../../shared/constants/styleConstants'
 import { AppConstants } from './../../shared/constants/constants'
+import { s3Upload } from '../admin/awsStorage'
 
 const StyledSettings = styled.div`
   h2 {
@@ -94,10 +95,11 @@ const StyledSettings = styled.div`
 
 class Settings extends PureComponent {
   state = {
-    id: null,
+    userId: null,
     // todo: replace isNewUser with id.
     isNewUser: false,
     userPicture: null,
+    userImage: null,
     userName: null,
     password: null,
     newPassword: null,
@@ -118,7 +120,7 @@ class Settings extends PureComponent {
     API.get(AppConstants.endpoints.self, '', {})
       .then(response => {
         this.setState({
-          id: response.id,
+          userId: response.userId,
           userName: response.userName,
           userPicture: response.picture,
         })
@@ -129,38 +131,54 @@ class Settings extends PureComponent {
       })
   }
 
-  handleFileChange(event) {
+  updateUserDetails() {
+    const { userName, userPicture, userId } = this.state
+    const body = {
+      userName,
+      picture: userPicture,
+    }
+
+    API.put('Users', `/${userId}`, { body })
+      .then(res => {
+        console.log('user details updated')
+        window.location.reload()
+      })
+      .catch(err => {
+        console.log('could not update user details', err)
+      })
+  }
+
+  createUser() {
+    const { userName, userPicture } = this.state
+    const body = {
+      userName,
+      picture: userPicture,
+    }
+    API.post('Users', '', { body }).then(() => {
+      window.location.reload()
+    })
+  }
+
+  async handleFileChange(event) {
     const file = event.target.files && event.target.files[0]
 
     if (!file) {
       return
-    }
-
-    this.generatePreviewImgUrl(file, userPicture => {
-      this.setState({ userPicture })
-    })
-
-    const body = {
-      userName: this.state.userName,
-      picture: this.state.userPicture,
-    }
-
-    if (this.state.isNewUser) {
-      API.post(AppConstants.endpoints.users, '', { body })
-        .then(() => {
-          window.location.reload()
-        })
-        .catch(err => {
-          console.log(err)
-        })
     } else {
-      API.put(AppConstants.endpoints.users, `/${this.state.id}`, { body })
-        .then(() => {
-          window.location.reload()
-        })
-        .catch(err => {
-          console.log(err)
-        })
+      // this.generatePreviewImgUrl(file, userImage => {
+      //   this.setState({ userImage })
+      // })
+      console.log('new picture selected')
+      const filename = await s3Upload(file)
+      this.setState({ userPicture: filename })
+    }
+
+    if (!this.state.userId) {
+      console.log('new user')
+      // this.createUser()
+    } else {
+      console.log('old as a dog')
+      this.updateUserDetails()
     }
   }
 
@@ -183,27 +201,12 @@ class Settings extends PureComponent {
         return
       }
 
-      const body = {
-        userName: event.target.value,
-        picture: this.state.userPicture,
-      }
+      this.setState({ userName: event.target.value })
 
-      if (this.state.isNewUser) {
-        API.post(AppConstants.endpoints.users, '', { body })
-          .then(() => {
-            window.location.reload()
-          })
-          .catch(err => {
-            console.log(err)
-          })
+      if (!this.state.userId) {
+        this.createUser()
       } else {
-        API.put(AppConstants.endpoints.users, `/${this.state.id}`, { body })
-          .then(() => {
-            window.location.reload()
-          })
-          .catch(err => {
-            console.log(err)
-          })
+        this.updateUserDetails()
       }
 
       this.isDebounce = false
@@ -211,28 +214,8 @@ class Settings extends PureComponent {
   }
 
   handleResetPassword() {
-    const body = {
-      userName: this.state.userName,
-      picture: this.state.userPicture,
-    }
-
-    if (this.state.isNewUser) {
-      API.post(AppConstants.endpoints.users, '', { body })
-        .then(() => {
-          this.loadUserData()
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    } else {
-      API.put(AppConstants.endpoints.users, `/${this.state.id}`, { body })
-        .then(() => {
-          this.loadUserData()
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    }
+    // todo: de facut password reset cu cognito
+    // parola se reseteaza cu cognito, nu din user details
   }
 
   generatePreviewImgUrl(file, callback) {
@@ -251,7 +234,7 @@ class Settings extends PureComponent {
     return (
       <StyledSettings>
         <div className="user-image">
-          <div className="profile-picture profile-picture--large" />
+          <div className="profile-picture profile-picture--self profile-picture--large" />
           <input
             autoComplete="off"
             id="upload-user-picture"
