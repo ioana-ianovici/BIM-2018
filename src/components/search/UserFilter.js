@@ -73,10 +73,6 @@ const StyledUserFilter = styled.div`
     }
   }
 
-  .filter--center {
-    text-align: center;
-  }
-
   .search__filter,
   .filter {
     min-width: 24%;
@@ -318,7 +314,7 @@ class UserFilter extends PureComponent {
               />
             </div>
           </div>
-          <div className="search__filter filter filter--center">
+          <div className="search__filter filter">
             <div className="search__text">Badges</div>
             <div className="filter__badges-wrapper">
               <div className="filter__badges">
@@ -345,7 +341,7 @@ class UserFilter extends PureComponent {
                     badges.map(badge => (
                       <img
                         className="badge"
-                        key={badge.badgeId}
+                        key={badge.picture || badge.badgeId}
                         src={badge.picture}
                         alt={badge.title}
                         onClick={() => this.handleBadgeSelect(badge)}

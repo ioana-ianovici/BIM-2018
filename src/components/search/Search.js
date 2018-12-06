@@ -253,12 +253,7 @@ class Search extends PureComponent {
 
   getUsers() {
     return API.get(AppConstants.endpoints.users, '').then(users => {
-      // Promise.all(users.filter(user => user.ladder).map(user => API.get(AppConstants.endpoints.ladders, `/${user.ladder}`).then(ladder => {
-      //   user.ladder = ladder;
-      // })))
-      //   .then(() => {
       this.setState({ users })
-      // })
     })
   }
 
@@ -292,7 +287,7 @@ class Search extends PureComponent {
 
         Promise.all(
           badges.map(badge =>
-            Storage.vault.get(badge, { level: 'public' }).then(res => {
+            Storage.vault.get(badge.picture, { level: 'public' }).then(res => {
               badge.picture = res
 
               users.forEach(user => {
