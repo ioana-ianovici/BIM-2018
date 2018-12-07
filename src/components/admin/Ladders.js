@@ -840,7 +840,18 @@ class Ladders extends PureComponent {
         ladder.isCollapsed = true
         return ladder
       })
-      this.setState({ ladders })
+
+      Promise.all(
+        ladders.map(ladder => {
+          ladder.steps.map(step => {
+            Storage.vault
+              .get(step.frame, { level: 'public' })
+              .then(img => (step.frameImage = img))
+          })
+        }),
+      ).then(() => {
+        this.setState({ ladders })
+      })
     })
   }
 
