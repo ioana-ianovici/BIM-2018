@@ -22,8 +22,9 @@ class Search extends PureComponent {
     this.handleUserSelect = this.handleUserSelect.bind(this)
 
     this.getUsers().then(() => {
-      this.getLadders()
-      this.getBadges()
+      this.getBadges().then(() => {
+        this.getLadders()
+      })
     })
   }
 
@@ -149,31 +150,30 @@ class Search extends PureComponent {
       })
     })
 
-    API.get(AppConstants.endpoints.badges, '/' + allUserBadges.toString()).then(
-      badges => {
-        let users = this.state.users
+    return API.get(
+      AppConstants.endpoints.badges,
+      '/' + allUserBadges.toString(),
+    ).then(badges => {
+      let users = this.state.users
 
-        Promise.all(
-          badges
-            .filter(badge => badge.picture)
-            .map(badge =>
-              Storage.vault
-                .get(badge.picture, { level: 'public' })
-                .then(res => {
-                  badge.picture = res
+      Promise.all(
+        badges
+          .filter(badge => badge.picture)
+          .map(badge =>
+            Storage.vault.get(badge.picture, { level: 'public' }).then(res => {
+              badge.picture = res
 
-                  users.forEach(user => {
-                    if (user.badge === badge.badgeId) {
-                      user.badge = badge
-                    }
-                  })
-                }),
-            ),
-        ).then(() => {
-          this.setState({ badges })
-        })
-      },
-    )
+              users.forEach(user => {
+                if (user.badge === badge.badgeId) {
+                  user.badge = badge
+                }
+              })
+            }),
+          ),
+      ).then(() => {
+        this.setState({ badges })
+      })
+    })
   }
 
   handleUserSelect(selectedUser) {

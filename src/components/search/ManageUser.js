@@ -272,22 +272,27 @@ class ManageUser extends Component {
     this.handleBadgeAdd = this.handleBadgeAdd.bind(this)
     this.handleBadgeSubstract = this.handleBadgeSubstract.bind(this)
     this.handleLevelUp = this.handleLevelUp.bind(this)
+  }
 
+  componentDidMount() {
     this.mapBadges(this.props)
   }
 
   componentWillReceiveProps(props) {
-    this.mapBadges(props)
-
     if (this.state.user.id !== props.user.id) {
-      this.setState({
-        user:
-          this.state.user.id !== props.user.id ? props.user : this.state.user,
-      })
+      this.setState(
+        {
+          user:
+            this.state.user.id !== props.user.id ? props.user : this.state.user,
+        },
+        () => this.mapBadges(props),
+      )
+    } else {
+      this.mapBadges(props)
     }
   }
 
-  mapBadges(props) {
+  mapBadges(props, isUnmounted) {
     const allBadges = props.badges || []
 
     allBadges.forEach(badge => {
@@ -392,14 +397,17 @@ class ManageUser extends Component {
           <section className="section-right">
             <h2 className="section-right__title">Badges</h2>
             <div className="badges">
-              {allBadges.map((badge, index) => (
-                <Badge
-                  badge={badge}
-                  key={badge.picture || badge.badgeId || index}
-                  onAddBadge={this.handleBadgeAdd}
-                  onSubstractBadge={this.handleBadgeSubstract}
-                />
-              ))}
+              {allBadges &&
+                allBadges.length &&
+                allBadges.filter(b => b.count != null).length &&
+                allBadges.map((badge, index) => (
+                  <Badge
+                    badge={badge}
+                    key={badge.picture || badge.badgeId || index}
+                    onAddBadge={this.handleBadgeAdd}
+                    onSubstractBadge={this.handleBadgeSubstract}
+                  />
+                ))}
             </div>
           </section>
         </div>
@@ -410,16 +418,16 @@ class ManageUser extends Component {
 
 ManageUser.propTypes = {
   user: propTypes.shape({
-    picture: propTypes.string.isRequired,
+    picture: propTypes.string,
     userName: propTypes.string.isRequired,
     requirements: propTypes.arrayOf(
       propTypes.shape({
         id: propTypes.string,
         text: propTypes.string,
         isAccomplished: propTypes.boolean,
-      }).isRequired,
-    ).isRequired,
-    badges: propTypes.arrayOf(propTypes.string).isRequired,
+      }),
+    ),
+    badges: propTypes.arrayOf(propTypes.string),
   }).isRequired,
 }
 
