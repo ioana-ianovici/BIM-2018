@@ -262,7 +262,7 @@ Badge.propTypes = {
 class ManageUser extends Component {
   state = {
     user: this.props.user,
-    allBadges: this.props.badges,
+    allBadges: this.props.badges.filter(b => b.picture),
   }
 
   constructor(props) {
@@ -292,11 +292,12 @@ class ManageUser extends Component {
     }
   }
 
-  mapBadges(props, isUnmounted) {
-    const allBadges = props.badges || []
+  mapBadges(props) {
+    debugger
+    const allBadges = props.badges.filter(b => b.picture) || []
 
     allBadges.forEach(badge => {
-      badge.count = this.state.user.badges.filter(
+      badge.count = (this.state.user.badges || []).filter(
         b => b && badge && b.badgeId === badge.badgeId,
       ).length
     })

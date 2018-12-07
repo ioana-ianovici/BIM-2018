@@ -39,6 +39,7 @@ class Search extends PureComponent {
       let users = this.state.users
       let steps = []
       let requirements = []
+      debugger
       const badges = this.state.badges.map(b => b)
 
       ladders.forEach(ladder => {
@@ -141,24 +142,12 @@ class Search extends PureComponent {
   }
 
   getBadges() {
-    const allUserBadges = []
-    this.state.users.forEach(user => {
-      ;(user.badges || []).forEach(badge => {
-        if (!allUserBadges.find(b => b === badge)) {
-          allUserBadges.push(badge)
-        }
-      })
-    })
-
-    return API.get(
-      AppConstants.endpoints.badges,
-      '/' + allUserBadges.toString(),
-    ).then(badges => {
+    return API.get('Badges', '', {}).then(badges => {
       let users = this.state.users
 
       Promise.all(
         badges
-          .filter(badge => badge.picture)
+          .filter(b => b.picture)
           .map(badge =>
             Storage.vault.get(badge.picture, { level: 'public' }).then(res => {
               badge.picture = res
