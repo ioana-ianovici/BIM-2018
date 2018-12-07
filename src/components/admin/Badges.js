@@ -120,7 +120,7 @@ class Badge extends PureComponent {
       <img
         src={badge.image}
         alt={badge.title}
-        name={badge.title}
+        title={badge.title}
         onClick={() => onBadgeSelect(badge)}
       />
     )

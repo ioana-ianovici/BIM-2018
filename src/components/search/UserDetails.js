@@ -147,13 +147,13 @@ class UserCard extends Component {
                 'profile-picture profile-picture--large profile-picture--self'
               }
             />
-            {user && user.ladder && user.ladder.frame && (
+            {user && user.frame && (
               <img className="profile-picture-frame" src={frame} alt="frame" />
             )}
-            {user && user.ladder && user.ladder.frame && (
+            {user && user.frame && (
               <img
                 className="profile-picture-frame-piece"
-                src={user.ladder.frame}
+                src={user.frame}
                 alt="frame-content"
               />
             )}

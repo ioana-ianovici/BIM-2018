@@ -155,6 +155,17 @@ class Dashboard extends Component {
             countConfirmed += el.isAccomplished ? 1 : 0
             requirements.push(el)
           })
+
+          Storage.vault.get(step.frame, { level: 'public' }).then(img => {
+            step.frameImage = img
+            this.setState(oldState => ({
+              userDetails: {
+                ...oldState.userDetails,
+                userFrame: img,
+              },
+            }))
+          })
+
           this.setState({
             requirements,
             userDetails: {

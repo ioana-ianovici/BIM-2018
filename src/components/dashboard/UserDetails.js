@@ -24,6 +24,7 @@ const StyledUserDetails = styled.div`
     height: 25px;
     width: 25px;
     background-image: url(${props => props.userFrame});
+    background-size: contain;
   }
 
   .profile-info-section {

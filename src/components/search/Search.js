@@ -74,6 +74,8 @@ class Search extends PureComponent {
           user.badges = (user.badges || []).map(badge =>
             this.state.badges.find(b => b.badgeId === badge),
           )
+          user.frame = user.ladder.steps[titleIndex].frameImage
+          console.log(user)
           user.requirements = JSON.parse(
             JSON.stringify(
               user.ladder && user.ladder.steps && user.title

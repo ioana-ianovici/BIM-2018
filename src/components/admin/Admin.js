@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { API } from 'aws-amplify'
+import { API, Storage } from 'aws-amplify'
 
 import { styleConstants } from '../../shared/constants/styleConstants'
 import { AppConstants } from '../../shared/constants/constants'
@@ -53,134 +53,9 @@ const StyledAdmin = styled.div`
 `
 
 class Admin extends Component {
-  defaultBadges = [
-    {
-      description: '',
-      name: '',
-      image: badge1,
-    },
-    {
-      description: '',
-      name: '',
-      image: badge2,
-    },
-    {
-      description: '',
-      name: '',
-      image: badge3,
-    },
-    {
-      description: '',
-      name: '',
-      image: badge4,
-    },
-    {
-      description: '',
-      name: '',
-      image: badge5,
-    },
-    {
-      description: '',
-      name: '',
-      image: badge6,
-    },
-    {
-      description: '',
-      name: '',
-      image: badge7,
-    },
-    {
-      description: '',
-      name: '',
-      image: badge8,
-    },
-    {
-      description: '',
-      name: '',
-      image: badge9,
-    },
-    {
-      description: '',
-      name: '',
-      image: badge10,
-    },
-    {
-      description: '',
-      name: '',
-      image: badge11,
-    },
-    {
-      description: '',
-      name: '',
-      image: badge12,
-    },
-    {
-      description: '',
-      name: '',
-      image: badge13,
-    },
-  ]
-
   state = {
     users: [],
-
-    ladders: [
-      // {
-      //   id: 1,
-      //   name: 'Developer',
-      //   steps: [
-      //     {
-      //       id: 1,
-      //       name: 'ASSIST Intern',
-      //       frame: 'frame',
-      //       requirements: [
-      //         { id: 1, text: 'some requirement' },
-      //         { id: 2, text: 'some requirement 2' },
-      //         { id: 3, text: 'some requirement 3' },
-      //       ],
-      //     },
-      //     {
-      //       id: 2,
-      //       name: 'SDE 1',
-      //       frame: 'frame',
-      //       requirements: [
-      //         { id: 4, text: 'some requirement' },
-      //         { id: 5, text: 'some requirement 2' },
-      //         { id: 6, text: 'some requirement 3' },
-      //       ],
-      //     },
-      //     {
-      //       id: 3,
-      //       name: 'SDE 2',
-      //       frame: 'frame',
-      //       requirements: [
-      //         { id: 7, text: 'some requirement' },
-      //         { id: 8, text: 'some requirement 2' },
-      //         { id: 9, text: 'some requirement 3' },
-      //       ],
-      //     },
-      //     {
-      //       id: 4,
-      //       name: 'SDE 3',
-      //       frame: 'frame',
-      //       requirements: [
-      //         { id: 10, text: 'some requirement' },
-      //         { id: 11, text: 'some requirement 2' },
-      //         { id: 12, text: 'some requirement 3' },
-      //       ],
-      //     },
-      //   ],
-      //   members: [
-      //     { profileImage: 'lala', userName: 'user name 1', id: 9 },
-      //     { profileImage: 'lala', userName: 'user name 2', id: 10 },
-      //     { profileImage: 'lala', userName: 'user name 3', id: 11 },
-      //     { profileImage: 'lala', userName: 'user name 4', id: 12 },
-      //     { profileImage: 'lala', userName: 'user name 5', id: 13 },
-      //     { profileImage: 'lala', userName: 'user name 6', id: 14 },
-      //     { profileImage: 'lala', userName: 'user name 7', id: 15 },
-      //   ],
-      // },
-    ],
+    ladders: [],
   }
 
   constructor(props) {
@@ -193,9 +68,17 @@ class Admin extends Component {
 
   getUsers() {
     // todo: implement pending functionality. (now there are no pending users ever)
-    API.get(AppConstants.endpoints.users, '').then(users =>
-      this.setState({ users }),
-    )
+    API.get(AppConstants.endpoints.users, '').then(users => {
+      Promise.all(
+        users.map(user => {
+          Storage.vault
+            .get(user.picture, { level: 'public' })
+            .then(img => (user.picture = img))
+        }),
+      ).then(() => {
+        this.setState({ users })
+      })
+    })
   }
 
   render() {

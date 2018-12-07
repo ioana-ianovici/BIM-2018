@@ -852,6 +852,8 @@ class Ladders extends PureComponent {
       ).then(() => {
         this.setState({ ladders })
       })
+
+      // this.setState({ ladders })
     })
   }
 

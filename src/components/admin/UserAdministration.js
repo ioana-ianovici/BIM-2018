@@ -8,23 +8,30 @@ import { AppConstants } from '../../shared/constants/constants'
 import ConfirmImage from '../../shared/images/Confirm.image'
 import RemoveImage from '../../shared/images/Remove.image'
 
+const StyledExistingUser = styled.div`
+  .profile-picture--medium {
+    background-image: url(${props =>
+      JSON.parse(JSON.stringify(props.picture))});
+  }
+`
+
 class ExistingUser extends PureComponent {
   render() {
     const { user, handleRemoveUser } = this.props
 
     return (
-      <div className="users__user user">
-        <img
-          className="profile-picture profile-picture--medium"
-          src={user.alt}
-          alt={user.userName}
-          title={user.userName}
-        />
-        <RemoveImage
-          className="user__delete"
-          onClick={() => handleRemoveUser(user)}
-        />
-      </div>
+      <StyledExistingUser {...user}>
+        <div className="users__user user">
+          <div
+            className="profile-picture profile-picture--medium"
+            title={user.userName}
+          />
+          <RemoveImage
+            className="user__delete"
+            onClick={() => handleRemoveUser(user)}
+          />
+        </div>
+      </StyledExistingUser>
     )
   }
 }
