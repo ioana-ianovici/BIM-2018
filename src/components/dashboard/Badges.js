@@ -17,6 +17,7 @@ const StyledBadgesSection = styled.div`
   }
 
   .badge {
+    display: flex !important;
     text-align: center;
 
     &:focus {
