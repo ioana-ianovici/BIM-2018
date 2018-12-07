@@ -71,7 +71,7 @@ class Search extends PureComponent {
                 ? user.ladder.steps[titleIndex + 1].name
                 : user.ladder.steps[user.ladder.steps.length - 1].name
               : null
-          user.badges = user.badges.map(badge =>
+          user.badges = (user.badges || []).map(badge =>
             this.state.badges.find(b => b.badgeId === badge),
           )
           user.requirements = JSON.parse(
