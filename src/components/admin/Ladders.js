@@ -4,6 +4,7 @@ import propTypes from 'prop-types'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import Select from 'react-select'
 import { API } from 'aws-amplify'
+import { Storage } from 'aws-amplify'
 
 import Spinner from '../../shared/Spinner'
 import { styleConstants } from '../../shared/constants/styleConstants'
@@ -129,6 +130,7 @@ const StyledLadders = styled.div`
     margin-bottom: 30px;
   }
 `
+
 class Requirement extends PureComponent {
   // todo: make req. them as card when click outside.
   constructor(props) {
@@ -234,6 +236,7 @@ class Step extends PureComponent {
   render() {
     const { isVisibleAllFrames } = this.state
     const { step, provided, allFrames } = this.props
+    console.log(allFrames)
 
     return (
       <div
@@ -278,13 +281,14 @@ class Step extends PureComponent {
             ) : (
               allFrames.map((frame, index) => (
                 <img
-                  key={index}
-                  src={frame}
+                  key={frame.frameId}
+                  src={frame.image}
                   className={
-                    'frame' + (step.frame === frame ? ' frame--selected' : '')
+                    'frame' +
+                    (step.frame === frame.picture ? ' frame--selected' : '')
                   }
-                  alt="frame"
-                  onClick={() => this.handleFrameChoice(frame)}
+                  alt={frame.picture}
+                  onClick={() => this.handleFrameChoice(frame.picture)}
                 />
               ))
             )}
@@ -311,7 +315,13 @@ Step.propTypes = {
     draggableProps: propTypes.any,
     dragHandleProps: propTypes.any,
   }).isRequired,
-  allFrames: propTypes.arrayOf(propTypes.string).isRequired,
+  allFrames: propTypes.arrayOf(
+    propTypes.shape({
+      frameId: propTypes.string,
+      image: propTypes.string,
+      picture: propTypes.string,
+    }),
+  ).isRequired,
   index: propTypes.number.isRequired,
   onStepNameChange: propTypes.func.isRequired,
   onStepRemove: propTypes.func.isRequired,
@@ -669,7 +679,13 @@ Ladder.propTypes = {
     ), // todo: remove? move to step?
   }).isRequired,
   index: propTypes.number.isRequired,
-  allFrames: propTypes.arrayOf(propTypes.string),
+  allFrames: propTypes.arrayOf(
+    propTypes.shape({
+      frameId: propTypes.string,
+      image: propTypes.string,
+      picture: propTypes.string,
+    }),
+  ),
   users: propTypes.arrayOf(
     propTypes.shape({
       picture: propTypes.string,
@@ -685,7 +701,7 @@ class Ladders extends PureComponent {
   state = {
     ladders: [],
     // allFrames: [], // todo: unocmment this, remove next, read from api.
-    allFrames: ['frame x', 'frame y', 'frame a', 'frame b', 'frame c'],
+    allFrames: [],
   }
 
   constructor(props) {
@@ -695,6 +711,31 @@ class Ladders extends PureComponent {
     this.handleAddNewLadder = this.handleAddNewLadder.bind(this)
 
     this.getLadders()
+
+    const getFrames = () => {
+      API.get('Frames', '')
+        .then(frames => {
+          Promise.all(
+            frames
+              .filter(f => f.picture)
+              .map(frame =>
+                Storage.vault
+                  .get(frame.picture, { level: 'public' })
+                  .then(res => {
+                    frame.image = res
+                  }),
+              ),
+          ).then(() => {
+            this.setState({ allFrames: frames })
+            console.log(this.state)
+          })
+        })
+        .catch(err => {
+          console.log('error loading frames', err)
+        })
+    }
+
+    getFrames()
   }
 
   getLadders() {

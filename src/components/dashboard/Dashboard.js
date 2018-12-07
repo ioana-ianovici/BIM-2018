@@ -171,7 +171,6 @@ class Dashboard extends Component {
         tree.push(el)
       })
       this.setState({ tree })
-      console.log(this.state)
     }
 
     const getUser = () => {
