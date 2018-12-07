@@ -39,7 +39,6 @@ class Search extends PureComponent {
       let users = this.state.users
       let steps = []
       let requirements = []
-      debugger
       const badges = this.state.badges.map(b => b)
 
       ladders.forEach(ladder => {

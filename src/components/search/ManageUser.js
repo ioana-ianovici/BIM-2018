@@ -293,7 +293,6 @@ class ManageUser extends Component {
   }
 
   mapBadges(props) {
-    debugger
     const allBadges = props.badges.filter(b => b.picture) || []
 
     allBadges.forEach(badge => {

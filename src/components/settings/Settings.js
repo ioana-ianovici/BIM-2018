@@ -112,6 +112,7 @@ class Settings extends PureComponent {
     this.handleFileChange = this.handleFileChange.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleUserNameChange = this.handleUserNameChange.bind(this)
+    this.handleUserNameSubmit = this.handleUserNameSubmit.bind(this)
 
     this.loadUserData()
   }
@@ -150,6 +151,11 @@ class Settings extends PureComponent {
 
   createUser() {
     const { userName, userPicture } = this.state
+
+    if (!userName || !userPicture) {
+      return
+    }
+
     const body = {
       userName,
       picture: userPicture,
@@ -181,33 +187,36 @@ class Settings extends PureComponent {
   }
 
   handleUserNameChange(event) {
-    const oldUserName = this.state.userName
     this.setState({ userName: event.target.value })
+  }
 
-    if (this.isDebounce) {
-      return
+  handleUserNameSubmit() {
+    // const oldUserName = this.state.userName
+
+    // if (this.isDebounce) {
+    //   return
+    // }
+
+    // event.persist()
+
+    // this.isDebounce = true
+
+    // setTimeout(() => {
+    // if (this.state.userName === oldUserName) {
+    //   this.isDebounce = false
+    //   return
+    // }
+
+    // this.setState({ userName: event.target.value })
+
+    if (!this.state.userId) {
+      this.createUser()
+    } else {
+      this.updateUserDetails()
     }
 
-    event.persist()
-
-    this.isDebounce = true
-
-    setTimeout(() => {
-      if (this.state.userName === oldUserName) {
-        this.isDebounce = false
-        return
-      }
-
-      this.setState({ userName: event.target.value })
-
-      if (!this.state.userId) {
-        this.createUser()
-      } else {
-        this.updateUserDetails()
-      }
-
-      this.isDebounce = false
-    }, 1000)
+    // this.isDebounce = false
+    // }, 1000)
   }
 
   handleResetPassword() {
@@ -255,6 +264,7 @@ class Settings extends PureComponent {
             type="text"
             className="edit-name__input"
             onChange={this.handleUserNameChange}
+            onBlur={this.handleUserNameSubmit}
             value={userName || ''}
             placeholder="Your name"
             name="userName"
