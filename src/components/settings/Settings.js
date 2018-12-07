@@ -134,13 +134,14 @@ class Settings extends PureComponent {
 
   updateUserDetails() {
     const { userName, userPicture, userId } = this.state
+
+    if (!userName || !userPicture) {
+      return
+    }
+
     const body = {
       userName,
       picture: userPicture,
-    }
-    if (!userName || !userPicture) {
-      console.log('nu sunt suficiente info')
-      return
     }
 
     API.put('Users', `/${userId}`, { body })
@@ -164,10 +165,7 @@ class Settings extends PureComponent {
       userName,
       picture: userPicture,
     }
-    if (!userName || !userPicture) {
-      console.log('nu sunt suficiente info')
-      return
-    }
+
     API.post('Users', '', { body }).then(() => {
       window.location.reload()
     })
