@@ -92,6 +92,7 @@ const StyledLadders = styled.div`
       .frame {
         color: ${styleConstants.darkThemePaleText};
         padding: 10px;
+        flex-grow: 1;
       }
 
       .frame--selected {
