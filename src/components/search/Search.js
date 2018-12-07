@@ -2,40 +2,13 @@ import React, { PureComponent, Fragment } from 'react'
 import { API, Storage } from 'aws-amplify'
 
 import { AppConstants } from '../../shared/constants/constants'
+import Spinner from '../../shared/Spinner'
 import UserFilter from './UserFilter'
 import ManageUser from './ManageUser'
 
 class Search extends PureComponent {
   state = {
-    // todo: read users from api.
-    users: [
-      // {
-      //   profileImage: 'lala',
-      //   step: 'sde 1',
-      //   userName: 'user name 1',
-      //   id: 9,
-      //   ladder: 1,
-      //   badges: [
-      //     { id: 1, badge: 'b1', text: 'b1', count: 2 },
-      //     { id: 2, badge: 'b2', text: 'b2', count: 3 },
-      //     { id: 3, badge: 'b3', text: 'b3', count: 5 },
-      //     { id: 4, badge: 'b4', text: 'b4', count: 8 },
-      //   ],
-      //   requirements: [
-      //     { id: 1, text: 'req.', isAccomplished: true },
-      //     { id: 2, text: 'req. 2', isAccomplished: false },
-      //     { id: 3, text: 'req. 3', isAccomplished: true },
-      //     { id: 4, text: 'req. 4', isAccomplished: false },
-      //   ],
-      //   userPicture:
-      //     'http://profilepicturesdp.com/wp-content/uploads/2018/07/profile-picture-demo-7.jpg',
-      //   userTitle: 'user title',
-      //   userTitleProgressPercentage: 45,
-      //   userLastTitle: 'Rookie',
-      //   userNextTitle: 'Master',
-      //   userFrame: plant,
-      // },
-    ],
+    users: [],
     selectedUser: null,
     ladders: [],
     requirements: [],
@@ -78,54 +51,56 @@ class Search extends PureComponent {
       })
 
       users.forEach(user => {
-        const titleIndex =
-          user.ladder && user.ladder.steps
-            ? user.ladder.steps.findIndex(step => user.title === step.stepId)
-            : null
-        user.userTitle =
-          titleIndex != null ? user.ladder.steps[titleIndex].name : null
-        user.userLastTitle =
-          titleIndex != null
-            ? titleIndex > 0
-              ? user.ladder.steps[titleIndex - 1].name
-              : user.ladder.steps[titleIndex].name
-            : null
-        user.userNextTitle =
-          titleIndex != null
-            ? titleIndex < user.ladder.steps.length - 1
-              ? user.ladder.steps[titleIndex + 1].name
-              : user.ladder.steps[user.ladder.steps.length - 1].name
-            : null
-        user.badges = user.badges.map(badge =>
-          this.state.badges.find(b => b.badgeId === badge),
-        )
-        user.requirements = JSON.parse(
-          JSON.stringify(
-            user.ladder && user.ladder.steps && user.title
-              ? user.ladder.steps
-                  .find(step => step.stepId === user.title)
-                  .requirements.map(requirement => {
-                    requirement.isAccomplished = Boolean(
-                      user.confirmedRequirements &&
-                        user.confirmedRequirements.find(
-                          r => r === requirement.id,
-                        ),
-                    )
-                    return requirement
-                  })
-              : [],
-          ),
-        )
-        user.userTitleProgressPercentage =
-          user.requirements && user.requirements.length
-            ? Math.ceil(
-                (user.requirements.filter(
-                  requirement => requirement.isAccomplished,
-                ).length /
-                  user.requirements.length) *
-                  100,
-              )
-            : 0
+        if (user.ladder) {
+          const titleIndex =
+            user.ladder && user.ladder.steps
+              ? user.ladder.steps.findIndex(step => user.title === step.stepId)
+              : null
+          user.userTitle =
+            titleIndex !== -1 ? user.ladder.steps[titleIndex].name : null
+          user.userLastTitle =
+            titleIndex !== -1
+              ? titleIndex > 0
+                ? user.ladder.steps[titleIndex - 1].name
+                : user.ladder.steps[titleIndex].name
+              : null
+          user.userNextTitle =
+            titleIndex !== -1
+              ? titleIndex < user.ladder.steps.length - 1
+                ? user.ladder.steps[titleIndex + 1].name
+                : user.ladder.steps[user.ladder.steps.length - 1].name
+              : null
+          user.badges = user.badges.map(badge =>
+            this.state.badges.find(b => b.badgeId === badge),
+          )
+          user.requirements = JSON.parse(
+            JSON.stringify(
+              user.ladder && user.ladder.steps && user.title
+                ? user.ladder.steps
+                    .find(step => step.stepId === user.title)
+                    .requirements.map(requirement => {
+                      requirement.isAccomplished = Boolean(
+                        user.confirmedRequirements &&
+                          user.confirmedRequirements.find(
+                            r => r === requirement.id,
+                          ),
+                      )
+                      return requirement
+                    })
+                : [],
+            ),
+          )
+          user.userTitleProgressPercentage =
+            user.requirements && user.requirements.length
+              ? Math.ceil(
+                  (user.requirements.filter(
+                    requirement => requirement.isAccomplished,
+                  ).length /
+                    user.requirements.length) *
+                    100,
+                )
+              : 0
+        }
       })
 
       steps.forEach(step => {
@@ -216,7 +191,16 @@ class Search extends PureComponent {
       steps,
     } = this.state
 
-    return (
+    return users &&
+      ladders &&
+      requirements &&
+      badges &&
+      steps &&
+      (users.length ||
+        ladders.length ||
+        requirements.length ||
+        badges.length ||
+        steps.length) ? (
       <Fragment>
         <UserFilter
           users={users}
@@ -228,6 +212,8 @@ class Search extends PureComponent {
         />
         {selectedUser && <ManageUser user={selectedUser} badges={badges} />}
       </Fragment>
+    ) : (
+      <Spinner />
     )
   }
 }

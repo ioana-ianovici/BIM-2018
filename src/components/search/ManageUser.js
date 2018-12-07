@@ -1,7 +1,7 @@
 import React, { Component, PureComponent } from 'react'
 import styled from 'styled-components'
 import propTypes from 'prop-types'
-import { API, Storage } from 'aws-amplify'
+import { API } from 'aws-amplify'
 
 import { styleConstants } from '../../shared/constants/styleConstants'
 import Requirements from '../../shared/Requirements'
@@ -21,7 +21,7 @@ const StyledManageUser = styled.div`
     max-width: 300px;
     display: flex;
     padding-bottom: 15px;
-    border-bottom: 1px solid ${styleConstants.darkThemePaleText};
+    /* border-bottom: 1px solid ${styleConstants.darkThemePaleText}; */
     margin-bottom: 5px;
 
     .main-info__aside {
@@ -59,6 +59,30 @@ const StyledManageUser = styled.div`
       color: ${styleConstants.darkThemePaleText};
     }
   }
+
+  
+  .user-details__progress{
+    background: ${styleConstants.mainAccent};
+    background: -moz-linear-gradient(left, ${styleConstants.mainAccent} 0%, ${
+  styleConstants.mainAccent
+} ${props => props.userTitleProgressPercentage || 0}%, #2a2f39 ${props =>
+  props.userTitleProgressPercentage || 0}%, #2a2f39 100%);
+    background: -webkit-linear-gradient(left, ${styleConstants.mainAccent} 0%,${
+  styleConstants.mainAccent
+} ${props => props.userTitleProgressPercentage || 0}%,#2a2f39 ${props =>
+  props.userTitleProgressPercentage || 0}%,#2a2f39 100%);
+    background: linear-gradient(to right, ${styleConstants.mainAccent} 0%,${
+  styleConstants.mainAccent
+} ${props => props.userTitleProgressPercentage || 0}%,#2a2f39 ${props =>
+  props.userTitleProgressPercentage || 0}%,#2a2f39 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=${
+      styleConstants.mainAccent
+    }, endColorstr='#2a2f39',GradientType=1 );
+    width: 100%;
+    height: 1px;
+    display: inline-block;
+    vertical-align: middle;
+    }
 
   .user-details__actions {
     cursor: pointer;
@@ -247,6 +271,7 @@ class ManageUser extends Component {
     this.handleRequirementChange = this.handleRequirementChange.bind(this)
     this.handleBadgeAdd = this.handleBadgeAdd.bind(this)
     this.handleBadgeSubstract = this.handleBadgeSubstract.bind(this)
+    this.handleLevelUp = this.handleLevelUp.bind(this)
 
     this.mapBadges(this.props)
   }
@@ -325,8 +350,17 @@ class ManageUser extends Component {
   }
 
   handleLevelUp() {
-    console.log('level up')
-    // todo: call api.
+    const nextTitle = this.state.user.ladder.steps.find(
+      step => step.name === this.state.user.userNextTitle,
+    )
+    const body = {
+      title: nextTitle.stepId,
+      ladder: this.state.user.ladder.ladderId,
+    }
+
+    return API.put(AppConstants.endpoints.users, `/${this.state.user.userId}`, {
+      body,
+    }).then(() => window.location.reload())
   }
 
   render() {
@@ -342,6 +376,7 @@ class ManageUser extends Component {
               <p>{user.userTitle}</p>
             </div>
           </div>
+          <span className="user-details__progress" />
           <div className="user-details__actions" onClick={this.handleLevelUp}>
             <LevelUp className="levelup__icon" />
             Level up
