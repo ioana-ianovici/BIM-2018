@@ -736,7 +736,10 @@ class Ladder extends PureComponent {
             <div className="ladder__name">{ladder.ladderName}</div>
             <div className="ladder__frame">
               <img
-                src={ladder.steps[0] && ladder.steps[0].frameImage}
+                src={
+                  ladder.steps[ladder.steps.length - 1] &&
+                  ladder.steps[ladder.steps.length - 1].frameImage
+                }
                 alt="Frame of the first step of ladder"
               />
             </div>
