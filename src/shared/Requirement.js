@@ -9,7 +9,7 @@ class Requirement extends PureComponent {
       <p
         className={
           'requirement section-right__text' +
-          (!isAccomplished ? '' : ' section-right__text--inactive')
+          (isAccomplished ? '' : ' section-right__text--inactive')
         }
         onClick={() => this.props.onSelect(id)}
       >
