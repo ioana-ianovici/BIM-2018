@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent, Fragment } from 'react'
 import styled from 'styled-components'
 import propTypes from 'prop-types'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
@@ -20,6 +20,7 @@ const StyledLadders = styled.div`
   }
 
   .ladder {
+    margin-top: 50px;
     margin-bottom: 50px;
 
     &:last-child {
@@ -42,9 +43,27 @@ const StyledLadders = styled.div`
     }
   }
 
+  .ladder__collapse {
+    cursor: pointer;
+    font-size: 30px;
+    line-height: 0px;
+    display: inline-block;
+    margin-right: 30px;
+
+    &:hover {
+      color: ${styleConstants.mainAccent};
+    }
+  }
+
   .ladder__members {
     margin-bottom: 50px;
     /* max-width: 330px; */
+  }
+
+  .ladder__add-new-ladder {
+    position: absolute;
+    top: 28px;
+    left: 200px;
   }
 
   .ladder__add-new-step {
@@ -129,6 +148,36 @@ const StyledLadders = styled.div`
     display: block;
     margin: auto;
     margin-bottom: 30px;
+  }
+
+  .ladder--collapsed {
+    display: block;
+    cursor: pointer;
+    border-top: 1px solid ${styleConstants.mainAccent};
+    border-bottom: 1px solid ${styleConstants.mainAccent};
+    padding: 30px 0px;
+    margin-top: 0;
+    margin-bottom: 0;
+    display: flex;
+
+    &:first-child {
+      border-top: none;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    div:first-child {
+      width: 60%;
+    }
+    div:last-child {
+      width: 40%;
+    }
+
+    .ladder__name {
+      margin-bottom: 0;
+    }
   }
 `
 
@@ -370,6 +419,11 @@ class Ladder extends PureComponent {
     this.handleSubmit = this.handleSubmit.bind(this)
     this.onRemoveLadder = this.onRemoveLadder.bind(this)
     this.getMembers = this.getMembers.bind(this)
+    this.toggleLadderCollapse = this.toggleLadderCollapse.bind(this)
+  }
+
+  toggleLadderCollapse() {
+    this.setState(oldState => ({ isCollapsed: !oldState.isCollapsed }))
   }
 
   onRemoveLadder() {
@@ -538,9 +592,13 @@ class Ladder extends PureComponent {
               ladder: this.props.ladder.ladderId,
             }
 
-            return API.put(AppConstants.endpoints.users, `/${member.value}`, {
-              body,
-            })
+            return API.put(
+              AppConstants.endpoints.users,
+              `/${member.value}/update-title`,
+              {
+                body,
+              },
+            )
           })
         }
 
@@ -553,9 +611,13 @@ class Ladder extends PureComponent {
               ladder: null,
             }
 
-            return API.put(AppConstants.endpoints.users, `/${member.value}`, {
-              body,
-            })
+            return API.put(
+              AppConstants.endpoints.users,
+              `/${member.value}/update-title`,
+              {
+                body,
+              },
+            )
           })
         }
 
@@ -580,76 +642,101 @@ class Ladder extends PureComponent {
       }))
 
     return (
-      <div className="ladder">
-        <input
-          className="ladder__name"
-          type="text"
-          placeholder="Ladder name"
-          value={ladder.ladderName || ''}
-          onChange={this.handleLadderNameChange}
-        />
-        <RemoveLargeImage
-          className="ladder__remove"
-          onClick={this.onRemoveLadder}
-        />
+      <Fragment>
+        {!ladder.isCollapsed && (
+          <div className="ladder">
+            <div
+              className="ladder__collapse"
+              onClick={this.toggleLadderCollapse}
+            >
+              -
+            </div>
+            <input
+              className="ladder__name"
+              type="text"
+              placeholder="Ladder name"
+              value={ladder.ladderName || ''}
+              onChange={this.handleLadderNameChange}
+            />
+            <RemoveLargeImage
+              className="ladder__remove"
+              onClick={this.onRemoveLadder}
+            />
 
-        <DragDropContext onDragEnd={this.onDragEnd}>
-          <Droppable droppableId="droppable">
-            {provided => (
-              <div ref={provided.innerRef}>
-                {ladder.steps.map((step, index) => (
-                  <Draggable
-                    key={step.stepId || index}
-                    draggableId={'a' + index}
-                    index={index}
-                  >
-                    {provided => (
-                      <Step
+            <DragDropContext onDragEnd={this.onDragEnd}>
+              <Droppable droppableId="droppable">
+                {provided => (
+                  <div ref={provided.innerRef}>
+                    {ladder.steps.map((step, index) => (
+                      <Draggable
+                        key={step.stepId || index}
+                        draggableId={'a' + index}
                         index={index}
-                        innerRef={provided.innerRef}
-                        provided={provided}
-                        step={step}
-                        allFrames={allFrames}
-                        onStepNameChange={this.handleStepNameChange}
-                        onStepRemove={this.handleStepRemove}
-                        onAddNewRequirement={this.handleAddNewRequirement}
-                        onRequirementRemove={this.handleRequirementRemove}
-                        onRequirementTextChange={
-                          this.handleRequirementTextChange
-                        }
-                        handleFrameChoice={this.handleFrameChoice}
-                      />
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
+                      >
+                        {provided => (
+                          <Step
+                            index={index}
+                            innerRef={provided.innerRef}
+                            provided={provided}
+                            step={step}
+                            allFrames={allFrames}
+                            onStepNameChange={this.handleStepNameChange}
+                            onStepRemove={this.handleStepRemove}
+                            onAddNewRequirement={this.handleAddNewRequirement}
+                            onRequirementRemove={this.handleRequirementRemove}
+                            onRequirementTextChange={
+                              this.handleRequirementTextChange
+                            }
+                            handleFrameChoice={this.handleFrameChoice}
+                          />
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
 
-        <AddNew
-          text="Add new step"
-          className="ladder__add-new-step"
-          onClick={this.handleAddNewStep}
-        />
+            <AddNew
+              text="Add new step"
+              className="ladder__add-new-step"
+              onClick={this.handleAddNewStep}
+            />
 
-        <Select
-          placeholder="Select members"
-          className="ladder__members"
-          classNamePrefix="react-select"
-          value={ladder.members}
-          options={unassignedUsers}
-          onChange={this.handleMembersChange}
-          isSearchable={true}
-          isMulti={true}
-          closeMenuOnSelect={false}
-        />
+            <Select
+              placeholder="Select members"
+              className="ladder__members"
+              classNamePrefix="react-select"
+              value={ladder.members}
+              options={unassignedUsers}
+              onChange={this.handleMembersChange}
+              isSearchable={true}
+              isMulti={true}
+              closeMenuOnSelect={false}
+            />
 
-        <button className="save-button" onClick={this.handleSubmit}>
-          Save
-        </button>
-      </div>
+            <button className="save-button" onClick={this.handleSubmit}>
+              Save
+            </button>
+          </div>
+        )}
+
+        {ladder.isCollapsed && (
+          <div
+            className="ladder ladder--collapsed"
+            onClick={this.toggleLadderCollapse}
+          >
+            <div className="ladder__name">{ladder.ladderName}</div>
+            <div className="ladder__frame">
+              <img
+                src={ladder.steps[0] && ladder.steps[0].frame}
+                alt="Frame of the first step of ladder"
+              />
+            </div>
+          </div>
+        )}
+      </Fragment>
     )
   }
 }
@@ -741,6 +828,10 @@ class Ladders extends PureComponent {
 
   getLadders() {
     API.get(AppConstants.endpoints.ladders, '').then(ladders => {
+      ladders = ladders.map(ladder => {
+        ladder.isCollapsed = true
+        return ladder
+      })
       this.setState({ ladders })
     })
   }
@@ -759,6 +850,11 @@ class Ladders extends PureComponent {
 
     return (
       <StyledLadders>
+        <AddNew
+          text="Add new ladder"
+          className="ladder__add-new-ladder"
+          onClick={this.handleAddNewLadder}
+        />
         <div className="ladders">
           {ladders &&
             ladders.map((ladder, index) => (
@@ -773,12 +869,6 @@ class Ladders extends PureComponent {
             ))}
           {(!ladders || !ladders.length) && <Spinner />}
         </div>
-
-        <AddNew
-          text="Add new ladder"
-          className="ladder__add-new-step"
-          onClick={this.handleAddNewLadder}
-        />
       </StyledLadders>
     )
   }

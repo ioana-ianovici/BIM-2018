@@ -363,9 +363,13 @@ class ManageUser extends Component {
       ladder: this.state.user.ladder.ladderId,
     }
 
-    return API.put(AppConstants.endpoints.users, `/${this.state.user.userId}`, {
-      body,
-    }).then(() => window.location.reload())
+    return API.put(
+      AppConstants.endpoints.users,
+      `/${this.state.user.userId}/update-title`,
+      {
+        body,
+      },
+    ).then(() => window.location.reload())
   }
 
   render() {

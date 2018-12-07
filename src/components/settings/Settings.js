@@ -191,32 +191,11 @@ class Settings extends PureComponent {
   }
 
   handleUserNameSubmit() {
-    // const oldUserName = this.state.userName
-
-    // if (this.isDebounce) {
-    //   return
-    // }
-
-    // event.persist()
-
-    // this.isDebounce = true
-
-    // setTimeout(() => {
-    // if (this.state.userName === oldUserName) {
-    //   this.isDebounce = false
-    //   return
-    // }
-
-    // this.setState({ userName: event.target.value })
-
     if (!this.state.userId) {
       this.createUser()
     } else {
       this.updateUserDetails()
     }
-
-    // this.isDebounce = false
-    // }, 1000)
   }
 
   handleResetPassword() {
