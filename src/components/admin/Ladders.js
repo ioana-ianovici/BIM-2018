@@ -286,7 +286,6 @@ class Step extends PureComponent {
   render() {
     const { isVisibleAllFrames } = this.state
     const { step, provided, allFrames } = this.props
-    console.log(allFrames)
 
     return (
       <div
@@ -327,9 +326,13 @@ class Step extends PureComponent {
         <div>
           <div className="step__frames">
             {!isVisibleAllFrames ? (
-              <img src={step.frame} alt="" onClick={this.handleFramesClick} /> //todo: add alt
+              <img
+                src={step.frameImage}
+                alt=""
+                onClick={this.handleFramesClick}
+              /> //todo: add alt
             ) : (
-              allFrames.map((frame, index) => (
+              allFrames.map(frame => (
                 <img
                   key={frame.frameId}
                   src={frame.image}
@@ -525,7 +528,10 @@ class Ladder extends PureComponent {
     const steps = this.state.steps.map((step, indx) =>
       indx === stepIndex ? { ...step, frame } : step,
     )
-    this.setState({ steps })
+    Storage.vault.get(steps[stepIndex].frame, { level: 'public' }).then(img => {
+      steps[stepIndex].frameImage = img
+      this.setState({ steps })
+    })
   }
 
   handleMembersChange(members) {
@@ -730,7 +736,7 @@ class Ladder extends PureComponent {
             <div className="ladder__name">{ladder.ladderName}</div>
             <div className="ladder__frame">
               <img
-                src={ladder.steps[0] && ladder.steps[0].frame}
+                src={ladder.steps[0] && ladder.steps[0].frameImage}
                 alt="Frame of the first step of ladder"
               />
             </div>
@@ -815,7 +821,6 @@ class Ladders extends PureComponent {
               ),
           ).then(() => {
             this.setState({ allFrames: frames })
-            console.log(this.state)
           })
         })
         .catch(err => {
