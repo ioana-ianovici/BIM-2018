@@ -740,7 +740,7 @@ class Ladder extends PureComponent {
                   ladder.steps[ladder.steps.length - 1] &&
                   ladder.steps[ladder.steps.length - 1].frameImage
                 }
-                alt="Frame of the first step of ladder"
+                alt="Where's the image?!"
               />
             </div>
           </div>
