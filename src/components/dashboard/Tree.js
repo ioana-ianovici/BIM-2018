@@ -13,7 +13,7 @@ const StyledTree = styled.div`
     background-image: url(${tree});
     background-repeat: no-repeat;
     background-position: center bottom;
-    background-size: cover;
+    background-size: contain;
   }
 
   .tree__step {

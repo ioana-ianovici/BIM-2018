@@ -3,8 +3,7 @@ import styled from 'styled-components'
 import propTypes from 'prop-types'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import Select from 'react-select'
-import { API } from 'aws-amplify'
-import { Storage } from 'aws-amplify'
+import { API, Storage } from 'aws-amplify'
 
 import Spinner from '../../shared/Spinner'
 import { styleConstants } from '../../shared/constants/styleConstants'
@@ -530,7 +529,7 @@ class Ladder extends PureComponent {
     )
     Storage.vault.get(steps[stepIndex].frame, { level: 'public' }).then(img => {
       steps[stepIndex].frameImage = img
-      this.setState({ steps })
+      this.setState({ steps }, () => console.log('done steps', steps))
     })
   }
 
@@ -585,56 +584,61 @@ class Ladder extends PureComponent {
   }
 
   handleSubmit() {
-    API.post(AppConstants.endpoints.ladders, '', { body: this.state }).then(
-      ladder => {
-        this.setState({ ...ladder })
+    let body = JSON.parse(JSON.stringify({ ...this.state }))
 
-        const addLadderToNewMembers = () => {
-          const addedMembers = this.state.addedMembers
+    body.steps = body.steps.map(step => {
+      step.frameImage = null
+      return step
+    })
 
-          return addedMembers.map(member => {
-            const body = {
-              title: member.title,
-              ladder: this.props.ladder.ladderId,
-            }
+    API.post(AppConstants.endpoints.ladders, '', { body }).then(ladder => {
+      // this.setState({ ...ladder })
 
-            return API.put(
-              AppConstants.endpoints.users,
-              `/${member.value}/update-title`,
-              {
-                body,
-              },
-            )
-          })
-        }
+      const addLadderToNewMembers = () => {
+        const addedMembers = this.state.addedMembers
 
-        const removeLadderFromRemovedMembers = () => {
-          const removedMembers = this.state.removedMembers
+        return addedMembers.map(member => {
+          const body = {
+            title: member.title,
+            ladder: this.props.ladder.ladderId,
+          }
 
-          return removedMembers.map(member => {
-            const body = {
-              title: null,
-              ladder: null,
-            }
-
-            return API.put(
-              AppConstants.endpoints.users,
-              `/${member.value}/update-title`,
-              {
-                body,
-              },
-            )
-          })
-        }
-
-        Promise.all([
-          ...addLadderToNewMembers(),
-          ...removeLadderFromRemovedMembers(),
-        ]).then(() => {
-          this.props.onLaddersChange()
+          return API.put(
+            AppConstants.endpoints.users,
+            `/${member.value}/update-title`,
+            {
+              body,
+            },
+          )
         })
-      },
-    )
+      }
+
+      const removeLadderFromRemovedMembers = () => {
+        const removedMembers = this.state.removedMembers
+
+        return removedMembers.map(member => {
+          const body = {
+            title: null,
+            ladder: null,
+          }
+
+          return API.put(
+            AppConstants.endpoints.users,
+            `/${member.value}/update-title`,
+            {
+              body,
+            },
+          )
+        })
+      }
+
+      Promise.all([
+        ...addLadderToNewMembers(),
+        ...removeLadderFromRemovedMembers(),
+      ]).then(() => {
+        // this.props.onLaddersChange()
+      })
+    })
   }
 
   render() {
@@ -841,6 +845,8 @@ class Ladders extends PureComponent {
         return ladder
       })
 
+      console.log(ladders[0])
+
       Promise.all(
         ladders.map(ladder => {
           ladder.steps.map(step => {
@@ -850,10 +856,9 @@ class Ladders extends PureComponent {
           })
         }),
       ).then(() => {
+        console.log('init frames end', ladders[0].steps[0].frameImage)
         this.setState({ ladders })
       })
-
-      // this.setState({ ladders })
     })
   }
 
@@ -868,6 +873,13 @@ class Ladders extends PureComponent {
   render() {
     const { users } = this.props
     const { ladders, allFrames } = this.state
+
+    console.log(
+      'render ladders',
+      this.state.ladders && this.state.ladders.length
+        ? this.state.ladders[0].steps[0].frameImage
+        : 'nope',
+    )
 
     return (
       <StyledLadders>
